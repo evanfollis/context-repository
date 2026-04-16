@@ -1,39 +1,64 @@
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-04-16 — seeded by executive (general session)
+**Last updated**: 2026-04-16 — reframed by executive after principal clarification
 
 ---
 
+## What this repo is
+
+The **pattern lab** for agent context repositories. Not a workspace operational
+state store (that lives in supervisor/system/). Not a schemas-and-governance
+layer. The place where the concept of agent context repos gets designed,
+pressure-tested, and specified rigorously enough that every other agent can
+implement their own.
+
 ## Deployed / running state
-- **This repo is pure specification** — no deployed service, no runtime state
-- **Content**: `docs/`, `schemas/`, `apps/`, `notes/`, `spec/` — all Markdown
-- **Role**: canonical abstract layer defining object model, memory governance, epistemic infrastructure for all workspace agents
+- Pure Markdown specification repo — no deployable service
+- Current identity is being redesigned (see active handoff)
+- Prior identity ("abstract substrate", "no operational state") is being retired
 
 ## What's in progress
-Three handoffs pending (oldest first):
 
-1. `context-repo-pressure-current-state-operationalization-2026-04-15T13-53Z.md` — operationalize the current-state concept. The workspace has a pattern of agents starting cold; this repo should define the spec for per-project CURRENT_STATE.md files.
+One handoff pending:
+`context-repo-pattern-design-2026-04-16T14-30Z.md`
 
-2. `context-repo-executive-pressure-current-state-redesign-2026-04-16T11-06Z.md` — executive pressure: the redesign must clarify how context-repo's abstract specs *actually get used* by other agents. Currently named but not wired in.
+**Core task**: Design the canonical agent context repository pattern and be the
+reference implementation of it. Produce:
+1. `docs/agent-context-repo-pattern.md` — the spec (5 invariants: front door,
+   progressive disclosure, overwrite semantics, git history, default behavior)
+2. This repo restructured as an instance of that pattern
+3. Updated README.md and CLAUDE.md
 
-3. `context-repo-context-repo-redesign.md` — broader redesign of what context-repo is and how it plugs into the workspace. The goal: make it the substrate layer other agents actually query, not just a spec document other agents don't read.
+Prior handoffs (context-repo-redesign, operationalize-current-state,
+executive-pressure-redesign) were deleted — they were pushing toward workspace
+operational store, which is wrong.
 
 ## Known broken or degraded
-- **Not wired in**: context-repo is in sessions.conf as a project but its specs are not referenced in any agent prompt or tick template. It exists in isolation.
-- **Stale specs**: docs/ may reference an older architecture. Validate against current workspace topology before relying on them.
+- **Identity mismatch**: README.md and CLAUDE.md still say "abstract layer" /
+  "no operational state" — these are being changed as part of the handoff
+- **Not self-referential**: the repo doesn't currently exemplify the pattern
+  it's supposed to spec (it has no front door, no progressive disclosure)
 
 ## Blocked on
-- **Design decision**: Should context-repo produce a single queryable document (e.g., `workspace-context.md` that all tick prompts inject)? Or should it maintain per-domain schemas that consuming projects explicitly import? This decision shapes all three handoffs. Escalate if the handoffs don't converge on an answer.
+- Nothing. Handoff is self-contained.
 
 ## Recent decisions
-- **No code**: this repo is Markdown-only by design. Any implementation goes in consuming repos.
-- **Abstract layer only**: personal data, career strategy, runtime config — none of that belongs here.
-- **Other repos map to context-repo, not the reverse**: this repo defines the canonical terms; other repos use those terms.
+- **Pattern lab, not operational store**: executive clarified 2026-04-16.
+  The workspace state lives in supervisor/system/. This repo designs the concept.
+- **Three prior handoffs deleted**: they were pushing in the wrong direction
+  (workspace state aggregation). Replaced with single correctly-framed handoff.
+- **Each agent owns their own context repo**: no centralized aggregation.
+  This repo produces the spec; agents implement for their domain.
 
 ## What bit the last session
-- Unknown (no prior tick session). Three handoffs have accumulated without action for 1+ synthesis cycles.
+- Two previous redesign attempts drifted toward schema/governance expansion
+  instead of current-state surfaces. The root cause: "abstract layer" identity
+  in CLAUDE.md actively resisted operational content. Fix: change the identity
+  first, then the content follows.
 
 ## What the next agent must read first
-1. Read all three handoffs before touching any files — they overlap and the order matters
-2. The highest-leverage outcome: define what `CURRENT_STATE.md` is (executive session just seeded one per project) — this repo should formalize that spec
-3. The "not wired in" problem is the root cause of all three handoffs — solve that first or the rest is academic
+1. Read the new handoff first — it reframes everything
+2. The repo's own structure should demonstrate the pattern you're specifying
+   (eat your own cooking)
+3. The tension between "specifying the pattern" and "being an instance of it"
+   is real but resolvable — both are required; they reinforce each other
