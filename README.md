@@ -1,40 +1,21 @@
-﻿# Context Repository
+# Context Repository
 
-This repository is for the general substrate above agent harnesses.
+The pattern lab for agent context repositories.
 
-It is not a personal operational memory store.
-It is not a career repo.
-It is not a generic multi-agent framework.
+This repo designs and specifies the pattern that agents use to maintain
+persistent context across sessions — the file-based records that make
+work resumable without starting cold.
 
-It is a place to develop the ideas, schemas, and implementation for durable, inspectable, branchable epistemic work.
+## Start here
 
-## Thesis
+- `CURRENT_STATE.md` — what this repo is doing right now
+- `docs/agent-context-repo-pattern.md` — the canonical spec
 
-After you already have an agent harness, the bottleneck is not tool calling.
+## What this is not
 
-The bottleneck is:
+Not a workspace operational state store (that's `supervisor/system/`).
+Not a schema or governance layer.
+Not a centralized aggregator for other agents' context.
 
-- context governance
-- artifact persistence
-- hypothesis and explanation tracking
-- decision lineage
-- branch and merge semantics for inquiry
-- reentry after context loss
-- reflexive learning about the reasoning process itself
-
-## What This Repo Is For
-
-- define the object model for epistemic work
-- define memory classes and promotion rules
-- define branch semantics
-- build the substrate for specialist applications
-- explore thin orchestration and control-plane layers
-
-## What This Repo Is Not For
-
-- personal resumes
-- private career strategy
-- personal decision logs
-- sensitive operational state
-
-Those belong in separate private application repos.
+Each agent maintains their own context repo. This repo specifies the pattern
+they follow and is itself an instance of it.

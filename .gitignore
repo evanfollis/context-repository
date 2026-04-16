@@ -1,0 +1,11 @@
+# Legacy abstract-layer artifacts from prior identity (pre-2026-04-16)
+# These files were never committed and represent wrong-direction work.
+# Not deleted to preserve local disk state; excluded from tracking.
+docs/architecture_rubric.md
+docs/governance_contract.md
+docs/repo_bootstrap_template.md
+docs/telemetry_contract.md
+docs/venture_governance.md
+notes/
+schemas/venture_controller.md
+spec/
