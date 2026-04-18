@@ -1,3 +1,10 @@
+---
+name: README
+description: Repo overview and entry pointers for the context-repository pattern lab
+type: reference
+updated: 2026-04-18
+---
+
 # Context Repository
 
 The pattern lab for agent context repositories.
@@ -8,7 +15,8 @@ work resumable without starting cold.
 
 ## Start here
 
-- `CURRENT_STATE.md` — what this repo is doing right now
+- `CURRENT_STATE.md` — what this repo is doing right now (front door)
+- `index.md` — auto-generated table of contents pulled from every file's frontmatter
 - `docs/agent-context-repo-pattern.md` — the canonical spec
 
 ## What this is not

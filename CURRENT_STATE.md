@@ -1,6 +1,13 @@
+---
+name: CURRENT_STATE
+description: Front door for context-repository — what the pattern lab is and what's active
+type: front-door
+updated: 2026-04-18
+---
+
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-04-16 — pattern spec written, repo restructured as reference implementation
+**Last updated**: 2026-04-18 — mechanics retrofit (frontmatter + index + always-load declaration).
 
 ---
 
@@ -16,50 +23,33 @@ This repo is itself an instance of the pattern it specifies.
 
 Pure Markdown specification repo — no deployable service.
 
-Identity redesign complete: prior "abstract substrate / no operational state"
-identity fully retired. Legacy abstract-layer files removed from git tracking.
+**Reference implementation now ships the mechanics it mandates**: every tracked
+file has frontmatter, `index.md` is generated from frontmatter, `CLAUDE.md`
+declares the always-load list. Other repos retrofit via handoff.
 
 ## What's in progress
 
-Nothing active. Pattern design handoff executed and complete.
+- **Pass 1 (this session)**: spec adds a "Required mechanics" section (frontmatter schema, auto-generated index, always-load declaration). Reference implementation reconciled to match. ADR drafted for session-start read enforcement in `supervisor/decisions/`. Writer/retriever separation drafted as proposed design doc.
+- **Pass 2 (pending)**: retrofit handoffs to each project session so their context repos adopt the mechanics. Mentor and recruiter still lack a front door — that's the first pass-2 target.
+- **Pass 3 (proposed, not started)**: formalize the writer/retriever split per `docs/writer-retriever-separation-proposal.md`.
 
 ## Known broken or degraded
 
-**Untracked legacy files on disk** (gitignored, not in committed repo): Several
-abstract-layer files from the old identity remain in the working directory but
-are excluded via `.gitignore`. They don't affect the committed repo state.
-A fresh clone is clean. If the disk needs cleaning, a future session can `rm`
-them.
+- **Untracked legacy files on disk**: abstract-layer files from the prior identity remain in the working directory but are gitignored. A fresh clone is clean.
+- **`apps/ios/PersonalControlPlane/` is committed legacy**: iOS project artifacts from a prior identity. Not deleted yet — scoped out of pass 1.
+- **Spec not adversarially reviewed**: `docs/agent-context-repo-pattern.md` was written and extended without `/review`. Needs Codex adversarial review before other repos retrofit.
 
 ## Recent decisions
 
-- **Pattern spec written**: `docs/agent-context-repo-pattern.md` covers all
-  five invariants (front door, progressive disclosure, overwrite semantics,
-  default behavior, agent-owned design) with concrete actionable guidance and
-  the tick system naming convention.
-- **Legacy files removed from git**: docs/memory_classes.md, docs/epistemic_loop.md,
-  docs/reentry.md, docs/branch_semantics.md, docs/thesis.md,
-  docs/personal_control_plane.md, schemas/object_model.md,
-  schemas/intervention_objects.md, apps/personal_control_plane.md,
-  notes/README.md — all removed via `git rm`. Git history preserves them.
-- **Uncommitted old-identity expansions discarded**: ~466 lines of schema
-  expansion work from a prior session was discarded via `git restore` before
-  committing. It was moving in the wrong direction.
-- **`.gitignore` added**: Explicitly excludes untracked legacy files from status
-  noise. Notes the reason.
-
-## What bit the last session (2026-04-16)
-
-- Uncommitted modifications existed from a prior session pushing schema
-  expansion. Discarded via `git restore` — they were never going to be committed.
-- `docs/personal_control_plane.md` was committed but not caught in the initial
-  `git rm` list. Caught on advisor review pass.
-- `rm` permission denied for untracked legacy files; worked around with
-  `.gitignore` instead.
+- **2026-04-18**: added required mechanics to the pattern — frontmatter schema, auto-generated `index.md`, CLAUDE.md-declared always-load list. Kept the original five invariants intact.
+- **2026-04-18**: session-start read enforcement to be resolved by ADR (proposed in `supervisor/decisions/0021-*`). Options: SessionStart hook, CLAUDE.md directive, workspace.sh wrapper.
+- **2026-04-18**: writer/retriever separation drafted as a future (pass 3) design. The 12h reflection/synthesis pipeline is ~80% of a writer agent; formalization makes it the sole mutation path.
+- **2026-04-17**: pattern spec identity retired the "abstract substrate" framing; repo is current-state-first.
 
 ## What the next agent should read first
 
-1. This file (you're reading it).
-2. `docs/agent-context-repo-pattern.md` — the canonical spec.
-3. If untracked legacy files are bothering you, they're listed in `.gitignore`.
-   A simple `rm` cleans them (requires Bash permission).
+1. This file.
+2. `index.md` — auto-generated from frontmatter; use it to find what you need.
+3. `docs/agent-context-repo-pattern.md` — the spec, including the new "Required mechanics" section.
+4. `docs/writer-retriever-separation-proposal.md` — future work, not active.
+5. `supervisor/decisions/0021-*` — the enforcement decision (whichever option is accepted).

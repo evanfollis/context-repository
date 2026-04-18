@@ -1,3 +1,10 @@
+---
+name: Agent Context Repository Pattern
+description: Canonical spec for how agents maintain file-based persistent context — five invariants, required mechanics, future work
+type: spec
+updated: 2026-04-18
+---
+
 # Agent Context Repository Pattern
 
 This document specifies the canonical pattern for agent context repositories.
@@ -109,6 +116,114 @@ different. That is correct.
 **What NOT to do:** Don't copy another agent's structure because it looks right.
 Design for your domain. Don't add sections because they seem professional. Add
 them when you need them.
+
+---
+
+## Required mechanics
+
+The five invariants above are the philosophy. The mechanics below are *how*
+the philosophy gets delivered. Without them, the pattern reduces to "discipline
+to remember the invariants" — and discipline fails. The mechanics exist so
+that agents can cold-orient, skim for relevance, and have load-bearing files
+surfaced without explicit searching.
+
+These mechanics are required in every context repo. The reference implementation
+(this repo) must ship them. If it doesn't, fix it — not the spec.
+
+### M1. YAML frontmatter on every Markdown file
+
+Every `.md` file in a context repo carries a YAML frontmatter block at the top:
+
+```markdown
+---
+name: <short human-readable title>
+description: <one-line purpose; used by index.md and as navigation signal>
+type: <front-door | spec | directive | reference | decision | plan | finding | workflow | proposal | index | ...>
+updated: <YYYY-MM-DD>
+---
+```
+
+**Why:** Without frontmatter, a cold agent listing the filetree sees names only.
+Grep is the only discovery path. With frontmatter, descriptions surface via the
+generated index (M2) and make the filetree genuinely navigational.
+
+**Required fields:** `name`, `description`, `type`, `updated`. The `type` enum
+is loose — start with the values above, add repo-local types when a new class
+genuinely repeats. Don't over-schematize.
+
+**Optional fields:** repos may add their own (e.g., `status`, `owner`, `tags`).
+Don't gate on optional fields — a minimum-viable frontmatter is the four required
+fields and nothing else.
+
+### M2. Auto-generated `index.md` at repo root
+
+Each context repo has an `index.md` auto-generated from frontmatter:
+
+- Rebuilt by a script in `scripts/` (e.g., `build-index.sh`) that walks the
+  repo, extracts frontmatter, and writes a table of path + name + description
+  + type + updated.
+- Regenerated after any file add, remove, retitle, or frontmatter change.
+- Lists files *missing* frontmatter under a visible "Unindexed" section so
+  the gap is self-surfacing rather than silent.
+
+**Why:** The filetree in `ls` output is not the navigation surface; `index.md`
+is. A cold agent reads `CURRENT_STATE.md` for orientation, then `index.md` for
+navigation, then opens specific files. Three files to get from cold to working.
+
+**Authority:** `index.md` is generated, not hand-maintained. If the script
+doesn't produce the file you want, fix the script, not the output.
+
+### M3. `CLAUDE.md`-declared always-load list
+
+Each context repo's `CLAUDE.md` carries a `context-always-load:` block naming
+the files that must be read at session start:
+
+```yaml
+context-always-load:
+  - CURRENT_STATE.md
+  - index.md
+  - docs/<repo-specific-spec>.md
+```
+
+**Why:** `CLAUDE.md` is the Claude Code native always-loaded surface (auto-injected
+into the system prompt when present in the cwd). The inspiration's `system/`
+pinning concept maps to this: `CLAUDE.md` declares what *additional* files the
+agent must read before answering about this domain. An enforcement layer (see
+below) can read this declaration and inject the files automatically.
+
+**Length discipline:** keep the always-load list short. If it balloons, the
+front door has failed to summarize — fix the front door, not the list. Rule
+of thumb: 3-5 files is normal, 10+ is a signal that progressive disclosure has
+collapsed.
+
+### M4. Session-start read is enforced, not discretionary
+
+Discipline-only session-start reads fail. The workspace needs a mechanism that
+either:
+
+- injects the always-load files at session start (SessionStart hook), or
+- hard-fails a session that attempts substantive work before reading them, or
+- provides a `workspace.sh context` wrapper that must be invoked first.
+
+The specific mechanism is a workspace-level ADR
+(`supervisor/decisions/0021-session-start-context-repo-read-enforcement.md`).
+Until that ADR is accepted, agents must honor the always-load list manually —
+but the spec considers manual compliance a transitional state, not a target.
+
+### M5. Session-end update is enforced, not discretionary
+
+Symmetric to M4. The front door must be updated at session end or the ritual
+fails. Enforcement options parallel M4 (hook, gate, wrapper). The same ADR
+covers both.
+
+---
+
+## Future work (proposed, not active)
+
+- **Writer/retriever separation** — `docs/writer-retriever-separation-proposal.md`
+  describes a formalization where context-repo writes come only from a dedicated
+  writer path (reflection/synthesis pipeline), and the foreground agent operates
+  in retrieval-only mode. Status: proposed.
 
 ---
 
