@@ -141,6 +141,61 @@ Writer commits land on `main` only after:
    deliberately, not synthesized from transcripts. They stay foreground-edit.
    How is that boundary declared?
 
+## Concerns surfaced by adversarial review (2026-04-18)
+
+Codex review (`supervisor/.reviews/writer-retriever-proposal-2026-04-18T13-20Z.md`)
+flagged three risks that must be resolved before this proposal moves from
+proposed → accepted. They are reproduced here because they shape the design
+space, not just the implementation.
+
+### C1. Transcript-as-ground-truth over-trusts a lossy evidence source
+
+The proposal says the writer reasons from the "raw session transcript" and
+positions that as *more honest* than foreground self-summarization. But the
+transcript is itself lossy: it captures what the agent said, not what actually
+happened in the external system. Errors of omission (an unsuccessful tool
+call that didn't get explained), hallucinated-then-corrected claims, and
+confident wrong answers all live in the transcript exactly as they were
+uttered. Centralizing all context writes behind transcript-derived synthesis
+can systematize the same confident-wrong pattern with *stronger* provenance.
+
+**Implication for design**: the writer pass must triangulate transcript
+claims against primary evidence (git diff, tool-call results, telemetry)
+before committing. A transcript-only writer is not safer than a foreground
+self-writer — it's differently biased. Gating on git-diff-alignment at
+minimum.
+
+### C2. Sessions end before state settles
+
+Session-end triggers the writer pass. But sessions often end mid-exploration
+(human closes the laptop, server job times out, session crashes, agent
+abandons a debug path). The writer sees a transcript and commits what looks
+like a conclusion, when the underlying work was actually in-progress.
+"Eventual consistency" becomes a euphemism for writing half-formed thought
+into canonical state.
+
+**Implication for design**: the writer needs a "did this session actually
+settle?" gate. Candidates: explicit session-end tag from the agent, a
+heuristic on transcript tail (did the agent declare done?), or a delay
+window (wait N minutes after last activity before writing). None are clean.
+Must be resolved before acceptance.
+
+### C3. Exception boundaries erode the single mutation path
+
+The proposal names `writer-managed: true` as a per-file opt-in flag and
+"emergency writes" as an escape hatch. In pressure, the files that most
+need the single-mutation-path guarantee (active-issues, CURRENT_STATE,
+blocked-on lists) are exactly the ones where agents will reach for the
+escape hatch. The system drifts from "single mutation path" to "writer
+when convenient, foreground when urgent" — which is the current state with
+extra ceremony.
+
+**Implication for design**: the emergency escape must be high-friction and
+audit-loud, not a convenience. Every emergency write should automatically
+file a friction record, and if an agent invokes it more than N times per
+week, the mutation model itself is failing and needs review. Named exception
+channels, not ambient bypass.
+
 ## What would need to happen for this to move from proposed → accepted
 
 1. Adversarial review of this doc (Codex opposing-agent pass).

@@ -24,8 +24,10 @@ This repo is itself an instance of the pattern it specifies.
 Pure Markdown specification repo — no deployable service.
 
 **Reference implementation now ships the mechanics it mandates**: every tracked
-file has frontmatter, `index.md` is generated from frontmatter, `CLAUDE.md`
-declares the always-load list. Other repos retrofit via handoff.
+Markdown file has frontmatter, `index.md` is generated from frontmatter, `CLAUDE.md`
+declares the always-load list. Legacy `apps/` (retired personal-control-plane
+identity from 2025) removed via `git rm` — `c4d843f` preserves the history.
+Other repos retrofit via handoff.
 
 ## What's in progress
 
@@ -36,8 +38,7 @@ declares the always-load list. Other repos retrofit via handoff.
 ## Known broken or degraded
 
 - **Untracked legacy files on disk**: abstract-layer files from the prior identity remain in the working directory but are gitignored. A fresh clone is clean.
-- **`apps/ios/PersonalControlPlane/` is committed legacy**: iOS project artifacts from a prior identity. Not deleted yet — scoped out of pass 1.
-- **Spec not adversarially reviewed**: `docs/agent-context-repo-pattern.md` was written and extended without `/review`. Needs Codex adversarial review before other repos retrofit.
+- **Spec adversarial review**: the pass-1 extension of `docs/agent-context-repo-pattern.md` routed through `supervisor/scripts/lib/adversarial-review.sh` in this session; artifact at `supervisor/.reviews/context-repo-spec-2026-04-18T13-20Z.md`. Prior identity-pivot commit (`c4d843f`) did not get reviewed at the time.
 
 ## Recent decisions
 

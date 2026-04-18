@@ -130,6 +130,19 @@ surfaced without explicit searching.
 These mechanics are required in every context repo. The reference implementation
 (this repo) must ship them. If it doesn't, fix it — not the spec.
 
+**Honesty about what each mechanic delivers:**
+
+- M1 (frontmatter) and M2 (index) are fully in-repo. Authority is local; they
+  work the moment the files are in place.
+- M3 (`CLAUDE.md` always-load declaration) is in-repo, but its enforcement
+  depends on out-of-repo machinery (a Claude Code hook, a workspace wrapper,
+  or agent discipline). The declaration is durable; the enforcement is not
+  yet universal. Codex sessions and headless subagents don't inherit it.
+- M4 (session-start read enforced) and M5 (session-end update enforced) are
+  **aspirational until the enforcement ADR lands and is implemented**. Calling
+  them "required" before enforcement ships is a known tension — see §Known
+  limitations below.
+
 ### M1. YAML frontmatter on every Markdown file
 
 Every `.md` file in a context repo carries a YAML frontmatter block at the top:
@@ -213,8 +226,58 @@ but the spec considers manual compliance a transitional state, not a target.
 ### M5. Session-end update is enforced, not discretionary
 
 Symmetric to M4. The front door must be updated at session end or the ritual
-fails. Enforcement options parallel M4 (hook, gate, wrapper). The same ADR
-covers both.
+fails. Enforcement options parallel M4 (hook, gate, wrapper). Write-side
+enforcement is explicitly deferred to a follow-on ADR because it couples to
+the writer/retriever separation work (see Future work) — the two decisions
+should move independently.
+
+---
+
+## Known limitations
+
+Adversarial review (2026-04-18) surfaced three failure modes this spec does
+not yet fully address. They are documented here so that agents adopting the
+pattern can judge its fitness honestly.
+
+### L1. Read enforcement without freshness enforcement amplifies stale state
+
+M4 ships before M5. A SessionStart hook that injects the always-load list
+into a session's prompt makes `CURRENT_STATE.md` *more* trusted — but if the
+file itself is stale (because M5 isn't enforced), the hook launders confidence
+into untruth. A forgotten CURRENT_STATE update compounds: the stale state gets
+auto-loaded into every subsequent session and gains the appearance of ground
+truth.
+
+**Mitigation (partial)**: the front door's `updated:` frontmatter surfaces
+staleness in the index. Agents reading the index can spot a front door that
+hasn't moved in days. But this requires attention, not enforcement. True
+mitigation requires M5 + a freshness gate.
+
+### L2. Concurrent writers race under overwrite semantics
+
+Invariant 3 (overwritten, not appended) is correct but assumes a single writer.
+Two sessions that both read `CURRENT_STATE.md`, work in parallel, and both
+write at session end produce last-writer-wins; the earlier session's update
+is silently lost. The file still looks authoritative.
+
+**Mitigation (partial)**: git merge conflicts on the front door force the
+second writer to notice. In practice, auto-merge often succeeds on
+non-overlapping sections and the semantic conflict goes undetected. The
+writer/retriever separation proposal's worktree-per-session pattern is the
+structural fix; until that lands, concurrent-writer risk is real.
+
+### L3. Agent-owned design vs mandatory workspace mechanics
+
+Invariant 5 ("each agent designs their own structure within the invariants")
+sits in tension with the Required mechanics, which are workspace-wide
+standards. In practice, repos will converge on "whatever the tooling supports"
+and the agent-owned-design claim will become mostly nominal.
+
+**Resolution**: the invariants are agent-owned (how you organize, what depth
+files you keep, what types you declare). The mechanics are workspace-wide
+(frontmatter schema, index script interface, always-load declaration key).
+Agents are free within that frame, not outside it. This spec now states that
+explicitly — earlier phrasing overstated the design freedom.
 
 ---
 

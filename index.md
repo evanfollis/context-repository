@@ -19,12 +19,3 @@ after any file add, remove, or retitle.
 | [`docs/agent-context-repo-pattern.md`](docs/agent-context-repo-pattern.md) | Agent Context Repository Pattern | Canonical spec for how agents maintain file-based persistent context — five invariants, required mechanics, future work | spec | 2026-04-18 |
 | [`docs/writer-retriever-separation-proposal.md`](docs/writer-retriever-separation-proposal.md) | Writer/Retriever Separation Proposal | Proposed architecture where context-repo writes flow through a single writer pipeline and foreground agents operate retrieval-only; pass-3 groundwork, not yet accepted | proposal | 2026-04-18 |
 | [`README.md`](README.md) | README | Repo overview and entry pointers for the context-repository pattern lab | reference | 2026-04-18 |
-
-## Unindexed (frontmatter missing)
-
-Every context-repo file should carry frontmatter per the spec §Required mechanics.
-The files below do not and should be fixed.
-
-- `apps/ios/PersonalControlPlane/README.md` (no frontmatter — add one)
-- `apps/README.md` (no frontmatter — add one)
-- `apps/recruiter.md` (no frontmatter — add one)
