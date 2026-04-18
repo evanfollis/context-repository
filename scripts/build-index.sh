@@ -22,14 +22,16 @@ OUT="index.md"
 TMP="$(mktemp)"
 trap 'rm -f "$TMP"' EXIT
 
-# Collect all markdown files: tracked + root-level state files. Exclude index.md
-# itself so rebuilds don't self-reference.
+# Collect all markdown files: tracked + untracked-but-not-ignored. Excludes
+# index.md itself (no self-reference) and .git internals. Uses `git ls-files`
+# with -co --exclude-standard so new-but-not-yet-committed files still show up
+# on their first build — otherwise you add a file, run build-index, and the
+# file is missing from its own index until after the next commit.
 mapfile -t FILES < <(
-  {
-    git ls-files '*.md' 2>/dev/null || true
-    [[ -f CURRENT_STATE.md ]] && echo CURRENT_STATE.md
-    [[ -f index.md ]] && echo index.md
-  } | sort -u | grep -v '^index\.md$' || true
+  git ls-files -co --exclude-standard '*.md' 2>/dev/null \
+    | sort -u \
+    | grep -v '^index\.md$' \
+    || true
 )
 
 extract_field() {
