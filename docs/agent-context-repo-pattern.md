@@ -138,9 +138,13 @@ These mechanics are required in every context repo. The reference implementation
   depends on out-of-repo machinery (a Claude Code hook, a workspace wrapper,
   or agent discipline). The declaration is durable; the enforcement is not
   yet universal. Codex sessions and headless subagents don't inherit it.
-- M4 (session-start read enforced) and M5 (session-end update enforced) are
-  **aspirational until the enforcement ADR lands and is implemented**. Calling
-  them "required" before enforcement ships is a known tension — see §Known
+- M4 (session-start read enforced) is **live** as of 2026-04-18 (ADR-0021
+  accepted; `~/.claude/hooks/session-start-context-load.sh` fires on every
+  Claude Code session with a `context-always-load:` block in `CLAUDE.md`).
+  Coverage is Claude-Code-specific — Codex sessions and headless subagents
+  still rely on agent discipline.
+- M5 (session-end update enforced) remains **deferred**. Calling it
+  "required" before enforcement ships is a known tension — see §Known
   limitations below.
 
 ### M1. YAML frontmatter on every Markdown file
