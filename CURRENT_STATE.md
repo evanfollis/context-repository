@@ -7,7 +7,7 @@ updated: 2026-04-23
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-04-23 — attended session: pass-2 proposal drafted, reflection gaps closed.
+**Last updated**: 2026-04-23 — pass-2 execution: atlas retrofit landed, valuation retrofit handoff shipped, spec gaps surfaced.
 
 ---
 
@@ -45,13 +45,17 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   ADR-0021 accepted and hook live. Adversarial review (Codex) ran against spec,
   writer/retriever proposal, and ADR; findings folded in (§Known limitations L1–L3).
   Spec honesty block fixed in `064150b`.
-- **Pass 2 (proposal drafted 2026-04-23, awaiting principal verdict)**: original
-  targets (mentor, recruiter) removed 2026-04-18. Draft candidate list at
-  `docs/pass-2-candidates.md` — 8 candidates surveyed, recommendation:
-  skillfoundry-valuation-context first (acute M5 symptom in practice), atlas second.
-  Every managed project carries M3 (always-load) but none carry M2 (index.md);
-  most CURRENT_STATE files lack spec-conformant frontmatter. Principal picks
-  before any retrofit ships.
+- **Pass 2 (in progress, 2026-04-23)**: principal authorized retrofit on
+  skillfoundry-valuation-context + atlas. Audit complete (0/29 and 0/26
+  frontmatter compliance respectively). Core-surface retrofits proposed via
+  handoffs. **Atlas retrofit landed** in commit `49c24df` (atlas repo) —
+  3 Indexed + 23 Unindexed in atlas/index.md. **Valuation-context retrofit
+  pending** skillfoundry session execution (needs CLAUDE.md creation too —
+  M3 actually missing at sub-repo level; my pass-2 proposal's M3-universal
+  claim was a sub-repo survey gap, corrected in handoff + completion report).
+  Two spec gaps surfaced for separate spec-review pass:
+  `docs/spec-gap-m1-artifact-files.md` (M1 over-broad for artifact archives)
+  and `docs/supervisor-self-audit-scope.md` (front-door-set shape).
 - **Pass 3 (proposed, not started)**: formalize the writer/retriever split per
   `docs/writer-retriever-separation-proposal.md`.
 
@@ -79,9 +83,14 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 
 ## Recent decisions
 
-- **2026-04-23**: Pass-2 candidate proposal drafted (`docs/pass-2-candidates.md`).
+- **2026-04-23 (9b02a25)**: Pass-2 execution — principal authorized both
+  recommended targets (valuation, atlas); both retrofits proposed via handoffs;
+  atlas retrofit landed (49c24df); spec gaps surfaced to separate review pass.
+  Pre-M5 retrofit approved (known limitation, not blocker). Supervisor audit
+  deferred to separate pass (front-door-set shape recommended).
+- **2026-04-23 (e2967d2)**: Pass-2 candidate proposal drafted (`docs/pass-2-candidates.md`).
   Stale URGENT handoff confirmed deleted; 6-cycle CURRENT_STATE commit gap closed
-  (`a2bf9ee`). Awaiting principal verdict on retrofit targets.
+  (`a2bf9ee`).
 - **2026-04-20 (064150b)**: Spec honesty block fixed — M4 marked live (ADR-0021, hook),
   M5 marked deferred. Closes 4-cycle carry-forward. Co-authored with Claude Opus 4.7.
 - **2026-04-18**: ADR-0021 accepted (principal directive: "build the whole thing").
