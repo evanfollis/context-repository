@@ -2,12 +2,12 @@
 name: CURRENT_STATE
 description: Front door for context-repository — what the pattern lab is and what's active
 type: front-door
-updated: 2026-04-20T02:29:54Z
+updated: 2026-04-23T14:25:47Z
 ---
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-04-20T02:29:54Z — reflection pass (02:29 UTC).
+**Last updated**: 2026-04-23T14:25:47Z — reflection pass (14:25 UTC).
 
 ---
 
@@ -31,18 +31,24 @@ Other repos retrofit via handoff.
 
 **M4 (session-start read enforcement) is live**: ADR-0021 accepted 2026-04-18.
 `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Code session
-with a `context-always-load:` declaration in its `CLAUDE.md`. M5 (session-end
-write enforcement) is still deferred.
+with a `context-always-load:` declaration in its `CLAUDE.md`. Coverage is
+Claude-Code-specific — Codex sessions and headless subagents still rely on agent
+discipline. M5 (session-end write enforcement) is still deferred.
+
+**Spec honesty block resolved** (`064150b`, 2026-04-20T16:52Z): `docs/agent-context-repo-pattern.md`
+now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is closed.
 
 ## What's in progress
 
-- **Pass 1 (complete, 2026-04-18)**: spec adds "Required mechanics" section (M1–M5
+- **Pass 1 (complete, 2026-04-20)**: spec adds "Required mechanics" section (M1–M5
   frontmatter/index/always-load/enforcement). Reference implementation reconciled.
   ADR-0021 accepted and hook live. Adversarial review (Codex) ran against spec,
   writer/retriever proposal, and ADR; findings folded in (§Known limitations L1–L3).
-- **Pass 2 (pending)**: retrofit handoffs to each project session so their context
-  repos adopt the mechanics. Mentor and recruiter lack a front door — first pass-2
-  target. M5 enforcement ADR is a candidate pass-2 task.
+  Spec honesty block fixed in `064150b`.
+- **Pass 2 (stalled, scope unclear)**: retrofit handoffs to project sessions so
+  their context repos adopt the mechanics. Original targets (mentor, recruiter)
+  removed from server 2026-04-18. No committed work since pass 1. Needs principal
+  verdict: either name new targets or formally close.
 - **Pass 3 (proposed, not started)**: formalize the writer/retriever split per
   `docs/writer-retriever-separation-proposal.md`.
 
@@ -53,21 +59,37 @@ write enforcement) is still deferred.
   not exist. The spec's §Known limitations L1 names the amplification risk: stale
   CURRENT_STATE files gain false authority from M4 injection. The M5 enforcement ADR
   is the structural fix; writer/retriever separation (pass 3) is the full solution.
+  Concrete symptom: CURRENT_STATE.md is updated by reflection passes but remains
+  uncommitted between passes — attended sessions must commit it.
 
-- **Spec M4/M5 honesty block URGENT (carry-forward, 4th cycle — escalation filed)**:
-  `docs/agent-context-repo-pattern.md` lines 141–142 still call M4+M5 "aspirational
-  until the enforcement ADR lands and is implemented." M4 has landed and is live. This
-  is factually wrong. **Fix is immediate priority**: split the block so M4 shows
-  "implemented" (ADR-0021, hook live) and M5 shows "aspirational." Four consecutive
-  reflection cycles have flagged this without action. URGENT handoff is at
-  `runtime/.handoff/URGENT-context-repository-spec-honesty-block.md`.
+- **Stale URGENT handoff on disk — 6-cycle carry-forward threshold exceeded**:
+  `runtime/.handoff/URGENT-context-repository-spec-honesty-block.md` still exists
+  after `064150b` landed (2026-04-20T16:52Z) — over 96 hours ago. Six reflection
+  cycles have flagged this; none can delete it (write constraint). Next attended
+  session must delete it. Creates false urgency for any session reading the handoff
+  directory.
 
-- **CURRENT_STATE.md uncommitted edit**: Reflection passes have updated this file
-  without committing (correct reflection behavior). Commit alongside the spec honesty
-  block fix. The on-disk version is correct; git history is one commit behind.
+- **CURRENT_STATE.md uncommitted — 6-cycle carry-forward threshold exceeded**: This
+  file has been updated by reflection passes on 02:31 Apr 21, 14:26 Apr 21, 02:26 Apr 22,
+  14:25 Apr 22, 02:25 Apr 23, and 14:25 Apr 23 but never committed. Content is correct.
+  Run: `git add CURRENT_STATE.md && git commit -m "Update CURRENT_STATE: reflection passes through 2026-04-23T14:25Z"`
+
+- **Sessions.conf gap**: context-repository is not registered in
+  `supervisor/scripts/lib/sessions.conf`. The workspace synthesis
+  (2026-04-22T03:26Z) recommends adding it so a tick session can handle
+  mechanical maintenance (commit CURRENT_STATE, delete stale handoffs) without
+  requiring attended-session attention.
+
+- **Escalation path gap**: Reflection jobs cannot write to `supervisor/handoffs/INBOX/`.
+  The 3-cycle carry-forward rule mandates URGENT handoffs after N consecutive skips,
+  but reflection jobs lack write access to the target path. The formal escalation
+  chain is broken for unattended projects. Six cycles in, this structural gap is
+  itself unresolved.
 
 ## Recent decisions
 
+- **2026-04-20 (064150b)**: Spec honesty block fixed — M4 marked live (ADR-0021, hook),
+  M5 marked deferred. Closes 4-cycle carry-forward. Co-authored with Claude Opus 4.7.
 - **2026-04-18**: ADR-0021 accepted (principal directive: "build the whole thing").
   SessionStart hook live at `~/.claude/hooks/session-start-context-load.sh`.
 - **2026-04-18**: §Known limitations added to spec (L1: stale amplification, L2:
@@ -86,22 +108,25 @@ write enforcement) is still deferred.
 ## What the next agent should read first
 
 1. This file.
-2. `runtime/.handoff/URGENT-context-repository-spec-honesty-block.md` — act on this first.
-   The fix is ~3 lines. See prior reflection for exact replacement text.
-3. `index.md` — auto-generated from frontmatter; use it to find what you need.
-4. `docs/agent-context-repo-pattern.md` — the spec (note: M4/M5 honesty block on
-   lines 141–142 is factually wrong and must be fixed this session).
-5. `supervisor/decisions/0021-*` — the enforcement decision (accepted, hook live).
+2. `index.md` — auto-generated from frontmatter; use it to find what you need.
+3. `docs/agent-context-repo-pattern.md` — the spec (M4/M5 honesty fixed in `064150b`).
+4. `supervisor/decisions/0021-*` — the enforcement decision (accepted, hook live).
+5. If pass 2 (retrofit) is being resumed: clarify scope first — original targets
+   (mentor, recruiter) are gone from server. Check with principal before filing handoffs.
 
 ## What bit the last session
 
-- **48+ hours of no attended sessions in this cwd.** Work affecting this repo may
-  be routed through the general session at `/opt/workspace`; its transcripts live
-  at `/root/.claude/projects/-opt-workspace/*.jsonl`. Per-project reflection cannot
-  see those sessions. Commit messages remain the primary evidence of attended work.
-- **4th carry-forward cycle for spec honesty block.** The URGENT handoff was filed
-  at cycle 3 (2026-04-19T14:30Z); it is still unactioned. The fix is a 3-line edit
-  plus a commit of the already-correct CURRENT_STATE.md. Do not let this reach cycle 5.
-- **Where to find attended transcripts when cwd-local JSONL is thin**: check
-  `/root/.claude/projects/-opt-workspace/*.jsonl` — sessions rooted at the workspace
-  root that touched this project will be there, not here.
+- **Six consecutive reflection passes, no attended session**: Window 02:31 Apr 21
+  through 14:25 Apr 23 had no attended work and no commits. The 3-cycle carry-forward
+  escalation threshold was met at cycle 3; this is now cycle 6 with no resolution.
+  The workspace synthesis (2026-04-22T03:26Z) flagged the pattern and proposed adding
+  the repo to `sessions.conf` or formally recording it as deprioritized. No verdict.
+- **M5 gap is visible in practice**: Reflection writes correct state but cannot commit
+  it. The always-load hook injects this file at session start, so sessions read correct
+  content. The gap is currently benign but demonstrates why M5 matters.
+- **Pass 2 scope problem persists**: Original pass-2 targets (mentor, recruiter) were
+  removed from server 2026-04-18. Six cycles without a verdict.
+- **Escalation path is broken for unattended projects**: Reflection jobs cannot write
+  to `supervisor/handoffs/INBOX/`. The carry-forward rule has no formal output path.
+  Synthesis output files reach the `general` session's display but are not INBOX items
+  requiring action. The gap between "observed" and "escalated" is structural.
