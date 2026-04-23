@@ -2,7 +2,7 @@
 name: index
 description: Auto-generated index of every frontmatter-bearing file in this repo
 type: index
-updated: 2026-04-18
+updated: 2026-04-23
 ---
 
 # Index
@@ -15,7 +15,8 @@ after any file add, remove, or retitle.
 | Path | Name | Description | Type | Updated |
 |---|---|---|---|---|
 | [`CLAUDE.md`](CLAUDE.md) | CLAUDE directives | Agent directives for the context-repository pattern lab + workspace-wide always-load declaration | directive | 2026-04-18 |
-| [`CURRENT_STATE.md`](CURRENT_STATE.md) | CURRENT_STATE | Front door for context-repository — what the pattern lab is and what's active | front-door | 2026-04-18 |
+| [`CURRENT_STATE.md`](CURRENT_STATE.md) | CURRENT_STATE | Front door for context-repository — what the pattern lab is and what's active | front-door | 2026-04-23 |
 | [`docs/agent-context-repo-pattern.md`](docs/agent-context-repo-pattern.md) | Agent Context Repository Pattern | Canonical spec for how agents maintain file-based persistent context — five invariants, required mechanics, future work | spec | 2026-04-18 |
+| [`docs/pass-2-candidates.md`](docs/pass-2-candidates.md) | Pass-2 candidates | Candidate projects for context-repo pattern retrofit (pass 2). Draft for principal verdict. | proposal | 2026-04-23 |
 | [`docs/writer-retriever-separation-proposal.md`](docs/writer-retriever-separation-proposal.md) | Writer/Retriever Separation Proposal | Proposed architecture where context-repo writes flow through a single writer pipeline and foreground agents operate retrieval-only; pass-3 groundwork, not yet accepted | proposal | 2026-04-18 |
 | [`README.md`](README.md) | README | Repo overview and entry pointers for the context-repository pattern lab | reference | 2026-04-18 |

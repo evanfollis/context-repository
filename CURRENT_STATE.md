@@ -2,12 +2,12 @@
 name: CURRENT_STATE
 description: Front door for context-repository — what the pattern lab is and what's active
 type: front-door
-updated: 2026-04-23T14:25:47Z
+updated: 2026-04-23
 ---
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-04-23T14:25:47Z — reflection pass (14:25 UTC).
+**Last updated**: 2026-04-23 — attended session: pass-2 proposal drafted, reflection gaps closed.
 
 ---
 
@@ -45,10 +45,13 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   ADR-0021 accepted and hook live. Adversarial review (Codex) ran against spec,
   writer/retriever proposal, and ADR; findings folded in (§Known limitations L1–L3).
   Spec honesty block fixed in `064150b`.
-- **Pass 2 (stalled, scope unclear)**: retrofit handoffs to project sessions so
-  their context repos adopt the mechanics. Original targets (mentor, recruiter)
-  removed from server 2026-04-18. No committed work since pass 1. Needs principal
-  verdict: either name new targets or formally close.
+- **Pass 2 (proposal drafted 2026-04-23, awaiting principal verdict)**: original
+  targets (mentor, recruiter) removed 2026-04-18. Draft candidate list at
+  `docs/pass-2-candidates.md` — 8 candidates surveyed, recommendation:
+  skillfoundry-valuation-context first (acute M5 symptom in practice), atlas second.
+  Every managed project carries M3 (always-load) but none carry M2 (index.md);
+  most CURRENT_STATE files lack spec-conformant frontmatter. Principal picks
+  before any retrofit ships.
 - **Pass 3 (proposed, not started)**: formalize the writer/retriever split per
   `docs/writer-retriever-separation-proposal.md`.
 
@@ -61,18 +64,6 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   is the structural fix; writer/retriever separation (pass 3) is the full solution.
   Concrete symptom: CURRENT_STATE.md is updated by reflection passes but remains
   uncommitted between passes — attended sessions must commit it.
-
-- **Stale URGENT handoff on disk — 6-cycle carry-forward threshold exceeded**:
-  `runtime/.handoff/URGENT-context-repository-spec-honesty-block.md` still exists
-  after `064150b` landed (2026-04-20T16:52Z) — over 96 hours ago. Six reflection
-  cycles have flagged this; none can delete it (write constraint). Next attended
-  session must delete it. Creates false urgency for any session reading the handoff
-  directory.
-
-- **CURRENT_STATE.md uncommitted — 6-cycle carry-forward threshold exceeded**: This
-  file has been updated by reflection passes on 02:31 Apr 21, 14:26 Apr 21, 02:26 Apr 22,
-  14:25 Apr 22, 02:25 Apr 23, and 14:25 Apr 23 but never committed. Content is correct.
-  Run: `git add CURRENT_STATE.md && git commit -m "Update CURRENT_STATE: reflection passes through 2026-04-23T14:25Z"`
 
 - **Sessions.conf gap**: context-repository is not registered in
   `supervisor/scripts/lib/sessions.conf`. The workspace synthesis
@@ -88,6 +79,9 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 
 ## Recent decisions
 
+- **2026-04-23**: Pass-2 candidate proposal drafted (`docs/pass-2-candidates.md`).
+  Stale URGENT handoff confirmed deleted; 6-cycle CURRENT_STATE commit gap closed
+  (`a2bf9ee`). Awaiting principal verdict on retrofit targets.
 - **2026-04-20 (064150b)**: Spec honesty block fixed — M4 marked live (ADR-0021, hook),
   M5 marked deferred. Closes 4-cycle carry-forward. Co-authored with Claude Opus 4.7.
 - **2026-04-18**: ADR-0021 accepted (principal directive: "build the whole thing").
