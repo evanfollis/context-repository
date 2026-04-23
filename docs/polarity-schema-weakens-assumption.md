@@ -3,7 +3,7 @@ name: Polarity schema — weakens_assumption proposal
 description: Recommend adding weakens_assumption to canon Evidence.polarity enum; flag related ambiguous drift as separate scope question for principal
 type: proposal
 updated: 2026-04-23
-status: draft — awaiting adversarial review on the spec before any canon v0.1.1 bump
+status: superseded 2026-04-23 by docs/polarity-schema-v0.1.1-audit.md — adversarial review (Codex) pushed back on scope; executive redirected to holistic audit
 ---
 
 # Proposal — add `weakens_assumption` to `Evidence.polarity` enum

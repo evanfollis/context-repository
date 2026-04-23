@@ -45,6 +45,16 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   ADR-0021 accepted and hook live. Adversarial review (Codex) ran against spec,
   writer/retriever proposal, and ADR; findings folded in (§Known limitations L1–L3).
   Spec honesty block fixed in `064150b`.
+- **Canon polarity v0.1.1 audit (in progress, 2026-04-23)**: first-round narrow
+  proposal (`docs/polarity-schema-weakens-assumption.md`, `532279a`) failed Codex
+  adversarial review; executive redirected to holistic audit. Revised proposal at
+  `docs/polarity-schema-v0.1.1-audit.md` — 5-value enum with operational tests,
+  coupled-surface changes (audit questions 21b/21c, decision citation rule, adapter
+  mapping, CHANGELOG), schema-invariant two-axis finding (epistemic polarity vs
+  operational signal class), atlas 113-neutral-envelopes follow-on flagged. Canon-CI
+  gap filed as FR-0035. Awaiting second adversarial review + principal verdict
+  before any v0.1.0 → v0.1.1 bump.
+
 - **Pass 2 (complete, 2026-04-23)**: principal authorized retrofit on
   skillfoundry-valuation-context + atlas; both landed. Atlas retrofit in
   atlas/`49c24df` (3 Indexed + 23 Unindexed). Valuation-context retrofit in
