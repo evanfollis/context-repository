@@ -2,7 +2,7 @@
 name: Agent Context Repository Pattern
 description: Canonical spec for how agents maintain file-based persistent context — five invariants, required mechanics, future work
 type: spec
-updated: 2026-04-18
+updated: 2026-04-23
 ---
 
 # Agent Context Repository Pattern
@@ -16,6 +16,7 @@ Any agent maintaining a scoped context repo should treat this as the reference.
 
 A file-based record of current domain state that an agent reads at session start
 and updates at session end. It is not a log. It is not an abstract schema layer.
+It is not the cross-pod knowledge system. It is not a runtime memory product.
 It is the agent's working memory made durable — the thing that makes the next
 session possible without starting cold.
 

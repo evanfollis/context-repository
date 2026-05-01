@@ -1,17 +1,25 @@
 ---
 name: CLAUDE directives
-description: Agent directives for the context-repository pattern lab + workspace-wide always-load declaration
+description: Agent directives for the context-repository pattern lab + canon spec home + workspace-wide always-load declaration
 type: directive
-updated: 2026-04-18
+updated: 2026-05-01
 ---
 
-# Context Repository — Pattern Lab
+# Context Repository — Pattern Lab + Canon
 
 ## What This Is
 
-The pattern lab for agent context repositories. This repo designs, specifies,
-and pressure-tests the pattern that agents across the workspace use to maintain
-persistent context across sessions.
+This repo has a deliberate **dual role**:
+
+1. **Pattern lab for agent context repositories** — designs, specifies, and
+   pressure-tests the pattern that agents across the workspace use to maintain
+   persistent context across sessions.
+2. **Home of canon** — the formal obligations and provenance model under
+   `spec/discovery-framework/`.
+
+These roles are related but distinct. This repo is **not** the synaplex
+knowledge system and **not** a production memory-runtime service. It is the
+pattern/spec substrate underneath those higher layers.
 
 This repo is itself an instance of the pattern it specifies.
 
@@ -19,7 +27,8 @@ This repo is itself an instance of the pattern it specifies.
 
 - `CURRENT_STATE.md` — front door (read this first, every session)
 - `index.md` — auto-generated index of every frontmatter-bearing file
-- `docs/agent-context-repo-pattern.md` — canonical spec for the pattern
+- `docs/agent-context-repo-pattern.md` — canonical spec for the context-repo pattern
+- `spec/discovery-framework/canon.md` — the canon obligations model
 - `docs/` — depth files linked from the front door
 - `scripts/build-index.sh` — regenerates `index.md` from frontmatter
 
