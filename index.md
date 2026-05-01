@@ -2,7 +2,7 @@
 name: index
 description: Auto-generated index of every frontmatter-bearing file in this repo
 type: index
-updated: 2026-04-23
+updated: 2026-05-01
 ---
 
 # Index
@@ -14,13 +14,14 @@ after any file add, remove, or retitle.
 
 | Path | Name | Description | Type | Updated |
 |---|---|---|---|---|
-| [`CLAUDE.md`](CLAUDE.md) | CLAUDE directives | Agent directives for the context-repository pattern lab + workspace-wide always-load declaration | directive | 2026-04-18 |
-| [`CURRENT_STATE.md`](CURRENT_STATE.md) | CURRENT_STATE | Front door for context-repository — what the pattern lab is and what's active | front-door | 2026-04-23 |
-| [`docs/agent-context-repo-pattern.md`](docs/agent-context-repo-pattern.md) | Agent Context Repository Pattern | Canonical spec for how agents maintain file-based persistent context — five invariants, required mechanics, future work | spec | 2026-04-18 |
+| [`CLAUDE.md`](CLAUDE.md) | CLAUDE directives | Agent directives for the context-repository pattern lab + canon spec home + workspace-wide always-load declaration | directive | 2026-05-01 |
+| [`CURRENT_STATE.md`](CURRENT_STATE.md) | CURRENT_STATE | Front door for context-repository — what the pattern lab is and what's active | front-door | 2026-05-01 |
+| [`docs/agent-context-repo-pattern.md`](docs/agent-context-repo-pattern.md) | Agent Context Repository Pattern | Canonical spec for how agents maintain file-based persistent context — five invariants, required mechanics, future work | spec | 2026-04-23 |
+| [`docs/harness-check-spec-amendment-proposal.md`](docs/harness-check-spec-amendment-proposal.md) | Harness-Check Spec Amendment Proposal | Four questions from harness-check.py against the context-repo pattern — decisions and proposed spec text where applicable | proposal | 2026-05-01 |
 | [`docs/pass-2-candidates.md`](docs/pass-2-candidates.md) | Pass-2 candidates | Candidate projects for context-repo pattern retrofit (pass 2). Draft for principal verdict. | proposal | 2026-04-23 |
 | [`docs/polarity-schema-v0.1.1-audit.md`](docs/polarity-schema-v0.1.1-audit.md) | Polarity schema — v0.1.1 holistic audit | End-to-end audit of canon Evidence.polarity usage across schemas, phase-0 fixtures, and live envelopes; proposes reconciled 5-value enum with operational tests and coupled-surface changes | proposal | 2026-04-23 |
 | [`docs/polarity-schema-weakens-assumption.md`](docs/polarity-schema-weakens-assumption.md) | Polarity schema — weakens_assumption proposal | Recommend adding weakens_assumption to canon Evidence.polarity enum; flag related ambiguous drift as separate scope question for principal | proposal | 2026-04-23 |
 | [`docs/spec-gap-m1-artifact-files.md`](docs/spec-gap-m1-artifact-files.md) | M1 schema gap — artifact-class files | Observed during pass-2 execution (2026-04-23) — M1's literal reading is over-broad for dated finding/evidence/review archives. Surfaces for separate spec-review pass. | finding | 2026-04-23 |
 | [`docs/supervisor-self-audit-scope.md`](docs/supervisor-self-audit-scope.md) | Supervisor self-audit scope | Scope note for the separate supervisor pass — whether supervisor/system/* satisfies M1+M2 or requires retrofit. Scope only, not execute. | proposal | 2026-04-23 |
 | [`docs/writer-retriever-separation-proposal.md`](docs/writer-retriever-separation-proposal.md) | Writer/Retriever Separation Proposal | Proposed architecture where context-repo writes flow through a single writer pipeline and foreground agents operate retrieval-only; pass-3 groundwork, not yet accepted | proposal | 2026-04-18 |
-| [`README.md`](README.md) | README | Repo overview and entry pointers for the context-repository pattern lab | reference | 2026-04-18 |
+| [`README.md`](README.md) | README | Repo overview and entry pointers for the context-repository pattern lab | reference | 2026-04-23 |
