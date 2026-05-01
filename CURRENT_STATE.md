@@ -7,7 +7,7 @@ updated: 2026-05-01
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-05-01T02:38Z — reflection pass; tick failed 401 auth at 00:38Z; 3 files still unstaged (9th cycle); sessions.conf gap claim was stale (entry exists — cleared); unread handoff from general-codex re harness-check.py spec decision.
+**Last updated**: 2026-05-01T05:13Z — tick session; landed dual-role identity (9-cycle carry-forward closed); harness-check spec decision rendered as proposal at `docs/harness-check-spec-amendment-proposal.md`; adversarial review gate fired but blocked (codex not installed); Codex AGENTS.md question routed to executive.
 
 ---
 
@@ -75,32 +75,15 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 - **Pass 3 (proposed, not started)**: formalize the writer/retriever split per
   `docs/writer-retriever-separation-proposal.md`.
 
-- **Harness-check.py spec decision (new, 2026-04-30)**: unread handoff from
-  `general-codex` at
-  `/opt/workspace/runtime/.handoff/context-repo-harness-qa-frontdoor-checks-2026-04-30T21-16Z.md`.
-  Asks whether QA-plan presence, front-door freshness gates, instruction-file size
-  limits, and Codex `context-always-load` coverage should be promoted into the
-  pattern spec. Requires attended session decision. Three acceptable outputs named
-  in the handoff; no implementation needed.
+- **Harness-check spec amendment proposal (2026-05-01, awaiting verdict)**:
+  `docs/harness-check-spec-amendment-proposal.md` — four questions from
+  `harness-check.py` resolved: QA-plan stays supervisor-local; freshness
+  gets a 7-day convention note in §L1; instruction-file size extends §M3;
+  Codex AGENTS.md coverage routed to executive as a workspace-mechanics
+  decision. Adversarial review blocked (codex unavailable); principal verdict
+  needed before any spec edit lands.
 
 ## Known broken or degraded
-
-- **Project tick broken: 401 auth failure** (2026-05-01T00:38Z): Tick session
-  `951c44e2` failed immediately with "Invalid authentication credentials". All
-  scheduled unattended work for this project is silently failing. No `failure`-class
-  telemetry emitted — visible only in the JSONL transcript. Handoff filed to general:
-  `runtime/.handoff/general-context-repo-tick-auth-failure-2026-05-01.md`.
-  Reflection job (different execution path) is not affected.
-
-- **3 files unstaged after attended session** (9th cycle, since Apr 23):
-  `CURRENT_STATE.md`, `README.md`, `docs/agent-context-repo-pattern.md` — dual-role
-  identity clarification. Substantive content, not just frontmatter. The M5 gap is
-  losing real identity commits.
-
-- **CLAUDE.md does not reflect dual identity**: Still reads "Pattern lab" only,
-  `updated: 2026-04-18`. The always-load chain will mislead agents into treating
-  canon work as out-of-scope. Needs update to "Pattern Lab + Canon" with §What This Is
-  revised.
 
 - **M5 (session-end write enforcement) unimplemented**: M4 auto-injects always-load
   files at session start; M5's symmetric guarantee (front door updated at end) does
@@ -118,6 +101,12 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 
 ## Recent decisions
 
+- **2026-05-01 (e3fe4b6)**: Landed dual-role identity across CLAUDE.md,
+  CURRENT_STATE.md, README.md, and spec. Closes 9-cycle M5-gap carry-forward.
+- **2026-05-01 (e561da1)**: Harness-check spec amendment proposal written at
+  `docs/harness-check-spec-amendment-proposal.md`. QA-plan supervisor-local;
+  freshness + size amendments proposed for spec; Codex AGENTS.md question
+  routed to executive.
 - **2026-04-23**: Pass-2 complete. Both retrofits landed — atlas/`49c24df`
   and skillfoundry-valuation-context/`f41ffd0`. Spec gaps surfaced to
   separate review pass. Pre-M5 retrofit approved (known limitation, not
@@ -150,25 +139,15 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 2. `index.md` — auto-generated from frontmatter; use it to find what you need.
 3. `docs/agent-context-repo-pattern.md` — the spec (M4/M5 honesty fixed in `064150b`).
 4. `supervisor/decisions/0021-*` — the enforcement decision (accepted, hook live).
-5. Unread handoff: `runtime/.handoff/context-repo-harness-qa-frontdoor-checks-2026-04-30T21-16Z.md`.
+5. `docs/harness-check-spec-amendment-proposal.md` — proposal pending adversarial review and principal verdict; two spec amendments proposed, one route-back to executive.
 6. If pass 2 (retrofit) is being resumed: clarify scope first — original targets
    (mentor, recruiter) are gone from server. Check with principal before filing handoffs.
 
 ## What bit the last session
 
-- **Tick session auth failure (2026-05-01T00:38Z)**: Project tick got 401
-  immediately; no work executed. Silently failed — no telemetry failure event.
-  Handoff to general filed.
-- **Sessions.conf stale bug (caught this cycle)**: CURRENT_STATE.md claimed
-  context-repo was not in sessions.conf; it is, as of some prior session that
-  never updated the front door. Classic M5 consequence — correct state in the
-  config, wrong state in the front door, reflection loop running "skipped" so
-  no one noticed for multiple cycles.
-- **M5 gap lost an identity commit** (Apr 23): attended session shipped dual-role
-  identity clarification across CURRENT_STATE.md, README.md, and the spec but did
-  not commit. Now 9 cycles without these landing.
-- **CLAUDE.md not updated for dual-role**: The Apr 23 session updated 3 files but
-  skipped CLAUDE.md. Always-load agents will be misled about the repo's scope.
+- **Adversarial review gate fired but blocked**: Commits touched ≥3 files, so the
+  gate applied. `adversarial-review.sh` requires `codex`, which is not installed.
+  Gate blocked, not skipped — noted in completion report to executive.
 - **Escalation path narrowed**: Reflection jobs CAN write to `runtime/.handoff/`
   root (confirmed). INBOX is still blocked. Previous claim ("Reflection jobs cannot
   write to `supervisor/handoffs/INBOX/`") remains accurate; root-level handoffs are
