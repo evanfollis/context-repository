@@ -54,16 +54,19 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   ADR-0021 accepted and hook live. Adversarial review (Codex) ran against spec,
   writer/retriever proposal, and ADR; findings folded in (§Known limitations L1–L3).
   Spec honesty block fixed in `064150b`.
-- **Canon 3-claims-per-assumption verdict (issued, 2026-05-07)**: skillfoundry-pm
-  routed Codex Finding A (single canon `Claim` per CriticalAssumption silently
-  drops `economic_claim` + `channel_claim`) for spec-authority decision after
-  14+ days deferred. Verdict at `docs/canon-3claims-per-assumption-verdict.md`:
-  two-step path — Option 3 (loud MAPPING.md acknowledgment) immediately,
-  Option 1 (3 envelopes via id-prefix `<assumption_id>:problem|economic|channel`)
-  medium-term after markdown-side authoring lands. No canon schema bump.
-  Surfaced unacknowledged cost: each CriticalAssumption today has one shared
-  `falsification_rule`; Option 1 requires three. Reply handoff filed to
-  skillfoundry-harness session.
+- **Canon 3-claims-per-assumption verdict (Step 1 landed, 2026-05-07)**:
+  skillfoundry-pm routed Codex Finding A (single canon `Claim` per
+  CriticalAssumption silently drops `economic_claim` + `channel_claim`) for
+  spec-authority decision after 14+ days deferred. Verdict at
+  `docs/canon-3claims-per-assumption-verdict.md` (`1fcf0ad`): two-step path —
+  Option 3 (loud MAPPING.md acknowledgment) immediately, Option 1 (3 envelopes
+  via id-prefix `<assumption_id>:problem|economic|channel`) medium-term after
+  markdown-side authoring lands. No canon schema bump. Skillfoundry shipped
+  Step 1 at `skillfoundry-harness/81ea5b5` ("Make partial-thesis canon collapse
+  explicit") 2026-05-07T15:25Z; tests 61/61 unchanged. **Step 2 awaits
+  principal verdict** on the two open questions in the verdict (two-step path
+  acceptable? markdown-side authoring cost acceptable, or prefer split-into-
+  atomic-files Option 4?). Skillfoundry's domain read accepts both.
 
 - **Canon polarity v0.1.1 audit (in progress, 2026-04-23)**: first-round narrow
   proposal (`docs/polarity-schema-weakens-assumption.md`, `532270a`) failed Codex
