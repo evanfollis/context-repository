@@ -2,12 +2,12 @@
 name: CURRENT_STATE
 description: Front door for context-repository — what the pattern lab is and what's active
 type: front-door
-updated: 2026-05-01
+updated: 2026-05-02
 ---
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-05-01T05:13Z — tick session; landed dual-role identity (9-cycle carry-forward closed); harness-check spec decision rendered as proposal at `docs/harness-check-spec-amendment-proposal.md`; adversarial review gate fired but blocked (codex not installed); Codex AGENTS.md question routed to executive.
+**Last updated**: 2026-05-02T02-35-10Z — reflection pass; quiet 12h window (no commits, no tick); CURRENT_STATE.md improvements from 14:35Z reflection still uncommitted (M5 failure mode); adversarial review gate 4th consecutive cycle blocked; all structural issues persist.
 
 ---
 
@@ -23,10 +23,10 @@ This repo has a deliberate **dual role**:
    `spec/discovery-framework/`.
 
 These roles are related but distinct. This repo is **not** the synaplex
-knowledge system and **not** a production memory-runtime surface. It is the
+knowledge system and **not** a production memory-runtime service. It is the
 pattern/spec substrate underneath those higher layers.
 
-This repo is itself an instance of the context-repo pattern it specifies.
+This repo is itself an instance of the pattern it specifies.
 
 ## Deployed / running state
 
@@ -54,6 +54,17 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   ADR-0021 accepted and hook live. Adversarial review (Codex) ran against spec,
   writer/retriever proposal, and ADR; findings folded in (§Known limitations L1–L3).
   Spec honesty block fixed in `064150b`.
+- **Canon 3-claims-per-assumption verdict (issued, 2026-05-07)**: skillfoundry-pm
+  routed Codex Finding A (single canon `Claim` per CriticalAssumption silently
+  drops `economic_claim` + `channel_claim`) for spec-authority decision after
+  14+ days deferred. Verdict at `docs/canon-3claims-per-assumption-verdict.md`:
+  two-step path — Option 3 (loud MAPPING.md acknowledgment) immediately,
+  Option 1 (3 envelopes via id-prefix `<assumption_id>:problem|economic|channel`)
+  medium-term after markdown-side authoring lands. No canon schema bump.
+  Surfaced unacknowledged cost: each CriticalAssumption today has one shared
+  `falsification_rule`; Option 1 requires three. Reply handoff filed to
+  skillfoundry-harness session.
+
 - **Canon polarity v0.1.1 audit (in progress, 2026-04-23)**: first-round narrow
   proposal (`docs/polarity-schema-weakens-assumption.md`, `532270a`) failed Codex
   adversarial review; executive redirected to holistic audit. Revised proposal at
@@ -62,7 +73,8 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   mapping, CHANGELOG), schema-invariant two-axis finding (epistemic polarity vs
   operational signal class), atlas 113-neutral-envelopes follow-on flagged. Canon-CI
   gap filed as FR-0035. Awaiting second adversarial review + principal verdict
-  before any v0.1.0 → v0.1.1 bump.
+  before any v0.1.0 → v0.1.1 bump. **Blocked: adversarial review requires codex,
+  which is not installed.**
 
 - **Pass 2 (complete, 2026-04-23)**: principal authorized retrofit on
   skillfoundry-valuation-context + atlas; both landed. Atlas retrofit in
@@ -80,8 +92,10 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   `harness-check.py` resolved: QA-plan stays supervisor-local; freshness
   gets a 7-day convention note in §L1; instruction-file size extends §M3;
   Codex AGENTS.md coverage routed to executive as a workspace-mechanics
-  decision. Adversarial review blocked (codex unavailable); principal verdict
-  needed before any spec edit lands.
+  decision. **Adversarial review blocked (codex unavailable); principal
+  verdict needed before any spec edit lands.** Q2 (freshness) + Q3 (size
+  limit) are low-risk additive changes; may proceed without adversarial
+  review if principal accepts the degraded condition.
 
 ## Known broken or degraded
 
@@ -90,14 +104,23 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   not exist. The spec's §Known limitations L1 names the amplification risk: stale
   CURRENT_STATE files gain false authority from M4 injection. The M5 enforcement ADR
   is the structural fix; writer/retriever separation (pass 3) is the full solution.
-  Concrete symptom: attended sessions close without committing modified files.
+  Concrete symptom: the dual-role identity clarification ran 9 reflection cycles as an
+  "unstaged since Apr 23" item before a tick session with commit access closed it.
+
+- **Adversarial review gate blocked**: The gate fires correctly (≥3 files or ≥100
+  lines changed) but cannot run the review because `codex` is not installed. Both
+  commits in the 05:13Z tick exceeded the threshold; neither received an actual review.
+  Two spec-amending proposals (harness-check and polarity v0.1.1 audit) are blocked
+  waiting for an adversarial review that cannot run. Until resolved, all substantive
+  spec work proceeds without the adversarial gate. The `/review` skill (via Claude)
+  is an alternative path if the principal enables it.
 
 - **Escalation path gap**: Reflection jobs cannot write to `supervisor/handoffs/INBOX/`.
   The 3-cycle carry-forward rule mandates URGENT handoffs after N consecutive skips,
   but reflection jobs lack write access to the target path. Reflection jobs CAN write
-  to `runtime/.handoff/` root (confirmed this cycle — general-targeted handoff
-  written). The gap is narrower than previously diagnosed: INBOX is blocked,
-  root .handoff/ is accessible.
+  to `runtime/.handoff/` root (confirmed — general-targeted handoffs reach the general
+  session and get consumed). The gap is narrower than previously diagnosed: INBOX is
+  blocked, root .handoff/ is accessible.
 
 ## Recent decisions
 
@@ -139,16 +162,22 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 2. `index.md` — auto-generated from frontmatter; use it to find what you need.
 3. `docs/agent-context-repo-pattern.md` — the spec (M4/M5 honesty fixed in `064150b`).
 4. `supervisor/decisions/0021-*` — the enforcement decision (accepted, hook live).
-5. `docs/harness-check-spec-amendment-proposal.md` — proposal pending adversarial review and principal verdict; two spec amendments proposed, one route-back to executive.
-6. If pass 2 (retrofit) is being resumed: clarify scope first — original targets
-   (mentor, recruiter) are gone from server. Check with principal before filing handoffs.
+5. `docs/harness-check-spec-amendment-proposal.md` — proposal pending principal verdict;
+   adversarial review blocked (codex not installed); Q2 + Q3 are low-risk and ready if
+   principal accepts degraded review condition.
+6. If canon polarity work is being resumed: adversarial review is also blocked there;
+   check whether codex is now available before proceeding.
 
 ## What bit the last session
 
-- **Adversarial review gate fired but blocked**: Commits touched ≥3 files, so the
-  gate applied. `adversarial-review.sh` requires `codex`, which is not installed.
-  Gate blocked, not skipped — noted in completion report to executive.
-- **Escalation path narrowed**: Reflection jobs CAN write to `runtime/.handoff/`
-  root (confirmed). INBOX is still blocked. Previous claim ("Reflection jobs cannot
-  write to `supervisor/handoffs/INBOX/`") remains accurate; root-level handoffs are
-  now a viable escalation path for general-targeted items.
+- **M5 failure mode confirmed, measured**: The 14:35Z reflection job updated
+  CURRENT_STATE.md with accurate improvements (adversarial-review added to §Known broken,
+  polarity/harness-check entries sharpened). Those changes sat uncommitted for 12h+
+  because reflection jobs cannot commit. Any attended session or working-tree reset
+  could discard them silently. The gap closes only when a tick session runs and commits.
+- **Adversarial review gate: 4th consecutive blocked cycle**: Gate still hollow on
+  missing `codex`. All spec-amending proposals still unreviewed. The `/review` skill
+  is an available fallback; no session has wired it in yet.
+- **No new proposals actioned**: Three proposals from the 14:35Z reflection (adversarial
+  review restoration, harness-check Q2/Q3 verdict, M5 escalation decision) remained
+  unactioned through this window — no tick ran to execute them.

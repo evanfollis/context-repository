@@ -2,7 +2,7 @@
 name: index
 description: Auto-generated index of every frontmatter-bearing file in this repo
 type: index
-updated: 2026-05-01
+updated: 2026-05-07
 ---
 
 # Index
@@ -15,8 +15,9 @@ after any file add, remove, or retitle.
 | Path | Name | Description | Type | Updated |
 |---|---|---|---|---|
 | [`CLAUDE.md`](CLAUDE.md) | CLAUDE directives | Agent directives for the context-repository pattern lab + canon spec home + workspace-wide always-load declaration | directive | 2026-05-01 |
-| [`CURRENT_STATE.md`](CURRENT_STATE.md) | CURRENT_STATE | Front door for context-repository — what the pattern lab is and what's active | front-door | 2026-05-01 |
+| [`CURRENT_STATE.md`](CURRENT_STATE.md) | CURRENT_STATE | Front door for context-repository — what the pattern lab is and what's active | front-door | 2026-05-02 |
 | [`docs/agent-context-repo-pattern.md`](docs/agent-context-repo-pattern.md) | Agent Context Repository Pattern | Canonical spec for how agents maintain file-based persistent context — five invariants, required mechanics, future work | spec | 2026-04-23 |
+| [`docs/canon-3claims-per-assumption-verdict.md`](docs/canon-3claims-per-assumption-verdict.md) | Canon 3-claims-per-assumption — context-repo verdict | Spec-authority verdict on whether canon Claim envelopes should be 1 or 3 per skillfoundry CriticalAssumption. Recommends Option 3 now + Option 1 medium-term; flags cluster_id as separate proposal. | decision | 2026-05-07 |
 | [`docs/harness-check-spec-amendment-proposal.md`](docs/harness-check-spec-amendment-proposal.md) | Harness-Check Spec Amendment Proposal | Four questions from harness-check.py against the context-repo pattern — decisions and proposed spec text where applicable | proposal | 2026-05-01 |
 | [`docs/pass-2-candidates.md`](docs/pass-2-candidates.md) | Pass-2 candidates | Candidate projects for context-repo pattern retrofit (pass 2). Draft for principal verdict. | proposal | 2026-04-23 |
 | [`docs/polarity-schema-v0.1.1-audit.md`](docs/polarity-schema-v0.1.1-audit.md) | Polarity schema — v0.1.1 holistic audit | End-to-end audit of canon Evidence.polarity usage across schemas, phase-0 fixtures, and live envelopes; proposes reconciled 5-value enum with operational tests and coupled-surface changes | proposal | 2026-04-23 |
