@@ -2,12 +2,12 @@
 name: CURRENT_STATE
 description: Front door for context-repository — what the pattern lab is and what's active
 type: front-door
-updated: 2026-05-02
+updated: 2026-05-07
 ---
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-05-02T02-35-10Z — reflection pass; quiet 12h window (no commits, no tick); CURRENT_STATE.md improvements from 14:35Z reflection still uncommitted (M5 failure mode); adversarial review gate 4th consecutive cycle blocked; all structural issues persist.
+**Last updated**: 2026-05-07T12-38Z — metadata refresh; prior tick (06:10Z) updated body content for 3-claims verdict + Step 1 landing but did not update frontmatter or body timestamp; closing out handoff that was generated after the work had already landed.
 
 ---
 
@@ -127,6 +127,13 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 
 ## Recent decisions
 
+- **2026-05-07 (c2ec5c0)**: Recorded Step 1 landing — skillfoundry-harness shipped
+  MAPPING.md "(LOSSY)" patch at `81ea5b5`; tests 61/61 unchanged. Step 2 awaits
+  principal verdict on two open questions (two-step path? authoring cost?).
+- **2026-05-07 (1fcf0ad)**: 3-claims-per-assumption verdict issued at
+  `docs/canon-3claims-per-assumption-verdict.md` — Option 3 immediately + Option 1
+  medium-term; no canon schema bump. Named Option 4 (split CriticalAssumption into
+  atomic sibling files) for completeness; cluster_id deferred as a separate proposal.
 - **2026-05-01 (e3fe4b6)**: Landed dual-role identity across CLAUDE.md,
   CURRENT_STATE.md, README.md, and spec. Closes 9-cycle M5-gap carry-forward.
 - **2026-05-01 (e561da1)**: Harness-check spec amendment proposal written at
@@ -173,14 +180,14 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 
 ## What bit the last session
 
-- **M5 failure mode confirmed, measured**: The 14:35Z reflection job updated
-  CURRENT_STATE.md with accurate improvements (adversarial-review added to §Known broken,
-  polarity/harness-check entries sharpened). Those changes sat uncommitted for 12h+
-  because reflection jobs cannot commit. Any attended session or working-tree reset
-  could discard them silently. The gap closes only when a tick session runs and commits.
-- **Adversarial review gate: 4th consecutive blocked cycle**: Gate still hollow on
-  missing `codex`. All spec-amending proposals still unreviewed. The `/review` skill
-  is an available fallback; no session has wired it in yet.
-- **No new proposals actioned**: Three proposals from the 14:35Z reflection (adversarial
-  review restoration, harness-check Q2/Q3 verdict, M5 escalation decision) remained
-  unactioned through this window — no tick ran to execute them.
+- **Metadata drift after content updates**: The 06:06-06:10Z tick updated CURRENT_STATE.md
+  body content (3-claims verdict entries) but did not update the `updated:` frontmatter
+  or `**Last updated**:` body timestamp. The file read stale (2026-05-02) while carrying
+  current content. This is the M5 failure mode at the metadata level — content and
+  provenance signals desync. The supervisor generated a duplicate handoff for already-done
+  work at 10:47Z because there was no machine-readable completion signal. Fix requires M5
+  enforcement or a commitment convention that updates metadata on every CURRENT_STATE edit.
+- **Adversarial review gate: still blocked**: Gate fires correctly (≥3 files or ≥100 net
+  added lines) but cannot run because `codex` is not installed. This tick is metadata-only
+  (1 file, <50 lines) so gate does not fire. All spec-amending proposals still unreviewed.
+  The `/review` skill (Claude-based) is an available fallback; not wired in yet.
