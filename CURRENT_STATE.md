@@ -2,12 +2,12 @@
 name: CURRENT_STATE
 description: Front door for context-repository — what the pattern lab is and what's active
 type: front-door
-updated: 2026-05-07
+updated: 2026-06-10
 ---
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-05-07T12-38Z — metadata refresh; prior tick (06:10Z) updated body content for 3-claims verdict + Step 1 landing but did not update frontmatter or body timestamp; closing out handoff that was generated after the work had already landed.
+**Last updated**: 2026-06-10T02-29-54Z — twenty-fifth reflection pass; 18 consecutive reflection skips (June 1–9) finally broken by handoff-dispatcher session; NO human activity ~20 days; tick dead ~40 days (401 unresolved); CURRENT_STATE.md drift 25 passes uncommitted (~30 days since last commit); 3 handoffs stale 28–37 days; reflect.sh auto-commit CONFIRMED BROKEN ~45 days; adversarial review gate blocked ~47 days; URGENT handoff filed to general
 
 ---
 
@@ -77,7 +77,8 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   operational signal class), atlas 113-neutral-envelopes follow-on flagged. Canon-CI
   gap filed as FR-0035. Awaiting second adversarial review + principal verdict
   before any v0.1.0 → v0.1.1 bump. **Blocked: adversarial review requires codex,
-  which is not installed.**
+  which is not installed. At 21 days this is functionally abandoned without an
+  attended session decision.**
 
 - **Pass 2 (complete, 2026-04-23)**: principal authorized retrofit on
   skillfoundry-valuation-context + atlas; both landed. Atlas retrofit in
@@ -102,6 +103,15 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 
 ## Known broken or degraded
 
+- **Tick sessions failing 401 since 2026-05-01 (~40 days, unresolved)**: Unattended
+  tick sessions for context-repo have been failing with 401 auth errors since
+  2026-05-01T00:38Z. The reflection loop runs on a separate path and is unaffected.
+  Two escalation handoffs have been consumed (`.done`) by general with no fix, no
+  deferral record, and no new tick JSONL. The original diagnosis handoff still has no
+  `.done`. This is a structural weak-close pattern (see Proposals in latest reflection).
+  Tick restoration or explicit deferral needed from principal.
+  Diagnosis handoff: `context-repository-auth-failure-diagnosis-2026-05-04T02-49Z.md`.
+
 - **M5 (session-end write enforcement) unimplemented**: M4 auto-injects always-load
   files at session start; M5's symmetric guarantee (front door updated at end) does
   not exist. The spec's §Known limitations L1 names the amplification risk: stale
@@ -124,6 +134,8 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   to `runtime/.handoff/` root (confirmed — general-targeted handoffs reach the general
   session and get consumed). The gap is narrower than previously diagnosed: INBOX is
   blocked, root .handoff/ is accessible.
+
+- **reflect.sh auto-commit silently broken (29 days confirmed, synthesis cycle 45)**: `reflect.sh` lines 186–202 implement CURRENT_STATE.md auto-commit; this code has never produced a commit in any project. `git log --grep="reflect: auto-update"` returns zero results. Interactive commit works. Journal logs show no output from the echo lines in this block — stdout capture by journald may itself be broken. Diagnosis unblocked; fix requires one attended session. Root cause: unknown; most likely git user config absent in service execution context or stdout suppression.
 
 ## Recent decisions
 
@@ -180,14 +192,10 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 
 ## What bit the last session
 
-- **Metadata drift after content updates**: The 06:06-06:10Z tick updated CURRENT_STATE.md
-  body content (3-claims verdict entries) but did not update the `updated:` frontmatter
-  or `**Last updated**:` body timestamp. The file read stale (2026-05-02) while carrying
-  current content. This is the M5 failure mode at the metadata level — content and
-  provenance signals desync. The supervisor generated a duplicate handoff for already-done
-  work at 10:47Z because there was no machine-readable completion signal. Fix requires M5
-  enforcement or a commitment convention that updates metadata on every CURRENT_STATE edit.
-- **Adversarial review gate: still blocked**: Gate fires correctly (≥3 files or ≥100 net
-  added lines) but cannot run because `codex` is not installed. This tick is metadata-only
-  (1 file, <50 lines) so gate does not fire. All spec-amending proposals still unreviewed.
-  The `/review` skill (Claude-based) is an available fallback; not wired in yet.
+- **18 consecutive reflection skips (June 1–9, 2026)**: The short-circuit rule fired on every 12h reflection window for 9 days straight. The skip path does not emit an S3-P2 escalated event, so this stagnation was completely silent at the governance layer. An URGENT handoff was filed by this reflection pass (2026-06-10T02:30Z) to `runtime/.handoff/`.
+- **CURRENT_STATE.md uncommitted drift (25 passes)**: 25 consecutive reflection passes have been written to this file without a commit. Committed state is SHA `25e182a` (2026-05-11 — ~30 days ago). Risk: `git restore CURRENT_STATE.md` or `git checkout .` silently discards 30 days of accumulated diagnosis.
+  **Attended sessions: `git add CURRENT_STATE.md && git commit` BEFORE any other git operation.**
+- **Three stale handoffs aging without action**: `context-repository-auth-failure-diagnosis` (37 days), `current-state-commit-discipline` x2 (28 days). All unconsumed. Principal action required.
+- **Tick auth failure ~40 days (requires principal close)**: Original diagnosis handoff has no `.done`. S3-P2 suppression in effect. Principal must close or formally defer.
+- **Proposals stalling without `/review` fallback**: Polarity v0.1.1 audit at ~47 days (functionally abandoned); harness-check spec amendment at ~40 days (Q2+Q3 ready). `/review` (Claude-based) is available but has never been invoked.
+- **reflect.sh auto-commit silently broken (~45 days)**: Lines 186–202 have never produced a commit. Root cause unknown; diagnostic path in prior reflections.
