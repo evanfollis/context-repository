@@ -7,7 +7,7 @@ updated: 2026-06-10
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-06-10T02-29-54Z — twenty-fifth reflection pass; 18 consecutive reflection skips (June 1–9) finally broken by handoff-dispatcher session; NO human activity ~20 days; tick dead ~40 days (401 unresolved); CURRENT_STATE.md drift 25 passes uncommitted (~30 days since last commit); 3 handoffs stale 28–37 days; reflect.sh auto-commit CONFIRMED BROKEN ~45 days; adversarial review gate blocked ~47 days; URGENT handoff filed to general
+**Last updated**: 2026-06-10T14-34-02Z — twenty-sixth reflection pass; reflect.sh auto-commit FIRED ONCE (ce51f81) — "broken 45 days" diagnosis partially falsified; CURRENT_STATE.md now committed (was dirty 30 days); repo 1 commit ahead of origin (unpushed); NO human activity ~20 days; tick dead ~41 days (401 unresolved); 4 handoffs unconsumed (URGENT filed 02:30Z today); adversarial review gate blocked ~48 days
 
 ---
 
@@ -135,7 +135,7 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   session and get consumed). The gap is narrower than previously diagnosed: INBOX is
   blocked, root .handoff/ is accessible.
 
-- **reflect.sh auto-commit silently broken (29 days confirmed, synthesis cycle 45)**: `reflect.sh` lines 186–202 implement CURRENT_STATE.md auto-commit; this code has never produced a commit in any project. `git log --grep="reflect: auto-update"` returns zero results. Interactive commit works. Journal logs show no output from the echo lines in this block — stdout capture by journald may itself be broken. Diagnosis unblocked; fix requires one attended session. Root cause: unknown; most likely git user config absent in service execution context or stdout suppression.
+- **reflect.sh auto-commit: first confirmed firing (ce51f81, 2026-06-10T02:33Z)**: The mechanism fired once — `git log --grep="reflect: auto-update"` now returns one result. Prior "broken 29–45 days" diagnosis is partially falsified. The prior silence likely reflects clean working trees (no dirty CURRENT_STATE.md to commit), not a broken mechanism. Root cause still unconfirmed; reliability unproven. Current CURRENT_STATE.md is committed.
 
 ## Recent decisions
 
@@ -192,10 +192,10 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 
 ## What bit the last session
 
-- **18 consecutive reflection skips (June 1–9, 2026)**: The short-circuit rule fired on every 12h reflection window for 9 days straight. The skip path does not emit an S3-P2 escalated event, so this stagnation was completely silent at the governance layer. An URGENT handoff was filed by this reflection pass (2026-06-10T02:30Z) to `runtime/.handoff/`.
-- **CURRENT_STATE.md uncommitted drift (25 passes)**: 25 consecutive reflection passes have been written to this file without a commit. Committed state is SHA `25e182a` (2026-05-11 — ~30 days ago). Risk: `git restore CURRENT_STATE.md` or `git checkout .` silently discards 30 days of accumulated diagnosis.
-  **Attended sessions: `git add CURRENT_STATE.md && git commit` BEFORE any other git operation.**
+- **reflect.sh auto-commit fired first time (ce51f81, 2026-06-10T02:33Z)**: CURRENT_STATE.md 30-day dirty state resolved. Repo 1 commit ahead of origin (unpushed). Root cause of prior silence unknown.
+- **Four stale handoffs unconsumed**: URGENT filed 02:30Z today (structural abandonment); plus auth-failure-diagnosis (38+ days), current-state-commit-discipline x2 (29+ days). Principal action required.
+  **Next attended session: push ce51f81 to origin; invoke /review on blocked proposals.**
 - **Three stale handoffs aging without action**: `context-repository-auth-failure-diagnosis` (37 days), `current-state-commit-discipline` x2 (28 days). All unconsumed. Principal action required.
 - **Tick auth failure ~40 days (requires principal close)**: Original diagnosis handoff has no `.done`. S3-P2 suppression in effect. Principal must close or formally defer.
 - **Proposals stalling without `/review` fallback**: Polarity v0.1.1 audit at ~47 days (functionally abandoned); harness-check spec amendment at ~40 days (Q2+Q3 ready). `/review` (Claude-based) is available but has never been invoked.
-- **reflect.sh auto-commit silently broken (~45 days)**: Lines 186–202 have never produced a commit. Root cause unknown; diagnostic path in prior reflections.
+- **reflect.sh auto-commit: once confirmed working; reliability unknown**: First firing in ce51f81. Prior 45-day silence remains unexplained.
