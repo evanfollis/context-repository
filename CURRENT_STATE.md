@@ -7,7 +7,7 @@ updated: 2026-06-11
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-06-11T02-30-08Z — twenty-seventh reflection pass; reflect.sh auto-commit FIRED TWICE (ce51f81 + 9f6743a) — mechanism confirmed working under dirty-tree conditions; "broken 45 days" diagnosis falsified; repo 2 commits ahead of origin (unpushed); NO human activity ~21 days; tick dead ~41 days (401 unresolved); URGENT handoff >24h unconsumed (dispatch obligation breached); 4 handoffs unconsumed total; adversarial review gate blocked ~48 days
+**Last updated**: 2026-06-11T14-26-58Z — twenty-eighth reflection pass; reflect.sh auto-commit FIRED THREE TIMES (ce51f81 + 9f6743a + c0a7808) — self-sustaining loop confirmed (each pass leaves dirty tree); repo 3 commits ahead of origin (unpushed); NO human activity ~22 days; tick dead ~42 days (401 unresolved); URGENT handoff >36h unconsumed (dispatch obligation FR-class); 4 handoffs unconsumed total; adversarial review gate blocked ~42-49 days
 
 ---
 
@@ -135,7 +135,7 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   session and get consumed). The gap is narrower than previously diagnosed: INBOX is
   blocked, root .handoff/ is accessible.
 
-- **reflect.sh auto-commit: TWO consecutive confirmed firings (ce51f81 + 9f6743a, 2026-06-10)**: The mechanism fired twice in the same day — 02:33Z and ~14:34Z. "Broken 45 days" diagnosis falsified. Working hypothesis: silent periods were clean-tree passes (nothing to commit). Mechanism is reliable under dirty-tree conditions. Repo is now 2 commits ahead of origin/main (both unpushed — unattended policy).
+- **reflect.sh auto-commit: THREE consecutive confirmed firings (ce51f81, 9f6743a, c0a7808)**: Three in a row across 2026-06-10 and 2026-06-11 confirm the mechanism is self-sustaining — each pass modifies CURRENT_STATE.md, guaranteeing a dirty tree for the next pass. Mechanism reliably fires every 12h pass going forward. Repo now 3 commits ahead of origin/main (all unpushed — unattended policy).
 
 ## Recent decisions
 
@@ -193,8 +193,8 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 ## What bit the last session
 
 - **reflect.sh fired twice (ce51f81 + 9f6743a, both 2026-06-10)**: Two consecutive auto-commits confirm the mechanism works. "Broken 45 days" diagnosis falsified — prior silence was clean-tree passes, not a broken mechanism. Repo is 2 commits ahead of origin (both unpushed, unattended policy).
-- **URGENT handoff >24h unconsumed — dispatch obligation breached**: `URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md` was filed at 02:30Z (2026-06-10). Per workspace CLAUDE.md dispatch obligation, general must dispatch or defer within 24h. That window has passed.
+- **URGENT handoff >36h unconsumed — dispatch obligation FR-class**: `URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md` filed 2026-06-10T02:30Z. >36h without dispatch or deferral. Per workspace CLAUDE.md this is now an FR-class structural issue, not merely a missed deadline. Each subsequent reflection cycle without action makes the original diagnosis staleness worse.
 - **Four stale handoffs unconsumed (38–29+ days)**: auth-failure-diagnosis (~38 days), current-state-commit-discipline x2 (~29 days), plus the URGENT. Principal must close or formally defer.
 - **Tick auth failure ~41 days (requires principal close)**: Original diagnosis handoff has no `.done`. Tick restoration or explicit decommission decision needed.
 - **Proposals stalling without `/review`**: Polarity v0.1.1 audit ~48 days (functionally abandoned); harness-check spec amendment ~41 days (Q2+Q3 ready). `/review` skill available, never invoked.
-  **Next attended session: push 2 commits to origin; invoke /review; close or defer all 4 handoffs.**
+  **Next attended session: push 3 commits to origin; invoke /review; close or defer all 4 handoffs. URGENT handoff is now FR-class (>36h).**
