@@ -2,12 +2,12 @@
 name: CURRENT_STATE
 description: Front door for context-repository — what the pattern lab is and what's active
 type: front-door
-updated: 2026-06-16
+updated: 2026-06-17
 ---
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-06-16T14-21-07Z — thirty-eighth reflection pass; THIRTEEN consecutive reflect.sh auto-commits (+ 4dc5040); repo 13 commits ahead of origin (unpushed); NO human activity ~30 days; tick dead ~46 days (401 unresolved); URGENT handoff ~180h unconsumed (~7.5x FR-class breach); degraded-output policy active
+**Last updated**: 2026-06-17T02-21-25Z — thirty-ninth reflection pass; FOURTEEN consecutive reflect.sh auto-commits (+ 8043c31); repo 14 commits ahead of origin (unpushed); NO human activity ~31 days; tick dead ~47 days (401 unresolved); URGENT handoff ~192h unconsumed (~8x FR-class breach); degraded-output policy active
 
 ---
 
@@ -68,12 +68,12 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   acceptable? markdown-side authoring cost acceptable, or prefer split-into-
   atomic-files Option 4?). Skillfoundry's domain read accepts both.
 
-- **Canon polarity v0.1.1 audit (~56 days stalled, effectively abandoned)**:
+- **Canon polarity v0.1.1 audit (~57 days stalled, effectively abandoned)**:
   first-round narrow proposal (`docs/polarity-schema-weakens-assumption.md`,
   `532270a`) failed Codex adversarial review; executive redirected to holistic
   audit. Revised proposal at `docs/polarity-schema-v0.1.1-audit.md`. Awaiting
   adversarial review + principal verdict — but codex not installed, `/review`
-  never invoked. **At ~56 days with no attended session attention, this is
+  never invoked. **At ~57 days with no attended session attention, this is
   functionally abandoned. Principal should explicitly close or formally defer.**
 
 - **Pass 2 (complete, 2026-04-23)**: principal authorized retrofit on
@@ -87,7 +87,7 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 - **Pass 3 (proposed, not started)**: formalize the writer/retriever split per
   `docs/writer-retriever-separation-proposal.md`.
 
-- **Harness-check spec amendment proposal (2026-05-01, ~45 days, awaiting verdict)**:
+- **Harness-check spec amendment proposal (2026-05-01, ~46 days, awaiting verdict)**:
   `docs/harness-check-spec-amendment-proposal.md` — four questions from
   `harness-check.py` resolved: QA-plan stays supervisor-local; freshness
   gets a 7-day convention note in §L1; instruction-file size extends §M3;
@@ -98,7 +98,7 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 
 ## Known broken or degraded
 
-- **Tick sessions failing 401 since 2026-05-01 (~45 days, unresolved)**: Unattended
+- **Tick sessions failing 401 since 2026-05-01 (~47 days, unresolved)**: Unattended
   tick sessions for context-repo have been failing with 401 auth errors since
   2026-05-01T00:38Z. The reflection loop runs on a separate path and is unaffected.
   Two escalation handoffs have been consumed (`.done`) by general with no fix, no
@@ -114,15 +114,15 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 - **Adversarial review gate blocked**: The gate fires correctly (≥3 files or ≥100
   lines changed) but cannot run because `codex` is not installed. Two spec-amending
   proposals (harness-check and polarity v0.1.1 audit) are blocked. The `/review`
-  skill (via Claude) is an alternative path — never invoked despite 41–56 days of wait.
+  skill (via Claude) is an alternative path — never invoked despite 46–57 days of wait.
 
-- **reflect.sh auto-commit: THIRTEEN consecutive firings (ce51f81 … 4dc5040)**: Self-sustaining confirmed — each pass modifies CURRENT_STATE.md, guaranteeing dirty tree for next pass. Mechanism fires every 12h pass going forward. Repo now 13 commits ahead of origin/main (all unpushed — unattended policy, requires attended push). Consider halting reflect.sh until an attended session clears open items.
+- **reflect.sh auto-commit: FOURTEEN consecutive firings (ce51f81 … 8043c31)**: Self-sustaining confirmed — each pass modifies CURRENT_STATE.md, guaranteeing dirty tree for next pass. Mechanism fires every 12h pass going forward. Repo now 14 commits ahead of origin/main (all unpushed — unattended policy, requires attended push). Consider halting reflect.sh until an attended session clears open items.
 
-- **Escalation path gap — URGENT ~180h unconsumed**: URGENT filed 2026-06-10T02:30Z is now ~180h unconsumed — ~15 full reflection cycles past the 24h dispatch obligation. ~7.5× FR-class breach. Four context-repo handoffs outstanding (auth-failure-diagnosis, commit-discipline ×2, structural-abandonment). File-based escalation is confirmed structurally broken at workspace scale. Gmail MCP available as alternative delivery path.
+- **Escalation path gap — URGENT ~192h unconsumed**: URGENT filed 2026-06-10T02:30Z is now ~192h unconsumed — ~16 full reflection cycles past the 24h dispatch obligation. ~8× FR-class breach. Four context-repo handoffs outstanding (auth-failure-diagnosis, commit-discipline ×2, structural-abandonment). File-based escalation is confirmed structurally broken at workspace scale. Gmail MCP available as alternative delivery path.
 
 - **Workspace-wide executive unresponsiveness — INBOX SATURATION**: Multiple URGENT handoffs unprocessed. File-based handoff delivery is confirmed broken. Gmail MCP (`mcp__claude_ai_Gmail__create_draft`) available as alternative for future escalation. Context-repo has 4 outstanding handoffs.
 
-- **Reflection output degrading**: Sixteen+ consecutive reflections with identical findings. Degraded-output policy active since 2026-06-13T02:25Z. P4 proposal: halt reflect.sh for this repo until attended session resolves open items.
+- **Reflection output degrading**: Seventeen+ consecutive reflections with identical findings. Degraded-output policy active since 2026-06-13T02:25Z. P4 proposal: halt reflect.sh for this repo until attended session resolves open items.
 
 ## Recent decisions
 
@@ -151,12 +151,12 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 5. `docs/harness-check-spec-amendment-proposal.md` — Q2 + Q3 ready; Q1 + Q4 await
    principal; `/review` never invoked despite skill being available.
 6. If resuming canon polarity work: consider formally closing polarity v0.1.1 as
-   deferred-indefinitely before reopening — it has been stalled ~56 days.
+   deferred-indefinitely before reopening — it has been stalled ~57 days.
 
 ## What bit the last session (patterns from session transcripts)
 
-- **reflect.sh loop is self-sustaining**: Thirteen consecutive auto-commits. "reflect.sh fired" ≠ "something meaningful changed." Noise accumulation in git log. P4 proposal: halt reflect.sh until attended session clears open items.
-- **URGENT handoff ~180h unconsumed**: Dispatch obligation breached ~fifteen times. No attended session in ~30 days.
+- **reflect.sh loop is self-sustaining**: Fourteen consecutive auto-commits. "reflect.sh fired" ≠ "something meaningful changed." Noise accumulation in git log. P4 proposal: halt reflect.sh until attended session clears open items.
+- **URGENT handoff ~192h unconsumed**: Dispatch obligation breached ~sixteen times. No attended session in ~31 days.
 - **INBOX saturation workspace-wide**: 4 context-repo handoffs unprocessed. File-based escalation is broken. Gmail MCP is confirmed available in reflection sessions but unauthorized for unilateral use.
-- **Reflection degradation policy active**: Condensed output since 2026-06-13T02:25Z. 7th cycle under degraded policy.
-- **Next attended session priorities**: (1) push 12 commits to origin; (2) invoke `/review` on harness-check Q2+Q3; (3) write decommission decision for tick loop; (4) close/delete all stale handoffs; (5) formally defer polarity v0.1.1; (6) authorize reflection jobs to send Gmail when URGENTs age past 48h; (7) triage supervisor dirty-tree URGENT as false positive.
+- **Reflection degradation policy active**: Condensed output since 2026-06-13T02:25Z. 8th cycle under degraded policy.
+- **Next attended session priorities**: (1) push 14 commits to origin; (2) invoke `/review` on harness-check Q2+Q3; (3) write decommission decision for tick loop; (4) close/delete all stale handoffs; (5) formally defer polarity v0.1.1; (6) authorize reflection jobs to send Gmail when URGENTs age past 48h; (7) triage supervisor dirty-tree URGENT as false positive.
