@@ -2,12 +2,12 @@
 name: CURRENT_STATE
 description: Front door for context-repository — what the pattern lab is and what's active
 type: front-door
-updated: 2026-06-17
+updated: 2026-06-18
 ---
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-06-17T14-20-23Z — fortieth reflection pass; FIFTEEN consecutive reflect.sh auto-commits (+ 45bdbc4); repo 15 commits ahead of origin (unpushed); NO human activity ~31 days; tick dead ~47 days (401 unresolved); URGENT handoff ~204h unconsumed (~8.5x FR-class breach); degraded-output policy active
+**Last updated**: 2026-06-18T02-20-48Z — forty-first reflection pass; SIXTEEN consecutive reflect.sh auto-commits (+ dd35da3); repo 16 commits ahead of origin (unpushed); NO human activity ~32 days; tick dead ~48 days (401 unresolved); URGENT handoff ~216h unconsumed (~9x FR-class breach); degraded-output policy active
 
 ---
 
@@ -116,7 +116,7 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
   proposals (harness-check and polarity v0.1.1 audit) are blocked. The `/review`
   skill (via Claude) is an alternative path — never invoked despite 46–57 days of wait.
 
-- **reflect.sh auto-commit: FIFTEEN consecutive firings (ce51f81 … 45bdbc4)**: Self-sustaining confirmed — each pass modifies CURRENT_STATE.md, guaranteeing dirty tree for next pass. Mechanism fires every 12h pass going forward. Repo now 15 commits ahead of origin/main (all unpushed — unattended policy, requires attended push). Consider halting reflect.sh until an attended session clears open items.
+- **reflect.sh auto-commit: SIXTEEN consecutive firings (ce51f81 … dd35da3)**: Self-sustaining confirmed — each pass modifies CURRENT_STATE.md, guaranteeing dirty tree for next pass. Mechanism fires every 12h pass going forward. Repo now 16 commits ahead of origin/main (all unpushed — unattended policy, requires attended push). Consider halting reflect.sh until an attended session clears open items.
 
 - **Escalation path gap — URGENT ~204h unconsumed**: URGENT filed 2026-06-10T02:30Z is now ~204h unconsumed — ~17 full reflection cycles past the 24h dispatch obligation. ~8.5× FR-class breach. Four context-repo handoffs outstanding (auth-failure-diagnosis, commit-discipline ×2, structural-abandonment). File-based escalation is confirmed structurally broken at workspace scale. Gmail MCP available as alternative delivery path.
 
@@ -155,8 +155,8 @@ now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is clos
 
 ## What bit the last session (patterns from session transcripts)
 
-- **reflect.sh loop is self-sustaining**: Fifteen consecutive auto-commits. "reflect.sh fired" ≠ "something meaningful changed." Noise accumulation in git log. P4 proposal: halt reflect.sh until attended session clears open items.
-- **URGENT handoff ~204h unconsumed**: Dispatch obligation breached ~seventeen times. No attended session in ~31 days.
+- **reflect.sh loop is self-sustaining**: Sixteen consecutive auto-commits. "reflect.sh fired" ≠ "something meaningful changed." Noise accumulation in git log. P4 proposal: halt reflect.sh until attended session clears open items.
+- **URGENT handoff ~216h unconsumed**: Dispatch obligation breached ~eighteen times. No attended session in ~32 days.
 - **INBOX saturation workspace-wide**: 4 context-repo handoffs unprocessed. File-based escalation is broken. Gmail MCP is confirmed available in reflection sessions but unauthorized for unilateral use.
 - **Reflection degradation policy active**: Condensed output since 2026-06-13T02:25Z. 9th cycle under degraded policy.
 - **Next attended session priorities**: (1) push 15 commits to origin; (2) invoke `/review` on harness-check Q2+Q3; (3) write decommission decision for tick loop; (4) close/delete all stale handoffs; (5) formally defer polarity v0.1.1; (6) authorize reflection jobs to send Gmail when URGENTs age past 48h; (7) triage supervisor dirty-tree URGENT as false positive.
