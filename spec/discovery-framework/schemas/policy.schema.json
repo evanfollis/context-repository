@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://synaplex.ai/discovery-framework/0.1.0/policy.schema.json",
+  "title": "Policy",
+  "type": "object",
+  "required": [
+    "id",
+    "spec_version",
+    "object_type",
+    "emitted_at",
+    "emitter",
+    "layer",
+    "roles",
+    "role_declared_at",
+    "binding",
+    "sources",
+    "class",
+    "scope",
+    "field_path",
+    "value",
+    "version",
+    "issuer",
+    "amendment_authority",
+    "ratification_rule",
+    "rollback_rule",
+    "provenance",
+    "effective_from"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "spec_version": { "$ref": "common.schema.json#/$defs/SpecVersion" },
+    "object_type": { "const": "Policy" },
+    "emitted_at": { "$ref": "common.schema.json#/$defs/Timestamp" },
+    "emitter": { "$ref": "common.schema.json#/$defs/PrincipalId" },
+    "layer": { "$ref": "common.schema.json#/$defs/LayerId" },
+    "roles": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/Role" },
+      "contains": { "const": "Policy" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "role_declared_at": { "$ref": "common.schema.json#/$defs/Timestamp" },
+    "binding": { "$ref": "common.schema.json#/$defs/Binding" },
+    "sources": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/SourceRef" } },
+    "class": {
+      "type": "string",
+      "enum": ["constitutional", "operational"],
+      "description": "Meta-constitutional: this classification is itself constitutional and cannot be changed by agents."
+    },
+    "scope": {
+      "type": "string",
+      "description": "'framework' | 'L<n>' | 'L<n>:<instance-id>' | 'layer:L<n>' (for role-profile policies per roles.md §4).",
+      "pattern": "^(framework|L[0-7](:[a-z0-9_-]+)?|layer:L[0-7])$"
+    },
+    "field_path": {
+      "type": "string",
+      "description": "Dotted path of the governed setting, e.g. 'capital.max_at_risk' or 'exploration.weight'."
+    },
+    "value": {
+      "description": "The setting value. Type is domain-determined."
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Monotonic version of this Policy id's amendment chain. Required so that decisions can unambiguously cite resolved-at-decision-time version and rollback can restore by version."
+    },
+    "issuer": { "$ref": "common.schema.json#/$defs/PrincipalId" },
+    "amendment_authority": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/PrincipalId" },
+      "minItems": 1
+    },
+    "ratification_rule": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": { "type": "string", "enum": ["principal_signoff", "evidence_threshold", "multi_party"] },
+        "required_evidence_tier": { "type": "string" },
+        "required_evidence_count": { "type": "integer", "minimum": 0 },
+        "signatories": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/PrincipalId" } }
+      }
+    },
+    "rollback_rule": {
+      "type": "object",
+      "required": ["rules", "precedence"],
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "condition"],
+            "properties": {
+              "id": { "type": "string" },
+              "condition": {
+                "type": "string",
+                "description": "Expressed as a canon-query predicate. Interpreted by runtime; canon records verbatim."
+              },
+              "restore_version": {
+                "type": "string",
+                "description": "Target version to restore (default: immediate predecessor)."
+              }
+            }
+          }
+        },
+        "precedence": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "description": "Ordered rule ids; lower index wins when multiple fire concurrently. Validators MUST verify this is a permutation of rules[*].id (see canon.md 'Validator-level rules')."
+        }
+      }
+    },
+    "provenance": {
+      "type": "array",
+      "description": "Ordered chain of prior versions. First entry is genesis.",
+      "items": {
+        "type": "object",
+        "required": ["version", "effective_from"],
+        "properties": {
+          "version": { "type": "string" },
+          "effective_from": { "$ref": "common.schema.json#/$defs/Timestamp" },
+          "effective_until": { "$ref": "common.schema.json#/$defs/Timestamp" },
+          "amending_decision_id": { "type": "string" },
+          "value": {}
+        }
+      }
+    },
+    "effective_from": { "$ref": "common.schema.json#/$defs/Timestamp" },
+    "effective_until": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Timestamp" },
+        { "type": "null" }
+      ],
+      "description": "Null means open-ended."
+    }
+  }
+}

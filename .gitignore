@@ -8,4 +8,14 @@ docs/telemetry_contract.md
 docs/venture_governance.md
 notes/
 schemas/venture_controller.md
-spec/
+
+# NOTE: `spec/` was listed here until 2026-07-12. It was ignored to bury the
+# prior identity's abstract-schema work — but `spec/discovery-framework/` (the
+# L1 canon: obligations model, validator rules, the eight JSON Schemas) was
+# later built underneath that path and silently inherited the ignore. The
+# highest truth source in the system was therefore untracked for ~3 months:
+# undiffable, unreviewable, unrevertable. Do not re-add it. If a path under
+# spec/ ever needs ignoring, ignore that path, never the root.
+
+__pycache__/
+*.pyc
