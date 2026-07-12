@@ -56,9 +56,13 @@ A frozen Policy is neither: it is agent-*created* but agent-**immutable**, and i
 
 #### Why `frozen` needs no principal signoff
 
-`frozen` is the only class that **cannot widen agent authority**. The self-authorization firewall (below) exists to stop an agent raising its own ceiling. An agent issuing a frozen Policy is *renouncing* amendment authority over a value, not granting itself any — `amendment_authority` is required to be **empty**. There is no configuration of a frozen Policy that authorizes its issuer to do anything it could not otherwise do.
+`frozen` is the only class that **cannot widen agent authority** — *provided it cannot govern a constitutional field.* The proviso is load-bearing; see the warning below.
+
+The self-authorization firewall (below) exists to stop an agent raising its own ceiling. An agent issuing a frozen Policy is *renouncing* amendment authority over a value, not granting itself any — `amendment_authority` is required to be **empty**. There is no configuration of a frozen Policy that authorizes its issuer to do anything it could not otherwise do.
 
 This is what makes it safe for agents to mint, and it is the asymmetry that separates this class from a constitutional one. An agent minting a *constitutional* Policy and naming itself in `amendment_authority` is self-authorization by construction. An agent minting a *frozen* Policy is binding its own hands, in public, before the results are in.
+
+> **The near-miss.** The first draft of this class stated the paragraph above without the proviso, and it was **false**. Nothing stopped an agent emitting `class: frozen, scope: framework, field_path: capital.max_at_risk, value: <enormous>` — a ceiling it granted *itself*, which by construction **nobody, including the principal, may ever amend.** The firewall breached by the very class claimed incapable of breaching it, and made *irreversible* rather than merely wrong. Two rules close it: frozen policies are schema-barred from `scope: framework`, and validator rule 17 refuses any frozen Policy sharing a `field_path` with a constitutional Policy of overlapping scope. Conformance cases 18 and 19 hold the line. **A safety argument with an unstated precondition is not a safety argument** — the precondition is now stated, enforced, and tested.
 
 Constitutional ceilings still bind. A frozen Policy sits **under** them exactly as an operational one does, and may never be cited to justify exceeding one (§Consumer obligations).
 
@@ -86,12 +90,27 @@ Immutability alone buys nothing. An agent that may *issue* a frozen gate at any 
 
 This aligns the class with the phase invariant canon already states (`probe`: *"Pre-registration immutability"*). The gate is part of the pre-registration, so it is in place when the pre-registration closes. A Claim that has not yet entered probe and has no Evidence has an **open window** — its gate may still be legally frozen.
 
-Two further closures, because immutability plus a window is still not enough on its own:
+Three further closures, because immutability plus a window is still not enough on its own:
 
 - **Uniqueness** — at most one frozen Policy per (`bound_to_claim_id`, `field_path`). Otherwise an agent issues two gates and cites the convenient one; nothing was amended, and the audit trail looks clean.
 - **Citation completeness** — a terminal Decision must cite *every* frozen Policy bound to its chosen Claim, not just the ones it passed (validator rule 13).
+- **Evidence–Claim coherence** — a Decision may not cite evidence gathered about a Claim it is not deciding (validator rule 15).
 
 Together with the window, these make the gate-set an eval commits to mechanically identical to the gate-set it is judged against.
+
+#### The bypass that makes all of the above decorative
+
+Adversarial review found it; the escalation did not name it, and neither did the first draft of this class.
+
+Freeze whatever you like — then **don't use it.** Run the eval, look at the results, mint a **fresh Claim**, and freeze a flattering gate against *that*. The new Claim's window is wide open precisely *because* it has no Evidence yet. Conclude it while citing the **old** Claim's evidence. Nothing is amended. Nothing is duplicated. Nothing is late. Every rule from 9 to 14 passes, and the eval reports whatever the agent wanted.
+
+Rule 15 closes the citation path: cited Evidence must belong to a Claim under decision.
+
+But there is a second layer, and it is the one that matters. An attacker who is willing to **re-emit the same observations** as fresh `Evidence` envelopes under the new Claim satisfies rule 15 trivially, and the emission order looks impeccable — gate first, evidence second. **`emitted_at` cannot save you here: it is entirely under the emitter's control.**
+
+So the window anchors on **`observed_at`** — the emitter's assertion about *when reality was consulted* — and reality was consulted before the gate was chosen (rule 10). Under a frozen gate, `observed_at` is therefore mandatory (rule 16); it stays optional everywhere else, so no v0.1.0 envelope is retroactively invalidated.
+
+This does not make the attack impossible. It makes it **a different kind of act**: no longer "order your envelopes cleverly," but "falsify an observation timestamp against a hash-pinned artifact." That is fabrication, not a loophole. Canon can close loopholes. It cannot stop a liar, and it does not claim to.
 
 #### Deriving the value from the Claim (`derived_from`)
 

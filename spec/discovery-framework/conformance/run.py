@@ -99,6 +99,27 @@ def json_equal(a, b):
     return type(a) is type(b) and a == b
 
 
+def scopes_overlap(a, b):
+    """Do two Policy scopes govern any common ground? (canon.md rule 17)
+
+    Scope grammar: 'framework' | 'L<n>' | 'L<n>:<instance>' | 'layer:L<n>'.
+    'framework' covers everything. 'L<n>' covers every instance at that layer.
+    Frozen policies are schema-barred from 'framework', but a constitutional one
+    at 'framework' or at a bare layer still shadows an instance-scoped frozen one.
+    """
+    if a == b:
+        return True
+    if "framework" in (a, b):
+        return True
+    norm = lambda s: s[len("layer:"):] if s.startswith("layer:") else s
+    a, b = norm(a), norm(b)
+    a_layer, b_layer = a.split(":")[0], b.split(":")[0]
+    if a_layer != b_layer:
+        return False
+    # same layer: a bare 'L<n>' covers every instance beneath it
+    return ":" not in a or ":" not in b or a == b
+
+
 def resolve_pointer(doc, pointer):
     """RFC-6901. Returns (found, value)."""
     if pointer == "":
@@ -182,6 +203,13 @@ def check_rules(envs):
     # Rule 10 — the pre-registration window. The real attack is late ISSUANCE,
     # not amendment: an unamendable gate picked after the Evidence is a post-hoc
     # gate that no amendment check will ever catch.
+    #
+    # Rule 16 is enforced here too: under a frozen gate, Evidence MUST carry
+    # observed_at. emitted_at alone is not enough -- it is fully under the
+    # emitter's control, so an emitter who has seen the results can re-emit the
+    # same observations as fresh Evidence with later emitted_at values and slip
+    # through a window keyed only on emission order. observed_at is the claim
+    # about when reality was consulted, and reality was consulted first.
     for p in frozen.values():
         cid = p["bound_to_claim_id"]
         claim = claims.get(cid)
@@ -204,10 +232,22 @@ def check_rules(envs):
                           f"{cid} entered probe at {min(probes)}")
 
         for ev in by_type["Evidence"]:
-            if ev["claim_id"] == cid and p["emitted_at"] > ev["emitted_at"]:
+            if ev["claim_id"] != cid:
+                continue
+            if "observed_at" not in ev:                                  # rule 16
+                raise Refusal("frozen_policy_evidence_unanchored",
+                              f"evidence {ev['id']} for claim {cid} has no observed_at, "
+                              f"but {p['id']} freezes a gate on that claim — the window "
+                              f"cannot be checked against emission order alone")
+            if p["emitted_at"] > ev["emitted_at"]:
                 raise Refusal("frozen_policy_late_issuance",
                               f"{p['id']} was emitted at {p['emitted_at']}, after "
                               f"evidence {ev['id']} at {ev['emitted_at']}")
+            if p["emitted_at"] > ev["observed_at"]:
+                raise Refusal("frozen_policy_late_issuance",
+                              f"{p['id']} was frozen at {p['emitted_at']}, but evidence "
+                              f"{ev['id']} was OBSERVED at {ev['observed_at']} — the gate "
+                              f"was chosen after reality was consulted")
 
     # Rule 11 — uniqueness. Two frozen gates on one field lets an emitter cite
     # whichever the results favour, with nothing amended and a clean-looking trail.
@@ -260,6 +300,43 @@ def check_rules(envs):
             raise Refusal("frozen_policy_derivation_mismatch",
                           f"{p['id']}: value != claim{p['derived_from']} "
                           f"({p['value']!r} vs {subtree!r})")
+
+    # Rule 15 — Evidence/Claim coherence. WITHOUT THIS, EVERY RULE ABOVE IS
+    # DECORATIVE. Run the eval, look at the results, mint a fresh Claim, freeze a
+    # flattering gate against it (legal -- a new Claim has no Evidence, so its
+    # window is wide open), and conclude it while citing the OLD claim's evidence.
+    # Nothing amended, nothing late, nothing duplicated. Found by adversarial
+    # review, not by the escalation that requested this work.
+    evidence = {e["id"]: e for e in by_type["Evidence"]}
+    for d in by_type["Decision"]:
+        cands = set(d["candidate_claims"])
+        for eid in d["cited_evidence"]:
+            ev = evidence.get(eid)
+            if ev is None:
+                raise Refusal("evidence_claim_mismatch",
+                              f"{d['id']} cites unknown evidence {eid!r}")
+            if ev["claim_id"] not in cands:
+                raise Refusal("evidence_claim_mismatch",
+                              f"{d['id']} cites evidence {eid} gathered about claim "
+                              f"{ev['claim_id']}, which is not among the claims it is "
+                              f"deciding ({sorted(cands)})")
+
+    # Rule 17 — no constitutional collision. The "frozen cannot widen agent
+    # authority" argument holds ONLY if a frozen policy cannot govern a
+    # constitutional field. Otherwise: mint class=frozen, field_path=
+    # capital.max_at_risk, value=<enormous> -- a ceiling the agent granted itself
+    # that by construction NOBODY, including the principal, may ever amend.
+    constitutional = [p for p in policies.values() if p["class"] == "constitutional"]
+    for p in frozen.values():
+        for c in constitutional:
+            if p["field_path"] != c["field_path"]:
+                continue
+            if scopes_overlap(p["scope"], c["scope"]):
+                raise Refusal("frozen_policy_constitutional_collision",
+                              f"{p['id']} freezes field_path {p['field_path']!r} at scope "
+                              f"{p['scope']}, colliding with constitutional policy {c['id']} "
+                              f"at scope {c['scope']} — a frozen policy may not govern a "
+                              f"constitutional field")
 
 
 def run_case(case, schemas, store):

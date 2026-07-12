@@ -8,7 +8,7 @@ updated: 2026-07-12
 # Conformance fixtures
 
 ```
-python3 run.py        # 14/14 expected
+python3 run.py        # 19/19 expected
 python3 run.py -v     # with case descriptions
 ```
 
@@ -28,7 +28,7 @@ Adapters implement the rules themselves against their own store. If several emit
 
 ## Coverage — stated honestly
 
-Validator rules **1–5** and **9–14** are exercised. Rules **6, 7, and 8 are not**: they need rollback objects and artifact I/O that the frozen-gate cases do not produce. A fixture that pretended to cover them would be worse than this sentence.
+Validator rules **1–5** and **9–17** are exercised. Rules **6, 7, and 8 are not**: they need rollback objects and artifact I/O that the frozen-gate cases do not produce. A fixture that pretended to cover them would be worse than this sentence.
 
 | Case | Rule | Asserts |
 |---|---|---|
@@ -41,19 +41,35 @@ Validator rules **1–5** and **9–14** are exercised. Rules **6, 7, and 8 are 
 | 07 policy missing | 5 | a Decision citing a Policy that does not resolve |
 | 08 no policy at all | schema | `policies_in_force` `minItems: 1` was **not** relaxed |
 | 09 foreign gate | 12 | a gate has authority only over the Claim it was pre-registered for |
-| 10 **late issuance** | 10 | the gate is *issued* after the evidence, never amended |
+| 10 late issuance | 10 | the gate is *issued* after the evidence, never amended |
 | 11 duplicate gate | 11 | two gates on one field, cite whichever the results favour |
 | 12 cherry-picked citation | 13 | a terminal Decision citing only the gates it met |
 | 13 derivation mismatch | 14 | a gate that silently disagrees with the Claim it claims to encode |
 | 14 backcompat | — | two **real** live v0.1.0 envelopes still validate under v0.2.0 |
+| 15 **evidence laundering** | 15 | conclude a *fresh* Claim while citing the old one's evidence |
+| 16 **postdated gate vs observation** | 10, 16 | …and re-emit the observations to make the ordering look clean |
+| 17 evidence without `observed_at` | 16 | the dodge for 16: omit the anchor entirely |
+| 18 **constitutional collision** | 17 | a frozen ceiling the agent granted itself, unamendable by anyone |
+| 19 frozen at framework scope | schema | the same land-grab, one level up |
 
-**Case 10 is the one that matters most,** and it is not in the escalation that requested this work. Refusing *amendment* while permitting *late issuance* would have been security theatre: an agent that can mint a frozen gate at any time simply waits for the evidence, freezes the threshold that gives the answer it wants, and cites it — and every amendment check passes, because no amendment ever happened. Rules 10, 11, and 13 exist because immutability alone is not pre-registration.
+**Cases 15, 16, and 18 are the ones that matter most, and none of them were requested.** 15 and 16 came out of adversarial review; 18 out of the author's own second pass. Before them, the class was decorative:
+
+- **15/16 — the bypass.** Don't attack the gate; route around it. Run the eval, see the results, mint a *fresh* Claim (whose window is wide open *because* it has no evidence), freeze a flattering gate on it, and conclude it citing the old Claim's evidence. Rules 9–14 all pass. Rule 10 passes **vacuously** — nothing is "late" relative to evidence that doesn't point at your claim. Rule 15 closes the citation path; rule 16 anchors the window on `observed_at`, because `emitted_at` is under the emitter's control and a re-emitted observation defeats any window keyed on emission order.
+- **18 — the land-grab.** `class: frozen, field_path: capital.max_at_risk, value: <enormous>, amendment_authority: []` — a ceiling the agent granted itself that *nobody, including the principal, can ever amend*. The self-authorization firewall breached by the class that was argued to be incapable of breaching it.
+
+Rules 10, 11, and 13 were also unrequested, and exist because immutability alone is not pre-registration.
 
 ## Verification performed
 
-- **14/14 pass**, each refusal matching its expected `violation_kind`.
-- **Mutation-tested.** Disabling a rule must make its case go red. For all six `frozen_policy_*` kinds, the neutered run **accepts** the bad envelope set — proving no other rule incidentally covers it and that each rule is load-bearing. (The seventh, `policy_reference_unresolved`, instead *crashes* when neutered, because the `raise` is the body of an `if p is None` guard; that shows it is load-bearing too, but not via the accept path. Recorded rather than rounded up.)
-- **Backward compatibility is tested against reality, not asserted.** Case 14 carries the actual `atlas.evidence_quality_to_canon_tier` Policy and the actual `memory-systems-v1` Claim, copied verbatim from the running stores. Separately, all **316** live envelopes across synaplex and atlas validate against these schemas with 0 invalid.
+- **19/19 pass**, each refusal matching its expected `violation_kind`. A case that refuses for the wrong reason fails — case 18 initially did (rule 13 fired before rule 17), and that is how the fixture got fixed.
+- **Mutation-tested.** Disabling a rule must make its case go red. Clean accept-path mutants for all eight of: `frozen_policy_amendment_attempt`, `frozen_policy_late_issuance`, `frozen_policy_duplicate`, `frozen_policy_scope_violation`, `frozen_policy_citation_incomplete`, `frozen_policy_derivation_mismatch`, `evidence_claim_mismatch`, `frozen_policy_constitutional_collision`. Two (`policy_reference_unresolved`, `frozen_policy_evidence_unanchored`) *crash* when neutered instead of accepting — in each the `raise` is the body of a missing-value guard, so removing it hits a `KeyError`/`TypeError` downstream. Load-bearing, but not demonstrated via the accept path. Recorded rather than rounded up.
+- **Backward compatibility is tested against reality, not asserted.** Case 14 carries the actual `atlas.evidence_quality_to_canon_tier` Policy and the actual `memory-systems-v1` Claim, copied verbatim from the running stores. Separately, all **316** live envelopes across synaplex and atlas validate with 0 invalid — **re-verified after** `additionalProperties: false` was added to `ratification_rule`/`rollback_rule`, which is a tightening and therefore had to re-earn the claim rather than inherit it.
+
+## A warning about green suites
+
+This harness was **14/14 green, mutation-tested, and shipped with a confident decision record** — while the class it tested was broken in two independent ways, one of which made every rule in it decorative. Both defects were found by *executing constructed attacks*, not by reading more carefully.
+
+A green suite is evidence that the tests you wrote pass. It is not evidence that the thing works. Attack it before you trust it.
 
 ## Adding a case
 

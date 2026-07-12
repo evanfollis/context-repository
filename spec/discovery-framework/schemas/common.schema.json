@@ -69,15 +69,18 @@
         "candidate_set_inconsistency",
         "rollback_precedence_invalid",
         "policy_reference_unresolved",
+        "evidence_claim_mismatch",
         "frozen_policy_amendment_attempt",
         "frozen_policy_late_issuance",
         "frozen_policy_duplicate",
         "frozen_policy_scope_violation",
         "frozen_policy_citation_incomplete",
         "frozen_policy_derivation_mismatch",
+        "frozen_policy_evidence_unanchored",
+        "frozen_policy_constitutional_collision",
         "other"
       ],
-      "description": "v0.2.0 added policy_reference_unresolved (validator rule 5 had no violation kind in v0.1.0) and the six frozen_policy_* kinds (validator rules 9-14). Refusal reasons are machine-readable by design: a refused write whose cause collapses to 'other' is not auditable."
+      "description": "v0.2.0 added policy_reference_unresolved (validator rule 5 had no violation kind in v0.1.0), evidence_claim_mismatch (rule 15), and the frozen_policy_* kinds (rules 9-14, 16, 17). Refusal reasons are machine-readable by design: a refused write whose cause collapses to 'other' is not auditable."
     },
     "Role": {
       "type": "string",

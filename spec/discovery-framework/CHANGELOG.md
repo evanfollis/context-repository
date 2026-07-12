@@ -16,14 +16,26 @@ Canon requires every `Decision` to cite a Policy in force (`policies_in_force`, 
 
 - **`policy.schema.json`** — `class` enum gains `frozen`. New `bound_to_claim_id` (required for `frozen`, forbidden otherwise) and optional `derived_from` (a JSON Pointer into the bound Claim). Conditional subschemas force `frozen` to carry an empty `amendment_authority`, `ratification_rule.kind = "none"`, no rollback rules, genesis-only `provenance`, and `effective_until: null`. `amendment_authority` relaxed to `minItems: 0` globally and re-imposed as `minItems: 1` for the other two classes — "nobody may amend this" has to be *writable*, and in v0.1.0 it was not.
 - **`decision.schema.json`** — `policies_in_force[*].class` enum gains `frozen`.
-- **`common.schema.json`** — `ViolationKind` gains six `frozen_policy_*` kinds plus `policy_reference_unresolved` (validator rule 5 had no violation kind in v0.1.0 — a pre-existing gap found while writing the fixtures).
-- **`canon.md`** — validator rules 9–14.
+- **`common.schema.json`** — `ViolationKind` gains the `frozen_policy_*` kinds, `evidence_claim_mismatch`, and `policy_reference_unresolved` (validator rule 5 had no violation kind in v0.1.0 — a pre-existing gap found while writing the fixtures).
+- **`canon.md`** — validator rules 9–17.
 - **`policy.md`** — §Frozen, §Pre-registration window, §Supersession, §Limits.
-- **`conformance/`** — new. 14 executable fixtures, mutation-tested.
+- **`conformance/`** — new. 19 executable fixtures, mutation-tested.
+
+### Rules added by adversarial review (Codex), after the first draft shipped green
+
+The first draft of this bump was 14/14 green with a confident decision record, and was **broken in two independent ways**. Review artifact: `docs/canon-0.2.0-adversarial-review.md`.
+
+- **Rules 15 + 16 (`evidence_claim_mismatch`, `frozen_policy_evidence_unanchored`)** — the bypass that made rules 9–14 decorative. Don't attack the gate; route around it: run the eval, see the results, mint a *fresh* Claim (its window is wide open *because* it has no Evidence), freeze a flattering gate on it, and conclude it citing the *old* Claim's evidence. Rule 10 passes vacuously. Rule 15 closes the citation path; rule 16 anchors the window on `observed_at` rather than `emitted_at`, since an attacker who re-emits the same observations defeats any window keyed on emission order — `emitted_at` is under the emitter's control.
+- **Rule 17 (`frozen_policy_constitutional_collision`)** + a schema bar on `scope: framework` for frozen — the self-authorization land-grab. `class: frozen, field_path: capital.max_at_risk, amendment_authority: []` is a ceiling an agent grants *itself* that **nobody, including the principal, can ever amend**. This defeated the very argument used to justify landing the class without principal signoff.
+- **Schema leaks** closed: `provenance: []` on frozen; stray undeclared fields in `ratification_rule` / `rollback_rule` (now `additionalProperties: false`); `required_evidence_count` alongside `kind: "none"`.
 
 ### Backward compatibility
 
-Additive. Every v0.1.0-valid envelope remains v0.2.0-valid. Verified, not asserted: **all 316 live canon envelopes across synaplex and atlas validate against v0.2.0 with 0 invalid**, and conformance case 14 pins two of them (the real `atlas.evidence_quality_to_canon_tier` Policy and the real `memory-systems-v1` Claim) as a permanent regression.
+Every v0.1.0-valid envelope remains v0.2.0-valid. Verified, not asserted: **all 316 live canon envelopes across synaplex and atlas validate against v0.2.0 with 0 invalid**, and conformance case 14 pins two of them (the real `atlas.evidence_quality_to_canon_tier` Policy and the real `memory-systems-v1` Claim) as a permanent regression.
+
+Not *purely* additive, and the distinction is worth stating: `additionalProperties: false` on `ratification_rule` / `rollback_rule` is a **tightening**. It was added during review to close a leak, and the 316-envelope check was **re-run afterwards** rather than inherited from before — a backcompat claim made before a tightening is not a backcompat claim. Live envelopes carry no undeclared fields there, so nothing broke.
+
+`observed_at` on `Evidence` remains **optional** in general; rule 16 makes it mandatory only for Evidence on a Claim that carries a frozen gate. This is deliberate — requiring it globally would have retroactively invalidated v0.1.0 envelopes.
 
 Adapters need no change unless they emit `frozen` policies. Emitters that switch on `Policy.class` must handle the third value.
 

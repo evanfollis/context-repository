@@ -89,9 +89,11 @@ These enforce pre-registration integrity for `Policy(class=frozen)`. See `policy
 10. **Pre-registration window.** For every `class: frozen` Policy `P` bound to Claim `C`:
     - `C.emitted_at ≤ P.emitted_at`, and
     - `P.emitted_at ≤ t_probe`, where `t_probe` is the `emitted_at` of the earliest `EventLogEntry(event_kind=phase_transition, to_phase=probe)` whose `phase_transition.claim_id == C.id`. If no such event exists, the window is still **open** and this clause passes.
-    - `P.emitted_at ≤ E.emitted_at` for every `Evidence` `E` with `E.claim_id == C.id`.
+    - `P.emitted_at ≤ E.emitted_at` **and** `P.emitted_at ≤ E.observed_at` for every `Evidence` `E` with `E.claim_id == C.id`.
 
     Immutability without this rule is theatre: an unamendable gate chosen *after* the Evidence is simply a post-hoc gate that no amendment check will ever catch. **Late issuance, not amendment, is the attack this class exists to stop.** → `frozen_policy_late_issuance`
+
+    The `observed_at` clause is load-bearing and is **not** redundant with `emitted_at`. `emitted_at` is entirely under the emitter's control: an emitter that has already seen its results can mint a fresh `Claim`, freeze a flattering gate against it, and then *re-emit the same observations* as brand-new `Evidence` envelopes with later `emitted_at` values — and a window keyed only on emission order accepts it. `observed_at` is the emitter's assertion about **when reality was consulted**, and reality was consulted before the gate was chosen. Anchoring the window there means the attack is no longer available through envelope ordering; it requires *falsifying an observation timestamp* against a hash-pinned artifact, which is fabrication, not a loophole. Canon can close the loophole. It cannot stop a liar, and does not claim to.
 
 11. **Uniqueness.** At most one `class: frozen` Policy per (`bound_to_claim_id`, `field_path`). Two frozen gates on the same field of the same Claim let an emitter cite whichever one the results favor, with nothing amended and a clean-looking trail. → `frozen_policy_duplicate`
 
@@ -100,6 +102,18 @@ These enforce pre-registration integrity for `Policy(class=frozen)`. See `policy
 13. **Citation completeness.** For a terminal `Decision` (`kind ∈ {promote, kill, pivot}`), `policies_in_force` MUST include **every** `class: frozen` Policy whose `bound_to_claim_id == Decision.chosen_claim_id`. Citing only the gates that were met is cherry-picking a pre-registration. (`kind=continue` may cite them and is not required to: it concludes nothing.) → `frozen_policy_citation_incomplete`
 
 14. **Derivation.** When a frozen Policy carries `derived_from`, `Policy.value` MUST be **canonical-JSON-equal** to the subtree of the bound Claim at that RFC-6901 JSON Pointer. Equality is over the parsed JSON data model, **not bytes** — `0.80` and `0.8` are the same number and any serializer round-trips one to the other; a byte-identity check would be born broken. → `frozen_policy_derivation_mismatch`
+
+15. **Evidence–Claim coherence.** Every id in `Decision.cited_evidence` MUST resolve to an `Evidence` envelope whose `claim_id` ∈ `Decision.candidate_claims`. A Decision may not cite evidence gathered about a Claim it is not deciding.
+
+    Without this, the pre-registration window is trivially bypassed and *every* frozen-policy rule above becomes decorative: run the eval, look at the results, mint a **fresh Claim**, freeze a flattering gate against it (legal — the new Claim has no Evidence, so its window is wide open), and conclude it while citing the *old* Claim's evidence. Nothing is amended, nothing is late, nothing is duplicated. This rule is what makes rules 9–14 mean anything. → `evidence_claim_mismatch`
+
+16. **Evidence anchoring under a frozen gate.** If a Claim `C` has any `class: frozen` Policy bound to it, then every `Evidence` with `claim_id == C.id` MUST carry `observed_at`. (`observed_at` remains optional in general — this obligation attaches only where a frozen gate exists, so no v0.1.0 envelope is retroactively invalidated.) Without it, rule 10's `observed_at` clause is vacuous and the re-emission attack above is open. → `frozen_policy_evidence_unanchored`
+
+17. **No constitutional collision.** A `class: frozen` Policy MUST NOT share a `field_path` with any `class: constitutional` Policy of overlapping scope. Frozen policies are also forbidden `scope: framework` at schema level.
+
+    This is what keeps the self-authorization firewall intact. `frozen` is argued (see `policy.md`) to be the one class that cannot widen agent authority, because issuing one *renounces* amendment power. That argument holds **only if a frozen Policy cannot govern a constitutional field.** Otherwise an agent mints `class: frozen, field_path: capital.max_at_risk, value: <enormous>` — a ceiling it granted itself, which by construction *nobody, including the principal, may ever amend*. That is the firewall breached by the very class claimed to be incapable of breaching it, and made irreversible. → `frozen_policy_constitutional_collision`
+
+    **Residual limit, stated rather than papered over:** canon has no global registry of field classes. Rule 17 can only detect a collision with a constitutional Policy **that exists in the store**. A constitutionally-*intended* field that has never had a constitutional Policy object minted for it is not protected by this rule. The mitigation is the one v0.1.0 already assumes — ceiling fields must have constitutional Policy objects — and it is now load-bearing rather than merely tidy.
 
 Rule 5 (`Decision.policies_in_force[*]` resolves to an existing Policy version) had no `violation_kind` in v0.1.0. It now emits → `policy_reference_unresolved`.
 

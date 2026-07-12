@@ -77,23 +77,26 @@
     "ratification_rule": {
       "type": "object",
       "required": ["kind"],
+      "additionalProperties": false,
       "properties": {
         "kind": { "type": "string", "enum": ["principal_signoff", "evidence_threshold", "multi_party", "none"] },
         "required_evidence_tier": { "type": "string" },
         "required_evidence_count": { "type": "integer", "minimum": 0 },
         "signatories": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/PrincipalId" } }
       },
-      "description": "kind='none' is legal ONLY for class=frozen, where there is no amendment to ratify. Conversely frozen MUST use 'none': an 'evidence_threshold' ratification on a frozen gate would be a gate re-openable by evidence, which is the thing the class exists to forbid."
+      "description": "kind='none' is legal ONLY for class=frozen, where there is no amendment to ratify. Conversely frozen MUST use 'none': an 'evidence_threshold' ratification on a frozen gate would be a gate re-openable by evidence, which is the thing the class exists to forbid. additionalProperties:false so an undeclared field cannot smuggle in ratification mechanics a validator will ignore but a naive adapter might honor."
     },
     "rollback_rule": {
       "type": "object",
       "required": ["rules", "precedence"],
+      "additionalProperties": false,
       "properties": {
         "rules": {
           "type": "array",
           "items": {
             "type": "object",
             "required": ["id", "condition"],
+            "additionalProperties": false,
             "properties": {
               "id": { "type": "string" },
               "condition": {
@@ -154,18 +157,32 @@
       "description": "class=frozen: amendable by nobody, bound to exactly one Claim, single genesis version, no rollback, no ratification, no expiry timestamp. Every degree of freedom that ADR-0041's review identified as still-discretionary under a hand-constrained 'operational' policy (ratification_rule, rollback_rule, amendment_authority, provenance) is closed HERE, by the class, mechanically.",
       "if": { "properties": { "class": { "const": "frozen" } }, "required": ["class"] },
       "then": {
-        "required": ["bound_to_claim_id"],
+        "required": ["bound_to_claim_id", "effective_until"],
         "properties": {
           "amendment_authority": { "maxItems": 0 },
-          "ratification_rule": { "properties": { "kind": { "const": "none" } } },
+          "ratification_rule": {
+            "properties": { "kind": { "const": "none" } },
+            "not": {
+              "anyOf": [
+                { "required": ["required_evidence_tier"] },
+                { "required": ["required_evidence_count"] },
+                { "required": ["signatories"] }
+              ]
+            },
+            "description": "Exactly {kind: 'none'} and nothing else. A stray required_evidence_count alongside kind='none' is inert to a correct validator but reads as ratification machinery to a careless one."
+          },
           "rollback_rule": {
             "properties": {
               "rules": { "maxItems": 0 },
               "precedence": { "maxItems": 0 }
             }
           },
-          "provenance": { "maxItems": 1 },
-          "effective_until": { "type": "null" }
+          "provenance": { "minItems": 1, "maxItems": 1 },
+          "effective_until": { "type": "null" },
+          "scope": {
+            "pattern": "^L[0-7](:[a-z0-9_-]+)?$",
+            "description": "A frozen Policy MUST NOT be framework-scoped. It is bound to one Claim, and Claims live at a layer/instance — a framework-scoped frozen Policy is a category error, and worse, it is the shape a self-authorization land-grab would take (a framework 'ceiling' an agent minted for itself that nobody, including the principal, can amend). Also excludes 'layer:L<n>' role-profile scope."
+          }
         }
       }
     },

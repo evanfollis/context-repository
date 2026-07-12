@@ -7,7 +7,7 @@ updated: 2026-07-12
 
 # Canon v0.2.0 — the `frozen` Policy class
 
-**Status:** accepted, pending cross-agent adversarial review (routed to Codex; this repo's sessions are Claude).
+**Status:** accepted. Cross-agent adversarial review **completed** (Codex, read-only) — it found **two blocking defects**, both fixed and fixture-pinned before this record was finalized. See `docs/canon-0.2.0-adversarial-review.md`. Read that alongside this; the first draft of this document confidently argued for a design that was broken.
 **Date:** 2026-07-12
 **Escalated by:** synaplex ADR-0042, via handoff `context-repository-canon-gap-frozen-eval-gate-2026-07-12T05-20Z`.
 **Supersedes nothing.** ADR-0040 and ADR-0041 (both rejected) are synaplex-side proposals that tried to solve this locally; this is the canon-side resolution their rejection routed here.
@@ -37,17 +37,27 @@ A `frozen` Policy is:
 
 Full semantics in `spec/discovery-framework/policy.md` §Frozen. Enforcement in `canon.md` validator rules 9–14. Executable fixtures in `spec/discovery-framework/conformance/`.
 
-## Why this needs no principal signoff — the load-bearing argument
+## Why this needs no principal signoff — the load-bearing argument, and the precondition it hides
 
 The handoff correctly warned that an agent minting a **constitutional** Policy and naming itself its amendment authority is self-authorization by construction, and flagged that option 3 would therefore need Evan.
 
 `frozen` does not have this problem, and the reason is structural:
 
-> **`frozen` is the only class that cannot widen agent authority.**
+> **`frozen` is the only class that cannot widen agent authority — *provided it cannot govern a constitutional field*.**
 
-The self-authorization firewall exists to stop an agent raising its own ceiling. An agent issuing a frozen Policy is *renouncing* amendment authority over a value — `amendment_authority` is required to be empty, so there is **no configuration** in which the issuer names itself the amender. Issuing one strictly *removes* a degree of freedom from the issuer. Constitutional ceilings still bind above it exactly as they bind above `operational`.
+The self-authorization firewall exists to stop an agent raising its own ceiling. An agent issuing a frozen Policy is *renouncing* amendment authority over a value — `amendment_authority` is required to be empty, so there is **no configuration** in which the issuer names itself the amender. Issuing one strictly *removes* a degree of freedom from the issuer.
 
 That asymmetry is what makes the class safe for agents to mint, and it is why **this decision has no principal dependency.** Option 3 (a constitutional meta-policy) was the shape that would have required routing to Evan; it was not chosen.
+
+### The precondition, and how nearly it was missed
+
+The first draft of this document stated the claim above **without the italicised proviso, and in that form it was false.** Nothing stopped an agent emitting `class: frozen, scope: framework, field_path: capital.max_at_risk, value: <enormous>, amendment_authority: []` — a ceiling it granted **itself**, which by construction **nobody, including the principal, may ever amend.** The firewall breached by the very class argued to be incapable of breaching it, and made *irreversible* rather than merely wrong.
+
+That was the argument justifying landing this without Evan. It shipped in `9faa92b` with 14 green fixtures behind it.
+
+Closed by: frozen policies schema-barred from `scope: framework`, plus validator rule 17 (no frozen Policy may share a `field_path` with a constitutional Policy of overlapping scope). Conformance cases 18 and 19.
+
+**A safety argument with an unstated precondition is not a safety argument.** The precondition is now stated, enforced, and tested — and the fact that the *conclusion* survived is not a reason to be reassured about the *reasoning* that reached it.
 
 ## What Evan should know he is bound by
 
@@ -70,13 +80,20 @@ Its one real advantage was requiring no schema bump. That is not a reason. Canon
 
 ## What the escalation did not ask for, and why it is here anyway
 
-The handoff asked for fixtures covering a valid gate, a refused post-Evidence amendment, a valid Decision, and a refused Decision (missing / wrongly-mutable / foreign Policy). All exist. Three more rules exist that it did not ask for, because **refusing amendment while permitting the following would have been security theatre:**
+The handoff asked for fixtures covering a valid gate, a refused post-Evidence amendment, a valid Decision, and a refused Decision (missing / wrongly-mutable / foreign Policy). All exist. **Six more rules exist that it did not ask for, and without them the class would have been decorative.**
 
-- **Rule 10 — late issuance.** The real attack is not amending the gate. It is *issuing* it late: wait for the Evidence, freeze the threshold that gives the answer you want, cite it. Nothing is ever amended, so every amendment check passes. A frozen Policy must be emitted inside its Claim's pre-registration window or it is refused.
-- **Rule 11 — duplicate issuance.** Two gates on the same field, both frozen legally inside the window, one at 0.80 and one at 0.60; cite whichever the results favour. Refused: at most one frozen Policy per (Claim, `field_path`).
-- **Rule 13 — citation completeness.** Pre-register three gates, cite only the one you passed. Refused: a terminal Decision must cite *every* frozen Policy bound to its chosen Claim.
+Three came from taking the threat model seriously — refusing amendment while permitting any of these would have been security theatre:
 
-Immutability alone is not pre-registration. These three are what make the gate-set an eval *commits to* mechanically identical to the gate-set it is *judged against*.
+- **Rule 10 — late issuance.** The real attack is not amending the gate. It is *issuing* it late: wait for the Evidence, freeze the threshold that gives the answer you want, cite it. Nothing is ever amended, so every amendment check passes.
+- **Rule 11 — duplicate issuance.** Two gates on the same field, both frozen legally inside the window, one at 0.80 and one at 0.60; cite whichever the results favour.
+- **Rule 13 — citation completeness.** Pre-register three gates, cite only the one you passed.
+
+Three more came from **adversarial review**, after the above had already shipped green:
+
+- **Rules 15 + 16 — the bypass that made rules 9–14 decorative.** Don't attack the gate; route around it. Run the eval, look at the results, mint a **fresh Claim** — whose pre-registration window is wide open *precisely because it has no Evidence* — freeze a flattering gate against it, and conclude it while citing the **old** Claim's evidence. Nothing amended, nothing duplicated, nothing late. Rule 10 passes *vacuously*. Rule 15 closes the citation path. Rule 16 anchors the window on `observed_at`, because an attacker who re-emits the same observations under the new Claim defeats any window keyed on `emitted_at` — **`emitted_at` is entirely under the emitter's control; `observed_at` is a claim about when reality was consulted.**
+- **Rule 17 — the constitutional land-grab.** Above.
+
+Immutability alone is not pre-registration, and a gate you can simply decline to use is not a gate.
 
 ## `derived_from` — why a Policy adds no new information
 
@@ -99,12 +116,22 @@ Whether to emit it is synaplex's call, not this repo's. Canon's job was to make 
 ## Limits — what this does not do
 
 - **Canon cannot force a domain to *use* `frozen`.** Nothing stops an L3 adapter from gating an eval on an `operational` Policy and moving it afterwards. Canon does not define domain-specific promotion thresholds and cannot recognize one when it sees it. Requiring `frozen` for eval gates is a **domain obligation** that belongs in each domain's adapter spec. Synaplex should record it in its own `CLAUDE.md`.
+- **Rule 17 only sees collisions with constitutional policies that exist.** Canon has no global registry of field classes. A constitutionally-*intended* field with no constitutional Policy object minted for it is unprotected. The mitigation is the one v0.1.0 already assumed — ceiling fields must have constitutional Policy objects — but it is now **load-bearing rather than merely tidy**, and every domain should treat it as an obligation.
+- **Canon closes loopholes; it cannot stop a liar.** Rule 16 reduces the post-hoc-gate attack from "order your envelopes cleverly" to "falsify an `observed_at` against a hash-pinned artifact." That is fabrication. It is a better place to stand, not an impossibility proof.
+- **Append-only enforcement is the store's job, not canon's.** These rules assume envelopes cannot be silently deleted. An emitter that can remove an inconvenient frozen Policy from its own store defeats all of them, and no validator rule can see it.
 - **A frozen gate can still be a bad gate.** Freezing guarantees the threshold was fixed in advance. It guarantees nothing about whether it was well chosen.
 - **`derived_from` proves the value matches the Claim, not that the Claim is sound.** Provenance integrity is not epistemic quality.
 
 ## Verification performed
 
-- 14/14 conformance fixtures pass, each refusal asserted against its specific `violation_kind` — refusing for the wrong reason is a failure.
-- Mutation-tested: disabling any one of the six `frozen_policy_*` rules makes its case **accept**, proving each is load-bearing and not incidentally covered by another.
-- All **316** live canon envelopes across synaplex and atlas validate against v0.2.0 with **0 invalid**. Case 14 pins two real ones as a permanent backward-compatibility regression.
+- **19/19** conformance fixtures pass, each refusal asserted against its specific `violation_kind` — refusing for the wrong reason is a failure, and case 18 initially did.
+- All four attacks from the adversarial review re-executed against the fixed spec: **all refused**, each by its intended rule.
+- Mutation-tested: disabling any of eight rules makes its case **accept**, proving each is load-bearing and not incidentally covered by another. Two rules crash instead of accepting when neutered (the `raise` is a guard body); load-bearing, but recorded as the weaker demonstration it is.
+- All **316** live canon envelopes across synaplex and atlas validate against v0.2.0 with **0 invalid** — re-verified *after* the `additionalProperties: false` tightening, which had to re-earn the backcompat claim rather than inherit it. Case 14 pins two real envelopes as a permanent regression.
 - `policies_in_force: minItems 1` was **not** relaxed (case 08).
+
+## What this episode should teach the next session
+
+The version of this design committed as `9faa92b` had: a decision record arguing confidently for its safety, 14 green conformance fixtures, a passing mutation test, and a 316-envelope backcompat check. **It was broken in two independent ways, one of which made every rule in it decorative.**
+
+The fixtures were green because they tested the attacks the author had thought of. Neither defect was found by reading more carefully — both were found by *executing constructed attacks* against the harness. Route canon-adjacent work to the opposing agent, and tell it to refute rather than review.
