@@ -7,7 +7,7 @@ updated: 2026-07-12
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-07-12 — attended session. **Canon bumped to v0.2.0** (`frozen` Policy class) resolving the escalated canon gap; synaplex Phase 2 unblocked pending review. **The canon spec is now under version control for the first time** — `spec/` had been gitignored since April.
+**Last updated**: 2026-07-12 — tick session. Auth failure diagnosis complete (self-resolved); CURRENT_STATE.md commit discipline adopted in CLAUDE.md; 5 commits pushed to origin/main.
 
 ---
 
@@ -93,8 +93,13 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
   It is verified by revalidating all 316 live envelopes (0 invalid), *not* by byte-identity.
   Found by synaplex, not by this repo — a sibling session's `$ref` failed to resolve.
 
-- **Tick sessions failing 401 since 2026-05-01 (~72 days, unresolved)**: Auth errors.
-  Reflection loop is on a separate path and unaffected. Tick restoration or decommission decision needed.
+- **RESOLVED 2026-07-12 — Tick auth failure (401, May 2026 was transient)**: The single
+  occurrence on 2026-05-01 was a transient OAuth token issue; the NEXT tick run succeeded
+  immediately. Authentication uses OAuth tokens in `/root/.claude/` accessed via the
+  `workspace-project-tick@.service` `ReadWritePaths`. The current tick session (this one) is
+  proof: running headless without 401. No ANTHROPIC_API_KEY needed or missing — OAuth auth path is
+  correct. The "failing since 2026-05-01" CURRENT_STATE claim was stale by the time it was written.
+  Handoff `context-repository-auth-failure-diagnosis-2026-05-04T02-49Z.md` consumed and deleted.
 
 - **M5 (session-end write enforcement) unimplemented**: Front door not updated at session end.
 
@@ -103,19 +108,17 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
   review gate is available; the two spec proposals blocked "72+ days on tooling" were blocked on
   nobody invoking it.
 
-- **reflect.sh generating noise**: TWENTY-THREE consecutive auto-commits (Jun 3 – Jun 18; then
-  reflections short-circuited Jul 1–11 because no CURRENT_STATE change was detected with
-  no activity). Repo 17+ commits ahead of origin/main — all unpushed reflect.sh auto-commits.
-
-- **Outstanding handoffs** (oldest ~72 days):
-  - `context-repository-auth-failure-diagnosis-2026-05-04T02-49Z.md` (~69 days)
-  - `context-repository-current-state-commit-discipline-2026-05-13T16-47Z.md` (~60 days)
-  - `context-repository-proposal-current-state-commit-discipline-2026-05-13T15-35-09Z.md` (~60 days)
-  - `URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md` (~32 days)
+- **Outstanding handoffs**:
+  - ~~`context-repository-auth-failure-diagnosis-2026-05-04T02-49Z.md`~~ **CONSUMED 2026-07-12** → auth self-resolved
+  - ~~`context-repository-current-state-commit-discipline-2026-05-13T16-47Z.md`~~ **CONSUMED 2026-07-12** → rule added to CLAUDE.md
+  - ~~`context-repository-proposal-current-state-commit-discipline-2026-05-13T15-35-09Z.md`~~ **CONSUMED 2026-07-12** → rule added to CLAUDE.md
+  - ~~`URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md`~~ — **STALE, deleted** (the 2026-07-12 attended session resolved the abandonment; this URGENT was not re-deleted)
   - ~~`context-repository-canon-gap-frozen-eval-gate-...`~~ **CONSUMED 2026-07-12** → canon v0.2.0
   - ~~`URGENT-context-repository-canon-spec-is-not-under-version-control.md`~~ **CONSUMED 2026-07-12** → `d93d4e5`
 
-- **File-based escalation confirmed broken**: URGENT ~32 days unconsumed.
+- **reflect.sh auto-commit noise**: 23 consecutive auto-commits Jun 3–18; reflections then
+  short-circuited Jul 1–11 (no CURRENT_STATE change detected). Resolved by attended session
+  + this tick; repo is now pushed to origin.
 
 ## Recent decisions
 
@@ -139,26 +142,24 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
 1. This file.
 2. `docs/canon-0.2.0-frozen-policy-class.md` — the canon decision of record. Read before touching
    `spec/`, and before building anything that emits a `Policy`.
-3. `spec/discovery-framework/conformance/` — run `python3 run.py`. If it is not 14/14, canon is broken.
+3. `spec/discovery-framework/conformance/` — run `python3 run.py`. If it is not 19/19, canon is broken.
 4. `index.md` — auto-generated from frontmatter.
 5. `docs/agent-context-repo-pattern.md` — the spec.
 
-## What bit the last session (patterns from session transcripts)
+## What bit the last sessions (patterns from session transcripts)
 
-- **The spec was editable with no diff, and it took a sibling repo to notice.** This session
-  rewrote all eight schemas in place before discovering `spec/` was gitignored. Synaplex caught it
-  because a `$ref` failed to resolve — nothing in *this* repo would have. An ignore rule written in
-  April for the prior identity's dead work silently swallowed the system's most load-bearing
-  artifact three months later. **Check `git ls-files` before trusting that `git status` is clean.**
-  A clean tree can mean "no changes" or "git has never heard of this directory."
+- **The spec was editable with no diff, and it took a sibling repo to notice.** The 2026-07-12
+  attended session rewrote all eight schemas before discovering `spec/` was gitignored. Synaplex
+  caught it because a `$ref` failed to resolve. **Check `git ls-files` before trusting that `git
+  status` is clean.** A clean tree can mean "no changes" or "git has never heard of this directory."
 - **The escalation asked for four fixtures; the design needed seven.** The handoff named the
   amendment attack. The *live* attack was late issuance — freeze the gate after seeing the results
   and no amendment check ever fires. Take an escalation's framing as input, not as scope.
-- **A stale "blocked on tooling" note cost 72 days.** The front door said codex wasn't installed.
-  It is, and it has been. Nobody re-checked.
+- **A stale claim in CURRENT_STATE.md ("401 failing since 2026-05-01") persisted ~69 days.** The
+  auth failure was a one-time transient event; the NEXT tick run succeeded. The claim was wrong from
+  the start. Read the tick log (`/var/log/workspace-project-tick-context-repo.log`) before trusting
+  front-door claims about tick health.
 - **Next attended session priorities**:
-  1. Adversarial review (Codex) of canon v0.2.0, then act on findings
-  2. Push commits to origin (repo is many commits ahead, all unpushed)
-  3. Give atlas + skillfoundry a schema-drift tripwire (synaplex has one; the others don't)
-  4. Formally close or defer polarity v0.1.1; invoke review on harness-check Q2+Q3
-  5. Delete stale handoffs; decide tick loop (restore auth or decommission)
+  1. Give atlas + skillfoundry a schema-drift tripwire (synaplex has one; the others don't)
+  2. Formally close or defer polarity v0.1.1; invoke review on harness-check Q2+Q3
+  3. Canon 3-claims-per-assumption Step 2 — awaits principal verdict on two open questions

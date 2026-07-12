@@ -45,6 +45,11 @@ This repo is itself an instance of the pattern it specifies.
 - **No abstract schemas.** Type systems, object models, governance frameworks —
   those were a prior wrong identity. This repo is about current-state surfaces,
   not type theory.
+- **CURRENT_STATE.md commit discipline.** Every session's first repo-touching
+  action is to commit any pending `CURRENT_STATE.md` edits before proceeding to
+  other work. Rationale: reflect.sh writes to disk but cannot commit (read-only
+  invariant preserved); sessions must commit what reflect.sh wrote. Source:
+  `runtime/.meta/cross-cutting-2026-05-13T15-26-05Z.md` Proposal 1.
 
 ## Conventions
 
