@@ -1,0 +1,244 @@
+{
+  "name": "02-valid-decision-citing-gate",
+  "description": "A terminal Decision citing the frozen gate and the complete Evidence set, including the contradicting Evidence that kills the Claim. This is the envelope synaplex's ADR-0042 Phase 2 cannot currently emit; with the frozen class it validates.",
+  "expect": "accept",
+  "envelopes": [
+    {
+      "id": "b7ff216f4eec6e58",
+      "spec_version": "0.1.0",
+      "object_type": "Claim",
+      "emitted_at": "2026-04-19T04:25:00Z",
+      "emitter": "L3:synaplex",
+      "layer": "L3",
+      "roles": [
+        "Claim"
+      ],
+      "role_declared_at": "2026-04-19T04:25:00Z",
+      "binding": "binding",
+      "sources": [],
+      "statement": "No current memory system achieves 0.80 or higher recall at 1 on multi-session coherence at 10-session depth",
+      "falsification_criteria": [
+        "If any one of {Letta, mem0, MemGPT, Claude-built-in-memory} achieves mean recall@1 >= 0.80 on the multi_session_coherence task (N>=10 runs) with 95% bootstrap CI lower bound >= 0.80, this claim is falsified.",
+        "If the held-out suite (reset_semantics) produces recall@1 performance that reverses the ordering observed on the primary suites, the claim's generalizability is falsified (the Decision MUST note this as an override)."
+      ],
+      "thresholds": {
+        "recall_at_1": 0.8,
+        "alpha": 0.05,
+        "bootstrap_iterations": 1000,
+        "runs_per_cell": 10,
+        "cohens_d_meaningful": 0.5,
+        "max_tokens_per_run_input": 30000,
+        "max_tokens_per_run_output": 3000
+      },
+      "exposure": {
+        "capital_at_risk": 0,
+        "reversibility": "reversible",
+        "correlation_tags": [
+          "agent-platform-evaluation",
+          "memory-systems"
+        ],
+        "time_to_realization": "P21D",
+        "blast_radius": "local"
+      },
+      "artifact": {
+        "uri": "file://lab/evals/memory-systems-v1/methodology.md",
+        "content_hash": "sha256:45916c9fc006d87b86eb09437cffdee0ff552184bd660c1ebf92e7a942b4900b",
+        "version": "1",
+        "media_type": "text/markdown"
+      },
+      "instance_id": "synaplex"
+    },
+    {
+      "id": "synaplex.memory-systems-v1.promotion_gate",
+      "spec_version": "0.2.0",
+      "object_type": "Policy",
+      "emitted_at": "2026-07-12T12:00:00Z",
+      "emitter": "L3:synaplex",
+      "layer": "L3",
+      "roles": [
+        "Policy"
+      ],
+      "role_declared_at": "2026-07-12T12:00:00Z",
+      "binding": "binding",
+      "sources": [],
+      "class": "frozen",
+      "scope": "L3:synaplex",
+      "field_path": "lab.eval.memory_systems_v1.promotion_gate",
+      "value": {
+        "recall_at_1": 0.8,
+        "alpha": 0.05,
+        "bootstrap_iterations": 1000,
+        "runs_per_cell": 10,
+        "cohens_d_meaningful": 0.5,
+        "max_tokens_per_run_input": 30000,
+        "max_tokens_per_run_output": 3000
+      },
+      "version": "1",
+      "issuer": "L3:synaplex",
+      "amendment_authority": [],
+      "ratification_rule": {
+        "kind": "none"
+      },
+      "rollback_rule": {
+        "rules": [],
+        "precedence": []
+      },
+      "provenance": [
+        {
+          "version": "1",
+          "effective_from": "2026-07-12T12:00:00Z"
+        }
+      ],
+      "effective_from": "2026-07-12T12:00:00Z",
+      "effective_until": null,
+      "bound_to_claim_id": "b7ff216f4eec6e58",
+      "derived_from": "/thresholds"
+    },
+    {
+      "id": "elog-methodology-b7ff216f",
+      "spec_version": "0.2.0",
+      "object_type": "EventLogEntry",
+      "emitted_at": "2026-07-12T12:04:00Z",
+      "emitter": "L3:synaplex",
+      "layer": "L3",
+      "roles": [
+        "EventLogEntry"
+      ],
+      "role_declared_at": "2026-07-12T12:04:00Z",
+      "binding": "binding",
+      "sources": [],
+      "event_kind": "methodology_log",
+      "instance_id": "synaplex",
+      "methodology_log": {
+        "artifact": {
+          "uri": "file://lab/evals/memory-systems-v1/methodology.md",
+          "content_hash": "sha256:45916c9fc006d87b86eb09437cffdee0ff552184bd660c1ebf92e7a942b4900b",
+          "version": "1",
+          "media_type": "text/markdown"
+        }
+      }
+    },
+    {
+      "id": "elog-probe-entry-b7ff216f",
+      "spec_version": "0.2.0",
+      "object_type": "EventLogEntry",
+      "emitted_at": "2026-07-12T12:05:00Z",
+      "emitter": "L3:synaplex",
+      "layer": "L3",
+      "roles": [
+        "EventLogEntry"
+      ],
+      "role_declared_at": "2026-07-12T12:05:00Z",
+      "binding": "binding",
+      "sources": [],
+      "event_kind": "phase_transition",
+      "instance_id": "synaplex",
+      "phase_transition": {
+        "claim_id": "b7ff216f4eec6e58",
+        "from_phase": "draft",
+        "to_phase": "probe"
+      }
+    },
+    {
+      "id": "ev-mem0-recall-01",
+      "spec_version": "0.2.0",
+      "object_type": "Evidence",
+      "emitted_at": "2026-07-19T09:00:00Z",
+      "emitter": "L3:synaplex",
+      "layer": "L3",
+      "roles": [
+        "Evidence"
+      ],
+      "role_declared_at": "2026-07-19T09:00:00Z",
+      "binding": "binding",
+      "sources": [],
+      "claim_id": "b7ff216f4eec6e58",
+      "evidence_type": "benchmark_run",
+      "tier": "internal_operational",
+      "polarity": "supports",
+      "artifact": {
+        "uri": "file://lab/runs/memory-systems-v1/mem0.json",
+        "content_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "version": "1",
+        "media_type": "application/json"
+      },
+      "observed_at": "2026-07-19T09:00:00Z",
+      "instance_id": "synaplex"
+    },
+    {
+      "id": "ev-letta-recall-01",
+      "spec_version": "0.2.0",
+      "object_type": "Evidence",
+      "emitted_at": "2026-07-19T09:30:00Z",
+      "emitter": "L3:synaplex",
+      "layer": "L3",
+      "roles": [
+        "Evidence"
+      ],
+      "role_declared_at": "2026-07-19T09:30:00Z",
+      "binding": "binding",
+      "sources": [],
+      "claim_id": "b7ff216f4eec6e58",
+      "evidence_type": "benchmark_run",
+      "tier": "internal_operational",
+      "polarity": "contradicts",
+      "artifact": {
+        "uri": "file://lab/runs/memory-systems-v1/letta.json",
+        "content_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "version": "1",
+        "media_type": "application/json"
+      },
+      "observed_at": "2026-07-19T09:30:00Z",
+      "instance_id": "synaplex"
+    },
+    {
+      "id": "dec-b7ff216f-kill",
+      "spec_version": "0.2.0",
+      "object_type": "Decision",
+      "emitted_at": "2026-07-20T10:00:00Z",
+      "emitter": "L3:synaplex",
+      "layer": "L3",
+      "roles": [
+        "Decision"
+      ],
+      "role_declared_at": "2026-07-20T10:00:00Z",
+      "binding": "binding",
+      "sources": [],
+      "kind": "kill",
+      "candidate_claims": [
+        "b7ff216f4eec6e58"
+      ],
+      "chosen_claim_id": "b7ff216f4eec6e58",
+      "cited_evidence": [
+        "ev-mem0-recall-01",
+        "ev-letta-recall-01"
+      ],
+      "rationale": "Letta reached mean recall@1 = 0.84 with 95% bootstrap CI lower bound 0.81, clearing the pre-registered 0.80 gate. Falsification criterion 1 fires. The claim is dead as stated.",
+      "policies_in_force": [
+        {
+          "policy_id": "synaplex.memory-systems-v1.promotion_gate",
+          "version": "1",
+          "class": "frozen"
+        }
+      ],
+      "exposure": {
+        "capital_at_risk": 0,
+        "reversibility": "reversible",
+        "correlation_tags": [
+          "agent-platform-evaluation"
+        ],
+        "time_to_realization": "P1D",
+        "blast_radius": "local"
+      },
+      "instance_id": "synaplex",
+      "contradictions_addressed": [
+        {
+          "evidence_id": "ev-letta-recall-01",
+          "treatment": "hard_gated",
+          "contradiction_operator": "pre-registered falsification criterion 1 (recall@1 >= 0.80, CI lower bound >= 0.80)",
+          "rationale": "The contradicting evidence is exactly what the frozen gate was pre-registered to detect. It is not rebutted; it is dispositive."
+        }
+      ]
+    }
+  ]
+}

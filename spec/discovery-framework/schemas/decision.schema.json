@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://synaplex.ai/discovery-framework/0.1.0/decision.schema.json",
+  "$id": "https://synaplex.ai/discovery-framework/0.2.0/decision.schema.json",
   "title": "Decision",
   "description": "Structured skeleton of a decision. Reasoning lives in the 'rationale' free-form text and cited artifacts. The structured fields exist only for pre-registration integrity, post-hoc audit, and replay — not to constrain how the decision is reached.",
   "type": "object",
@@ -120,14 +120,14 @@
     },
     "policies_in_force": {
       "type": "array",
-      "description": "Resolved Policy id + version effective at decision time for every governed field touched.",
+      "description": "Resolved Policy id + version effective at decision time for every governed field touched. minItems:1 is canon working as designed (obligation 7: a Decision governed by no policy is unanswerable) — do not relax it. For terminal decisions, validator rule 13 additionally requires that EVERY frozen Policy bound to the chosen Claim appear here: citing only the gate you passed is cherry-picking a pre-registration.",
       "items": {
         "type": "object",
         "required": ["policy_id", "version"],
         "properties": {
           "policy_id": { "type": "string" },
           "version": { "type": "string" },
-          "class": { "type": "string", "enum": ["constitutional", "operational"] }
+          "class": { "type": "string", "enum": ["constitutional", "operational", "frozen"] }
         }
       },
       "minItems": 1

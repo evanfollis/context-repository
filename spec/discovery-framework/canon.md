@@ -1,6 +1,6 @@
 # Canon — Objects & Obligations
 
-Spec version: `0.1.0`
+Spec version: `0.2.0`
 
 Canon is an **obligations model**, not a state machine. It defines what questions must be answerable about every decision, not what states a runtime must visit.
 
@@ -19,7 +19,7 @@ Design heuristic: **if the model got twice as smart, would this field constrain 
 | `Decision` | `promote \| kill \| continue \| pivot`, with rationale, citing Claim + Evidence set. |
 | `Promotion` | Downstream object produced on a `promote` Decision. |
 | `Realization` | Externally committed world-state change consuming scarce resources or creating irreversible exposure. Not "success." |
-| `Policy` | First-class canon object. See `policy.md`. |
+| `Policy` | First-class canon object. Three mutability classes: `constitutional`, `operational`, `frozen`. See `policy.md`. |
 | `EventLogEntry` | Append-only timestamped record of lifecycle events. |
 | `ArtifactPointer` | Reference to raw artifact with `content_hash`, `version`, `anchor`. Immutable. |
 
@@ -80,7 +80,32 @@ These obligations are in canon but cannot be expressed in plain JSON Schema. Con
 7. `ArtifactPointer.content_hash` must be reproducible from the referenced artifact at `uri` + `version`; stale hash = validation failure.
 8. If `advisory_rejection.offending_source_ref.consumer_path` and `advisory_rejection.attempted_consumer_path` are both present, they MUST match.
 
+### Frozen-policy rules (v0.2.0)
+
+These enforce pre-registration integrity for `Policy(class=frozen)`. See `policy.md` §Frozen. Each names the `violation_kind` emitted on refusal, so a refused write is machine-readably attributable.
+
+9. **Immutability.** No `Decision(kind ∈ {amend_policy, rollback_policy})` may name a `class: frozen` Policy as `target_policy_id`. Applies regardless of emitter identity — including the principal. → `frozen_policy_amendment_attempt`
+
+10. **Pre-registration window.** For every `class: frozen` Policy `P` bound to Claim `C`:
+    - `C.emitted_at ≤ P.emitted_at`, and
+    - `P.emitted_at ≤ t_probe`, where `t_probe` is the `emitted_at` of the earliest `EventLogEntry(event_kind=phase_transition, to_phase=probe)` whose `phase_transition.claim_id == C.id`. If no such event exists, the window is still **open** and this clause passes.
+    - `P.emitted_at ≤ E.emitted_at` for every `Evidence` `E` with `E.claim_id == C.id`.
+
+    Immutability without this rule is theatre: an unamendable gate chosen *after* the Evidence is simply a post-hoc gate that no amendment check will ever catch. **Late issuance, not amendment, is the attack this class exists to stop.** → `frozen_policy_late_issuance`
+
+11. **Uniqueness.** At most one `class: frozen` Policy per (`bound_to_claim_id`, `field_path`). Two frozen gates on the same field of the same Claim let an emitter cite whichever one the results favor, with nothing amended and a clean-looking trail. → `frozen_policy_duplicate`
+
+12. **Citation scope.** A `Decision` may list a frozen Policy in `policies_in_force` only if that Policy's `bound_to_claim_id` ∈ `Decision.candidate_claims`. A gate pre-registered for one Claim has no authority over another. → `frozen_policy_scope_violation`
+
+13. **Citation completeness.** For a terminal `Decision` (`kind ∈ {promote, kill, pivot}`), `policies_in_force` MUST include **every** `class: frozen` Policy whose `bound_to_claim_id == Decision.chosen_claim_id`. Citing only the gates that were met is cherry-picking a pre-registration. (`kind=continue` may cite them and is not required to: it concludes nothing.) → `frozen_policy_citation_incomplete`
+
+14. **Derivation.** When a frozen Policy carries `derived_from`, `Policy.value` MUST be **canonical-JSON-equal** to the subtree of the bound Claim at that RFC-6901 JSON Pointer. Equality is over the parsed JSON data model, **not bytes** — `0.80` and `0.8` are the same number and any serializer round-trips one to the other; a byte-identity check would be born broken. → `frozen_policy_derivation_mismatch`
+
+Rule 5 (`Decision.policies_in_force[*]` resolves to an existing Policy version) had no `violation_kind` in v0.1.0. It now emits → `policy_reference_unresolved`.
+
 Adapters that persist envelopes MUST run these checks at emission time. Violations are emitted as `EventLogEntry(canon_violation)`.
+
+Executable fixtures for rules 1–5 and 9–14 live in `conformance/`. Rules 6, 7, and 8 are unexercised there — they require rollback objects and artifact I/O that the frozen-gate cases do not produce, and saying so is cheaper than a fixture that pretends to cover them.
 
 ## Explicit exclusions
 

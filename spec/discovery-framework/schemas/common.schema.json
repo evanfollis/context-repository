@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://synaplex.ai/discovery-framework/0.1.0/common.schema.json",
+  "$id": "https://synaplex.ai/discovery-framework/0.2.0/common.schema.json",
   "title": "Discovery Framework — Common Types",
-  "description": "Shared type definitions. Spec version 0.1.0.",
+  "description": "Shared type definitions. Spec version 0.2.0.",
   "$defs": {
     "SpecVersion": {
       "type": "string",
@@ -68,8 +68,16 @@
         "backdated_role_declaration",
         "candidate_set_inconsistency",
         "rollback_precedence_invalid",
+        "policy_reference_unresolved",
+        "frozen_policy_amendment_attempt",
+        "frozen_policy_late_issuance",
+        "frozen_policy_duplicate",
+        "frozen_policy_scope_violation",
+        "frozen_policy_citation_incomplete",
+        "frozen_policy_derivation_mismatch",
         "other"
-      ]
+      ],
+      "description": "v0.2.0 added policy_reference_unresolved (validator rule 5 had no violation kind in v0.1.0) and the six frozen_policy_* kinds (validator rules 9-14). Refusal reasons are machine-readable by design: a refused write whose cause collapses to 'other' is not auditable."
     },
     "Role": {
       "type": "string",

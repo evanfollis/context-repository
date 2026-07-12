@@ -7,7 +7,7 @@ updated: 2026-07-12
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-07-12T02-25-44Z — reflection pass; 24 days since last human-attended session; NEW canon-gap handoff from executive (2026-07-12T01:40Z); 5 outstanding handoffs; repo 17+ commits ahead of origin (all reflect.sh auto-commits, unpushed); degraded-output policy active
+**Last updated**: 2026-07-12 — attended session. **Canon bumped to v0.2.0** (`frozen` Policy class) resolving the escalated canon gap; synaplex Phase 2 unblocked pending review. **The canon spec is now under version control for the first time** — `spec/` had been gitignored since April.
 
 ---
 
@@ -41,15 +41,22 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
 
 ## What's in progress
 
-- **NEW — Canon policy class gap (handoff 2026-07-12T01:40Z)**: general executive routed a
-  hard question: canon's `Policy` class model cannot express a pre-registered, frozen eval
-  gate. ADR-0040 and ADR-0041 were both rejected under cross-agent review. ADR-0042 routes
-  the gap here. Three candidate shapes:
-  1. New `pre_registered` mutability class — schema bump v0.2.0
-  2. `frozen_until` field on `operational` — schema bump v0.2.0
-  3. Constitutional meta-policy — no schema bump, but requires principal to authorize issuer
-  Full evidence in `runtime/.handoff/context-repository-canon-gap-frozen-eval-gate-2026-07-12T05-20Z.md`.
-  **Blocking**: synaplex Phase 2, `memory-systems-v1` eval pre-registered 2026-04-19.
+- **Canon v0.2.0 — `frozen` Policy class (LANDED 2026-07-12, awaiting adversarial review)**.
+  Resolves the escalated canon gap. Canon can now express a gate that is agent-issued,
+  amendable by **nobody** (including the principal), bound to one `Claim`, and issuable only
+  inside that Claim's pre-registration window. Decision record:
+  `docs/canon-0.2.0-frozen-policy-class.md`. Enforcement: `canon.md` validator rules 9–14.
+  Fixtures: `spec/discovery-framework/conformance/` (14/14, mutation-tested).
+  - Chose the **new class** (handoff option 1), not the constitutional meta-policy (option 3):
+    option 3 answers obligation 7 vacuously and needs a principal to authorize the issuer.
+    **`frozen` needs no principal signoff** — it is the one class that cannot widen agent
+    authority (issuing one *renounces* amendment power), so this landed without blocking on Evan.
+  - **Evan should read §"What Evan should know he is bound by"** — a frozen gate is not
+    amendable by *him* either. Deliberate, and reversible if he disagrees.
+  - **`memory-systems-v1`'s pre-registration window is still open** (verified: its canon store
+    holds 1 Claim, 0 Evidence, 0 phase-transitions). It can get a legal frozen gate today
+    without editing its hash-bound methodology. Emission is synaplex's call.
+  - **Next**: cross-agent review (Codex), then synaplex Phase 2.
 
 - **Canon 3-claims-per-assumption verdict (Step 1 landed, 2026-05-07)**:
   Step 2 awaits principal verdict on two open questions. See `docs/canon-3claims-per-assumption-verdict.md`.
@@ -67,30 +74,49 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
 
 ## Known broken or degraded
 
+- **FIXED 2026-07-12 — the canon spec was never under version control.** `spec/` was line 11 of
+  `.gitignore`, so `spec/discovery-framework/` — the highest truth source in the system — was
+  undiffable, unreviewable, unrevertable for its entire existence. Cause: `spec/` was ignored in
+  April to bury the prior identity's abstract-schema work; canon was later built underneath that
+  path and inherited the ignore silently. Now tracked (`d93d4e5`).
+  **Caveat, stated plainly:** the committed v0.1.0 baseline is a **reconstruction**. The on-disk
+  original was overwritten in-session before the hole was found, and no copy survived anywhere.
+  It is verified by revalidating all 316 live envelopes (0 invalid), *not* by byte-identity.
+  Found by synaplex, not by this repo — a sibling session's `$ref` failed to resolve.
+
 - **Tick sessions failing 401 since 2026-05-01 (~72 days, unresolved)**: Auth errors.
   Reflection loop is on a separate path and unaffected. Tick restoration or decommission decision needed.
 
 - **M5 (session-end write enforcement) unimplemented**: Front door not updated at session end.
 
-- **Adversarial review gate blocked**: `codex` not installed. `/review` skill (via Claude) never invoked.
-  Two spec proposals blocked 72+ days.
+- ~~**Adversarial review gate blocked**: `codex` not installed.~~ **STALE — codex 0.144.1 IS
+  installed** and produced `supervisor/.reviews/adr-0040-codex-2026-07-12T03-30Z.md` today. The
+  review gate is available; the two spec proposals blocked "72+ days on tooling" were blocked on
+  nobody invoking it.
 
 - **reflect.sh generating noise**: TWENTY-THREE consecutive auto-commits (Jun 3 – Jun 18; then
   reflections short-circuited Jul 1–11 because no CURRENT_STATE change was detected with
   no activity). Repo 17+ commits ahead of origin/main — all unpushed reflect.sh auto-commits.
 
-- **5 outstanding handoffs, no `.done` markers** (oldest ~72 days):
+- **Outstanding handoffs** (oldest ~72 days):
   - `context-repository-auth-failure-diagnosis-2026-05-04T02-49Z.md` (~69 days)
   - `context-repository-current-state-commit-discipline-2026-05-13T16-47Z.md` (~60 days)
   - `context-repository-proposal-current-state-commit-discipline-2026-05-13T15-35-09Z.md` (~60 days)
   - `URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md` (~32 days)
-  - `context-repository-canon-gap-frozen-eval-gate-2026-07-12T05-20Z.md` (NEW — this window)
+  - ~~`context-repository-canon-gap-frozen-eval-gate-...`~~ **CONSUMED 2026-07-12** → canon v0.2.0
+  - ~~`URGENT-context-repository-canon-spec-is-not-under-version-control.md`~~ **CONSUMED 2026-07-12** → `d93d4e5`
 
 - **File-based escalation confirmed broken**: URGENT ~32 days unconsumed.
 
 ## Recent decisions
 
-- **2026-07-12**: Canon-gap handoff received from general executive. No verdict yet.
+- **2026-07-12**: **Canon v0.2.0 — `frozen` Policy class.** Canon gap resolved. Chose a third
+  mutability class over a constitutional meta-policy; no principal dependency. Added three rules
+  the escalation did not ask for (late issuance, duplicate gates, cherry-picked citation) because
+  refusing amendment without them is security theatre — the real attack is issuing the gate late,
+  not amending it. `docs/canon-0.2.0-frozen-policy-class.md`.
+- **2026-07-12**: **`spec/` removed from `.gitignore`; v0.1.0 committed as a baseline** so the
+  bump lands as a reviewable diff (`d93d4e5`).
 - **2026-05-07 (c2ec5c0)**: Step 1 landing recorded — skillfoundry shipped MAPPING.md patch.
 - **2026-05-07 (1fcf0ad)**: 3-claims-per-assumption verdict issued.
 - **2026-05-01 (e3fe4b6)**: Dual-role identity landed across all files.
@@ -102,23 +128,28 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
 ## What the next agent must read first
 
 1. This file.
-2. `runtime/.handoff/context-repository-canon-gap-frozen-eval-gate-2026-07-12T05-20Z.md` — **read this second**. It is the most recent substantive input and is time-sensitive.
-3. `index.md` — auto-generated from frontmatter.
-4. `docs/agent-context-repo-pattern.md` — the spec.
-5. `docs/harness-check-spec-amendment-proposal.md` — Q2 + Q3 ready, awaiting attended authorization.
+2. `docs/canon-0.2.0-frozen-policy-class.md` — the canon decision of record. Read before touching
+   `spec/`, and before building anything that emits a `Policy`.
+3. `spec/discovery-framework/conformance/` — run `python3 run.py`. If it is not 14/14, canon is broken.
+4. `index.md` — auto-generated from frontmatter.
+5. `docs/agent-context-repo-pattern.md` — the spec.
 
 ## What bit the last session (patterns from session transcripts)
 
-- **No human-attended sessions for 24 days**: reflect.sh has been the only activity. Reflections
-  short-circuited (no activity) for 20 consecutive passes Jul 1–Jul 11.
-- **Canon-gap is the priority item**: This unblocks synaplex Phase 2 and `memory-systems-v1`.
-  Read the handoff before anything else.
-- **Outstanding handoffs require cleanup**: Five unprocessed. Start with the canon-gap (substantive
-  and actionable), then close/archive the stale ones.
+- **The spec was editable with no diff, and it took a sibling repo to notice.** This session
+  rewrote all eight schemas in place before discovering `spec/` was gitignored. Synaplex caught it
+  because a `$ref` failed to resolve — nothing in *this* repo would have. An ignore rule written in
+  April for the prior identity's dead work silently swallowed the system's most load-bearing
+  artifact three months later. **Check `git ls-files` before trusting that `git status` is clean.**
+  A clean tree can mean "no changes" or "git has never heard of this directory."
+- **The escalation asked for four fixtures; the design needed seven.** The handoff named the
+  amendment attack. The *live* attack was late issuance — freeze the gate after seeing the results
+  and no amendment check ever fires. Take an escalation's framing as input, not as scope.
+- **A stale "blocked on tooling" note cost 72 days.** The front door said codex wasn't installed.
+  It is, and it has been. Nobody re-checked.
 - **Next attended session priorities**:
-  1. Read canon-gap handoff and make a shape decision (or route to principal)
-  2. Push 17+ commits to origin
-  3. Invoke `/review` on harness-check Q2+Q3
-  4. Formally close or defer polarity v0.1.1
-  5. Delete stale handoffs (commit-discipline ×2, auth-failure if decommissioned)
-  6. Write decommission decision for tick loop or restore auth
+  1. Adversarial review (Codex) of canon v0.2.0, then act on findings
+  2. Push commits to origin (repo is many commits ahead, all unpushed)
+  3. Give atlas + skillfoundry a schema-drift tripwire (synaplex has one; the others don't)
+  4. Formally close or defer polarity v0.1.1; invoke review on harness-check Q2+Q3
+  5. Delete stale handoffs; decide tick loop (restore auth or decommission)

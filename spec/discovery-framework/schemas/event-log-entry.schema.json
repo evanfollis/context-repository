@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://synaplex.ai/discovery-framework/0.1.0/event-log-entry.schema.json",
+  "$id": "https://synaplex.ai/discovery-framework/0.2.0/event-log-entry.schema.json",
   "title": "EventLogEntry",
   "description": "Append-only timestamped record. Load-bearing events (phase transitions, canon violations, activation changes, advisory rejections, trigger firings) use typed sub-schemas under the matching discriminator field. The untyped 'detail' is reserved for non-load-bearing events; replay-critical fields MUST appear as first-class typed sub-schemas, not under 'detail'.",
   "type": "object",

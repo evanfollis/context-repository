@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://synaplex.ai/discovery-framework/0.1.0/policy.schema.json",
+  "$id": "https://synaplex.ai/discovery-framework/0.2.0/policy.schema.json",
   "title": "Policy",
+  "description": "Three mutability classes. 'constitutional' = principal-only. 'operational' = agent-mutable within constitutional ceilings. 'frozen' (v0.2.0) = amendable by nobody, bound to one Claim, issued inside that Claim's pre-registration window. See policy.md.",
   "type": "object",
   "required": [
     "id",
@@ -46,8 +47,8 @@
     "sources": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/SourceRef" } },
     "class": {
       "type": "string",
-      "enum": ["constitutional", "operational"],
-      "description": "Meta-constitutional: this classification is itself constitutional and cannot be changed by agents."
+      "enum": ["constitutional", "operational", "frozen"],
+      "description": "Meta-constitutional: this classification is itself constitutional and cannot be changed by agents. The class axis is amendment AUTHORITY: constitutional = principal only; operational = agent, within constitutional ceilings; frozen = nobody, including the principal (supersession is via a successor Claim, not amendment)."
     },
     "scope": {
       "type": "string",
@@ -70,17 +71,19 @@
     "amendment_authority": {
       "type": "array",
       "items": { "$ref": "common.schema.json#/$defs/PrincipalId" },
-      "minItems": 1
+      "minItems": 0,
+      "description": "Who may amend. MUST be non-empty for constitutional and operational (re-imposed in allOf). MUST be the empty array for frozen — 'nobody may amend this' is the whole point of the class, and it must be WRITABLE. In v0.1.0 this field was minItems:1, which made an unamendable policy unexpressible; that is the gap ADR-0041 hit."
     },
     "ratification_rule": {
       "type": "object",
       "required": ["kind"],
       "properties": {
-        "kind": { "type": "string", "enum": ["principal_signoff", "evidence_threshold", "multi_party"] },
+        "kind": { "type": "string", "enum": ["principal_signoff", "evidence_threshold", "multi_party", "none"] },
         "required_evidence_tier": { "type": "string" },
         "required_evidence_count": { "type": "integer", "minimum": 0 },
         "signatories": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/PrincipalId" } }
-      }
+      },
+      "description": "kind='none' is legal ONLY for class=frozen, where there is no amendment to ratify. Conversely frozen MUST use 'none': an 'evidence_threshold' ratification on a frozen gate would be a gate re-openable by evidence, which is the thing the class exists to forbid."
     },
     "rollback_rule": {
       "type": "object",
@@ -133,7 +136,61 @@
         { "$ref": "common.schema.json#/$defs/Timestamp" },
         { "type": "null" }
       ],
-      "description": "Null means open-ended."
+      "description": "Null means open-ended. MUST be null for class=frozen: a frozen policy is bounded by CLAIM SCOPE, not by time. Its horizon is the life of the Claim it is bound to, which is not a timestamp knowable at emission."
+    },
+    "bound_to_claim_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "REQUIRED for class=frozen, FORBIDDEN otherwise. The Claim whose pre-registration this policy is part of. This is what makes the policy eval-local rather than framework-level: it may be cited only by Decisions that arbitrate over this Claim (validator rule 12), and it is superseded only when the Claim is (via Decision.successor_claim_id), never by amendment."
+    },
+    "derived_from": {
+      "type": "string",
+      "description": "OPTIONAL, and legal only for class=frozen. An RFC-6901 JSON Pointer into the bound Claim envelope (e.g. '/thresholds'). When present, validators MUST check that Policy.value is canonical-JSON-equal to the Claim subtree at this pointer (validator rule 14). This is how a frozen Policy proves it carries ZERO information not already hash-bound in the immutable Claim — it is a VIEW of the pre-registration, not a restatement of it, and therefore adds no degrees of freedom. Omit it only when the governed value genuinely does not appear in the Claim.",
+      "pattern": "^(/([^/~]|~[01])*)*$"
     }
-  }
+  },
+  "allOf": [
+    {
+      "description": "class=frozen: amendable by nobody, bound to exactly one Claim, single genesis version, no rollback, no ratification, no expiry timestamp. Every degree of freedom that ADR-0041's review identified as still-discretionary under a hand-constrained 'operational' policy (ratification_rule, rollback_rule, amendment_authority, provenance) is closed HERE, by the class, mechanically.",
+      "if": { "properties": { "class": { "const": "frozen" } }, "required": ["class"] },
+      "then": {
+        "required": ["bound_to_claim_id"],
+        "properties": {
+          "amendment_authority": { "maxItems": 0 },
+          "ratification_rule": { "properties": { "kind": { "const": "none" } } },
+          "rollback_rule": {
+            "properties": {
+              "rules": { "maxItems": 0 },
+              "precedence": { "maxItems": 0 }
+            }
+          },
+          "provenance": { "maxItems": 1 },
+          "effective_until": { "type": "null" }
+        }
+      }
+    },
+    {
+      "description": "constitutional and operational: unchanged from v0.1.0. amendment_authority stays non-empty; the frozen-only fields are forbidden; ratification kind 'none' is forbidden (a mutable policy with nothing to ratify an amendment against is an unguarded policy).",
+      "if": {
+        "properties": { "class": { "enum": ["constitutional", "operational"] } },
+        "required": ["class"]
+      },
+      "then": {
+        "properties": {
+          "amendment_authority": { "minItems": 1 },
+          "ratification_rule": {
+            "properties": {
+              "kind": { "enum": ["principal_signoff", "evidence_threshold", "multi_party"] }
+            }
+          }
+        },
+        "not": {
+          "anyOf": [
+            { "required": ["bound_to_claim_id"] },
+            { "required": ["derived_from"] }
+          ]
+        }
+      }
+    }
+  ]
 }
