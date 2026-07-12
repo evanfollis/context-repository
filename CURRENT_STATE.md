@@ -2,12 +2,12 @@
 name: CURRENT_STATE
 description: Front door for context-repository — what the pattern lab is and what's active
 type: front-door
-updated: 2026-06-18
+updated: 2026-07-12
 ---
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-06-18T14-21-15Z — forty-second reflection pass; SEVENTEEN consecutive reflect.sh auto-commits (+ 946d7f8); repo 17 commits ahead of origin (unpushed); NO human activity ~33 days; tick dead ~48 days (401 unresolved); URGENT handoff ~228h unconsumed (~9.5x FR-class breach); degraded-output policy active
+**Last updated**: 2026-07-12T02-25-44Z — reflection pass; 24 days since last human-attended session; NEW canon-gap handoff from executive (2026-07-12T01:40Z); 5 outstanding handoffs; repo 17+ commits ahead of origin (all reflect.sh auto-commits, unpushed); degraded-output policy active
 
 ---
 
@@ -32,131 +32,93 @@ This repo is itself an instance of the pattern it specifies.
 
 Pure Markdown specification repo — no deployable service.
 
-**Reference implementation now ships the mechanics it mandates**: every tracked
+**Reference implementation ships the mechanics it mandates**: every tracked
 Markdown file has frontmatter, `index.md` is generated from frontmatter, `CLAUDE.md`
-declares the always-load list. Legacy `apps/` (retired personal-control-plane
-identity from 2025) removed via `git rm` — `c4d843f` preserves the history.
-Other repos retrofit via handoff.
+declares the always-load list. Legacy `apps/` removed via `git rm` (`c4d843f`).
 
 **M4 (session-start read enforcement) is live**: ADR-0021 accepted 2026-04-18.
-`~/.claude/hooks/session-start-context-load.sh` fires on every Claude Code session
-with a `context-always-load:` declaration in its `CLAUDE.md`. Coverage is
-Claude-Code-specific — Codex sessions and headless subagents still rely on agent
-discipline. M5 (session-end write enforcement) is still deferred.
-
-**Spec honesty block resolved** (`064150b`, 2026-04-20T16:52Z): `docs/agent-context-repo-pattern.md`
-now correctly marks M4 as live and M5 as deferred. 4-cycle carry-forward is closed.
+Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Code session.
 
 ## What's in progress
 
-- **Pass 1 (complete, 2026-04-20)**: spec adds "Required mechanics" section (M1–M5
-  frontmatter/index/always-load/enforcement). Reference implementation reconciled.
-  ADR-0021 accepted and hook live. Adversarial review (Codex) ran against spec,
-  writer/retriever proposal, and ADR; findings folded in (§Known limitations L1–L3).
-  Spec honesty block fixed in `064150b`.
+- **NEW — Canon policy class gap (handoff 2026-07-12T01:40Z)**: general executive routed a
+  hard question: canon's `Policy` class model cannot express a pre-registered, frozen eval
+  gate. ADR-0040 and ADR-0041 were both rejected under cross-agent review. ADR-0042 routes
+  the gap here. Three candidate shapes:
+  1. New `pre_registered` mutability class — schema bump v0.2.0
+  2. `frozen_until` field on `operational` — schema bump v0.2.0
+  3. Constitutional meta-policy — no schema bump, but requires principal to authorize issuer
+  Full evidence in `runtime/.handoff/context-repository-canon-gap-frozen-eval-gate-2026-07-12T05-20Z.md`.
+  **Blocking**: synaplex Phase 2, `memory-systems-v1` eval pre-registered 2026-04-19.
+
 - **Canon 3-claims-per-assumption verdict (Step 1 landed, 2026-05-07)**:
-  skillfoundry-pm routed Codex Finding A (single canon `Claim` per
-  CriticalAssumption silently drops `economic_claim` + `channel_claim`) for
-  spec-authority decision after 14+ days deferred. Verdict at
-  `docs/canon-3claims-per-assumption-verdict.md` (`1fcf0ad`): two-step path —
-  Option 3 (loud MAPPING.md acknowledgment) immediately, Option 1 (3 envelopes
-  via id-prefix `<assumption_id>:problem|economic|channel`) medium-term after
-  markdown-side authoring lands. No canon schema bump. Skillfoundry shipped
-  Step 1 at `skillfoundry-harness/81ea5b5` ("Make partial-thesis canon collapse
-  explicit") 2026-05-07T15:25Z; tests 61/61 unchanged. **Step 2 awaits
-  principal verdict** on the two open questions in the verdict (two-step path
-  acceptable? markdown-side authoring cost acceptable, or prefer split-into-
-  atomic-files Option 4?). Skillfoundry's domain read accepts both.
+  Step 2 awaits principal verdict on two open questions. See `docs/canon-3claims-per-assumption-verdict.md`.
 
-- **Canon polarity v0.1.1 audit (~57 days stalled, effectively abandoned)**:
-  first-round narrow proposal (`docs/polarity-schema-weakens-assumption.md`,
-  `532270a`) failed Codex adversarial review; executive redirected to holistic
-  audit. Revised proposal at `docs/polarity-schema-v0.1.1-audit.md`. Awaiting
-  adversarial review + principal verdict — but codex not installed, `/review`
-  never invoked. **At ~57 days with no attended session attention, this is
-  functionally abandoned. Principal should explicitly close or formally defer.**
+- **Canon polarity v0.1.1 audit (~82 days stalled, effectively abandoned)**:
+  Codex adversarial review of first proposal failed; holistic audit at `docs/polarity-schema-v0.1.1-audit.md`
+  awaits adversarial review + principal verdict. `/review` never invoked. Principal should
+  explicitly close or formally defer — see Q3 below.
 
-- **Pass 2 (complete, 2026-04-23)**: principal authorized retrofit on
-  skillfoundry-valuation-context + atlas; both landed. Atlas retrofit in
-  atlas/`49c24df` (3 Indexed + 23 Unindexed). Valuation-context retrofit in
-  skillfoundry-valuation-context/`f41ffd0` (6 Indexed + 24 Unindexed);
-  shipped directly by context-repo session after skillfoundry tick declined
-  the cross-repo boundary. Two spec gaps surfaced for separate spec-review
-  pass: `docs/spec-gap-m1-artifact-files.md` (M1 over-broad for artifact
-  archives) and `docs/supervisor-self-audit-scope.md` (front-door-set shape).
-- **Pass 3 (proposed, not started)**: formalize the writer/retriever split per
-  `docs/writer-retriever-separation-proposal.md`.
+- **Harness-check spec amendment proposal (~72 days, awaiting verdict)**:
+  Q2 + Q3 are low-risk additive changes flagged ready. `docs/harness-check-spec-amendment-proposal.md`.
+  No attended session has authorized them.
 
-- **Harness-check spec amendment proposal (2026-05-01, ~46 days, awaiting verdict)**:
-  `docs/harness-check-spec-amendment-proposal.md` — four questions from
-  `harness-check.py` resolved: QA-plan stays supervisor-local; freshness
-  gets a 7-day convention note in §L1; instruction-file size extends §M3;
-  Codex AGENTS.md coverage routed to executive as a workspace-mechanics
-  decision. **Q2 + Q3 are low-risk additive changes explicitly flagged ready;
-  `/review` skill never invoked. Principal can authorize Q2+Q3 without adversarial
-  review if acceptable under degraded condition.**
+- **Pass 3 (proposed, not started)**: writer/retriever split per `docs/writer-retriever-separation-proposal.md`.
 
 ## Known broken or degraded
 
-- **Tick sessions failing 401 since 2026-05-01 (~47 days, unresolved)**: Unattended
-  tick sessions for context-repo have been failing with 401 auth errors since
-  2026-05-01T00:38Z. The reflection loop runs on a separate path and is unaffected.
-  Two escalation handoffs have been consumed (`.done`) by general with no fix, no
-  deferral record, and no new tick JSONL. The original diagnosis handoff still has no
-  `.done`. Tick restoration or explicit decommission decision needed from principal.
-  Diagnosis handoff: `context-repository-auth-failure-diagnosis-2026-05-04T02-49Z.md`.
+- **Tick sessions failing 401 since 2026-05-01 (~72 days, unresolved)**: Auth errors.
+  Reflection loop is on a separate path and unaffected. Tick restoration or decommission decision needed.
 
-- **M5 (session-end write enforcement) unimplemented**: M4 auto-injects always-load
-  files at session start; M5's symmetric guarantee (front door updated at end) does
-  not exist. The spec's §Known limitations L1 names the amplification risk: stale
-  CURRENT_STATE files gain false authority from M4 injection.
+- **M5 (session-end write enforcement) unimplemented**: Front door not updated at session end.
 
-- **Adversarial review gate blocked**: The gate fires correctly (≥3 files or ≥100
-  lines changed) but cannot run because `codex` is not installed. Two spec-amending
-  proposals (harness-check and polarity v0.1.1 audit) are blocked. The `/review`
-  skill (via Claude) is an alternative path — never invoked despite 46–57 days of wait.
+- **Adversarial review gate blocked**: `codex` not installed. `/review` skill (via Claude) never invoked.
+  Two spec proposals blocked 72+ days.
 
-- **reflect.sh auto-commit: SEVENTEEN consecutive firings (ce51f81 … 946d7f8)**: Self-sustaining confirmed — each pass modifies CURRENT_STATE.md, guaranteeing dirty tree for next pass. Mechanism fires every 12h pass going forward. Repo now 17 commits ahead of origin/main (all unpushed — unattended policy, requires attended push). Consider halting reflect.sh until an attended session clears open items.
+- **reflect.sh generating noise**: TWENTY-THREE consecutive auto-commits (Jun 3 – Jun 18; then
+  reflections short-circuited Jul 1–11 because no CURRENT_STATE change was detected with
+  no activity). Repo 17+ commits ahead of origin/main — all unpushed reflect.sh auto-commits.
 
-- **Escalation path gap — URGENT ~228h unconsumed — ~19 full reflection cycles past the 24h dispatch obligation. ~9.5× FR-class breach. Four context-repo handoffs outstanding (auth-failure-diagnosis, commit-discipline ×2, structural-abandonment). File-based escalation is confirmed structurally broken at workspace scale. Gmail MCP available as alternative delivery path.
+- **5 outstanding handoffs, no `.done` markers** (oldest ~72 days):
+  - `context-repository-auth-failure-diagnosis-2026-05-04T02-49Z.md` (~69 days)
+  - `context-repository-current-state-commit-discipline-2026-05-13T16-47Z.md` (~60 days)
+  - `context-repository-proposal-current-state-commit-discipline-2026-05-13T15-35-09Z.md` (~60 days)
+  - `URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md` (~32 days)
+  - `context-repository-canon-gap-frozen-eval-gate-2026-07-12T05-20Z.md` (NEW — this window)
 
-- **Workspace-wide executive unresponsiveness — INBOX SATURATION**: Multiple URGENT handoffs unprocessed. File-based handoff delivery is confirmed broken. Gmail MCP (`mcp__claude_ai_Gmail__create_draft`) available as alternative for future escalation. Context-repo has 4 outstanding handoffs.
-
-- **Reflection output degrading**: Nineteen+ consecutive reflections with identical findings. Degraded-output policy active since 2026-06-13T02:25Z. P4 proposal: halt reflect.sh for this repo until attended session resolves open items.
+- **File-based escalation confirmed broken**: URGENT ~32 days unconsumed.
 
 ## Recent decisions
 
-- **2026-05-07 (c2ec5c0)**: Recorded Step 1 landing — skillfoundry-harness shipped
-  MAPPING.md "(LOSSY)" patch at `81ea5b5`; tests 61/61 unchanged. Step 2 awaits
-  principal verdict on two open questions (two-step path? authoring cost?).
-- **2026-05-07 (1fcf0ad)**: 3-claims-per-assumption verdict issued at
-  `docs/canon-3claims-per-assumption-verdict.md` — Option 3 immediately + Option 1
-  medium-term; no canon schema bump.
-- **2026-05-01 (e3fe4b6)**: Landed dual-role identity across CLAUDE.md,
-  CURRENT_STATE.md, README.md, and spec. Closes 9-cycle M5-gap carry-forward.
-- **2026-05-01 (e561da1)**: Harness-check spec amendment proposal written at
-  `docs/harness-check-spec-amendment-proposal.md`. QA-plan supervisor-local;
-  freshness + size amendments proposed for spec; Codex AGENTS.md question
-  routed to executive.
+- **2026-07-12**: Canon-gap handoff received from general executive. No verdict yet.
+- **2026-05-07 (c2ec5c0)**: Step 1 landing recorded — skillfoundry shipped MAPPING.md patch.
+- **2026-05-07 (1fcf0ad)**: 3-claims-per-assumption verdict issued.
+- **2026-05-01 (e3fe4b6)**: Dual-role identity landed across all files.
+- **2026-05-01 (e561da1)**: Harness-check spec amendment proposal written.
 - **2026-04-23**: Pass-2 complete. Both retrofits landed.
 - **2026-04-20 (064150b)**: Spec honesty block fixed — M4 marked live, M5 marked deferred.
 - **2026-04-18**: ADR-0021 accepted. SessionStart hook live.
 
-## What the next agent should read first
+## What the next agent must read first
 
 1. This file.
-2. `index.md` — auto-generated from frontmatter; use it to find what you need.
-3. `docs/agent-context-repo-pattern.md` — the spec (M4/M5 honesty fixed in `064150b`).
-4. `supervisor/decisions/0021-*` — the enforcement decision (accepted, hook live).
-5. `docs/harness-check-spec-amendment-proposal.md` — Q2 + Q3 ready; Q1 + Q4 await
-   principal; `/review` never invoked despite skill being available.
-6. If resuming canon polarity work: consider formally closing polarity v0.1.1 as
-   deferred-indefinitely before reopening — it has been stalled ~57 days.
+2. `runtime/.handoff/context-repository-canon-gap-frozen-eval-gate-2026-07-12T05-20Z.md` — **read this second**. It is the most recent substantive input and is time-sensitive.
+3. `index.md` — auto-generated from frontmatter.
+4. `docs/agent-context-repo-pattern.md` — the spec.
+5. `docs/harness-check-spec-amendment-proposal.md` — Q2 + Q3 ready, awaiting attended authorization.
 
 ## What bit the last session (patterns from session transcripts)
 
-- **reflect.sh loop is self-sustaining**: Sixteen consecutive auto-commits. "reflect.sh fired" ≠ "something meaningful changed." Noise accumulation in git log. P4 proposal: halt reflect.sh until attended session clears open items.
-- **URGENT handoff ~216h unconsumed**: Dispatch obligation breached ~eighteen times. No attended session in ~32 days.
-- **INBOX saturation workspace-wide**: 4 context-repo handoffs unprocessed. File-based escalation is broken. Gmail MCP is confirmed available in reflection sessions but unauthorized for unilateral use.
-- **Reflection degradation policy active**: Condensed output since 2026-06-13T02:25Z. 11th cycle under degraded policy.
-- **Next attended session priorities**: (1) push 15 commits to origin; (2) invoke `/review` on harness-check Q2+Q3; (3) write decommission decision for tick loop; (4) close/delete all stale handoffs; (5) formally defer polarity v0.1.1; (6) authorize reflection jobs to send Gmail when URGENTs age past 48h; (7) triage supervisor dirty-tree URGENT as false positive.
+- **No human-attended sessions for 24 days**: reflect.sh has been the only activity. Reflections
+  short-circuited (no activity) for 20 consecutive passes Jul 1–Jul 11.
+- **Canon-gap is the priority item**: This unblocks synaplex Phase 2 and `memory-systems-v1`.
+  Read the handoff before anything else.
+- **Outstanding handoffs require cleanup**: Five unprocessed. Start with the canon-gap (substantive
+  and actionable), then close/archive the stale ones.
+- **Next attended session priorities**:
+  1. Read canon-gap handoff and make a shape decision (or route to principal)
+  2. Push 17+ commits to origin
+  3. Invoke `/review` on harness-check Q2+Q3
+  4. Formally close or defer polarity v0.1.1
+  5. Delete stale handoffs (commit-discipline ×2, auth-failure if decommissioned)
+  6. Write decommission decision for tick loop or restore auth
