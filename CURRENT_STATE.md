@@ -41,22 +41,31 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
 
 ## What's in progress
 
-- **Canon v0.2.0 — `frozen` Policy class (LANDED 2026-07-12, awaiting adversarial review)**.
+- **Canon v0.2.0 — `frozen` Policy class. LANDED + REVIEWED 2026-07-12. Ready for synaplex Phase 2.**
   Resolves the escalated canon gap. Canon can now express a gate that is agent-issued,
   amendable by **nobody** (including the principal), bound to one `Claim`, and issuable only
-  inside that Claim's pre-registration window. Decision record:
-  `docs/canon-0.2.0-frozen-policy-class.md`. Enforcement: `canon.md` validator rules 9–14.
-  Fixtures: `spec/discovery-framework/conformance/` (14/14, mutation-tested).
+  inside that Claim's pre-registration window.
+  - Decision: `docs/canon-0.2.0-frozen-policy-class.md`. Review: `docs/canon-0.2.0-adversarial-review.md`.
+  - Enforcement: `canon.md` validator rules 9–17. Fixtures: `spec/discovery-framework/conformance/`
+    — **19/19, mutation-tested.** Run `python3 run.py`; if it is not 19/19, canon is broken.
   - Chose the **new class** (handoff option 1), not the constitutional meta-policy (option 3):
     option 3 answers obligation 7 vacuously and needs a principal to authorize the issuer.
-    **`frozen` needs no principal signoff** — it is the one class that cannot widen agent
-    authority (issuing one *renounces* amendment power), so this landed without blocking on Evan.
+    **No principal dependency** — see the caveat below.
+  - **Adversarial review (Codex) found TWO BLOCKING DEFECTS in the first draft**, which was
+    14/14 green with a confident decision record. Both fixed and fixture-pinned:
+    1. **Evidence laundering** — mint a fresh Claim post-hoc (its window is open *because* it
+       has no evidence), freeze a flattering gate on it, conclude it citing the *old* claim's
+       evidence. Rules 9–14 all passed. **The class was decorative.** Now rules 15/16; the
+       window anchors on `observed_at`, not `emitted_at` (which the emitter controls).
+    2. **Constitutional land-grab** — `class: frozen, field_path: capital.max_at_risk,
+       amendment_authority: []` = a ceiling an agent grants itself that *nobody, including
+       Evan,* can ever amend. This broke the exact argument used to justify landing without
+       him. Now rule 17 + a schema bar on framework scope.
   - **Evan should read §"What Evan should know he is bound by"** — a frozen gate is not
     amendable by *him* either. Deliberate, and reversible if he disagrees.
   - **`memory-systems-v1`'s pre-registration window is still open** (verified: its canon store
     holds 1 Claim, 0 Evidence, 0 phase-transitions). It can get a legal frozen gate today
     without editing its hash-bound methodology. Emission is synaplex's call.
-  - **Next**: cross-agent review (Codex), then synaplex Phase 2.
 
 - **Canon 3-claims-per-assumption verdict (Step 1 landed, 2026-05-07)**:
   Step 2 awaits principal verdict on two open questions. See `docs/canon-3claims-per-assumption-verdict.md`.
