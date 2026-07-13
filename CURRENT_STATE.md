@@ -2,12 +2,12 @@
 name: CURRENT_STATE
 description: Front door for context-repository — what the pattern lab is and what's active
 type: front-door
-updated: 2026-07-12
+updated: 2026-07-13
 ---
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-07-12 — tick session. Auth failure diagnosis complete (self-resolved); CURRENT_STATE.md commit discipline adopted in CLAUDE.md; 5 commits pushed to origin/main.
+**Last updated**: 2026-07-13T02-33-01Z — reflection pass. Canon v0.2.0 landed and reviewed (19/19); repo clean and pushed. URGENT structural-abandonment handoff found still on disk despite session noting it deleted. Three proposal tracks >70 days stale — flagged for next attended session verdict.
 
 ---
 
@@ -112,7 +112,7 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
   - ~~`context-repository-auth-failure-diagnosis-2026-05-04T02-49Z.md`~~ **CONSUMED 2026-07-12** → auth self-resolved
   - ~~`context-repository-current-state-commit-discipline-2026-05-13T16-47Z.md`~~ **CONSUMED 2026-07-12** → rule added to CLAUDE.md
   - ~~`context-repository-proposal-current-state-commit-discipline-2026-05-13T15-35-09Z.md`~~ **CONSUMED 2026-07-12** → rule added to CLAUDE.md
-  - ~~`URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md`~~ — **STALE, deleted** (the 2026-07-12 attended session resolved the abandonment; this URGENT was not re-deleted)
+  - `URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md` — **STILL ON DISK** (session intended to delete/archive but missed the step; reflection confirmed file exists at `/opt/workspace/runtime/.handoff/`). Addressed to `general`. Archive to `ARCHIVE/2026-07-12/`.
   - ~~`context-repository-canon-gap-frozen-eval-gate-...`~~ **CONSUMED 2026-07-12** → canon v0.2.0
   - ~~`URGENT-context-repository-canon-spec-is-not-under-version-control.md`~~ **CONSUMED 2026-07-12** → `d93d4e5`
 
@@ -155,11 +155,19 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
 - **The escalation asked for four fixtures; the design needed seven.** The handoff named the
   amendment attack. The *live* attack was late issuance — freeze the gate after seeing the results
   and no amendment check ever fires. Take an escalation's framing as input, not as scope.
+- **Conformance suites are positive-case dominated.** Adversarial review found two blocking defects
+  that 14/14 fixtures missed because all fixtures tested *legal* structures. The "evidence laundering"
+  and "constitutional land-grab" attacks required fixtures that *attempted violation* to be caught.
+  Every invariant rule needs at least one refusal test alongside its positive cases.
+- **Handoff archive steps are easy to skip.** The attended session marked the structural-abandonment
+  URGENT as "deleted" in CURRENT_STATE.md but the file remained. Reflect confirmed it still on disk.
+  Add a final `ls .handoff/` check to any session that touches handoffs.
 - **A stale claim in CURRENT_STATE.md ("401 failing since 2026-05-01") persisted ~69 days.** The
   auth failure was a one-time transient event; the NEXT tick run succeeded. The claim was wrong from
   the start. Read the tick log (`/var/log/workspace-project-tick-context-repo.log`) before trusting
   front-door claims about tick health.
 - **Next attended session priorities**:
-  1. Give atlas + skillfoundry a schema-drift tripwire (synaplex has one; the others don't)
-  2. Formally close or defer polarity v0.1.1; invoke review on harness-check Q2+Q3
+  1. Archive the structural-abandonment URGENT handoff (it was consumed; file still at `runtime/.handoff/`)
+  2. Formally close or defer polarity v0.1.1; invoke `/review` on harness-check Q2+Q3
   3. Canon 3-claims-per-assumption Step 2 — awaits principal verdict on two open questions
+  4. Give atlas + skillfoundry a schema-drift tripwire (synaplex has one; others don't)
