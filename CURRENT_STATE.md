@@ -2,12 +2,12 @@
 name: CURRENT_STATE
 description: Front door for context-repository — what the pattern lab is and what's active
 type: front-door
-updated: 2026-07-13
+updated: 2026-07-14
 ---
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-07-13T02-33-01Z — reflection pass. Canon v0.2.0 landed and reviewed (19/19); repo clean and pushed. URGENT structural-abandonment handoff found still on disk despite session noting it deleted. Three proposal tracks >70 days stale — flagged for next attended session verdict.
+**Last updated**: 2026-07-14T02-28-21Z — reflection pass (quiet window). No commits in 12h window. URGENT structural-abandonment handoff still not archived (2nd consecutive observation — route to general or attended session). Three stale proposal tracks approaching 3-cycle URGENT threshold.
 
 ---
 
@@ -112,7 +112,7 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
   - ~~`context-repository-auth-failure-diagnosis-2026-05-04T02-49Z.md`~~ **CONSUMED 2026-07-12** → auth self-resolved
   - ~~`context-repository-current-state-commit-discipline-2026-05-13T16-47Z.md`~~ **CONSUMED 2026-07-12** → rule added to CLAUDE.md
   - ~~`context-repository-proposal-current-state-commit-discipline-2026-05-13T15-35-09Z.md`~~ **CONSUMED 2026-07-12** → rule added to CLAUDE.md
-  - `URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md` — **STILL ON DISK** (session intended to delete/archive but missed the step; reflection confirmed file exists at `/opt/workspace/runtime/.handoff/`). Addressed to `general`. Archive to `ARCHIVE/2026-07-12/`.
+  - `URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md` — **STILL ON DISK (2nd consecutive reflection observation)**. Session intended to archive Jul 12; prior reflection flagged it; this reflection sees it again. Route to `general` or attended session. See Jul 14 02:28 reflection §Proposal 1.
   - ~~`context-repository-canon-gap-frozen-eval-gate-...`~~ **CONSUMED 2026-07-12** → canon v0.2.0
   - ~~`URGENT-context-repository-canon-spec-is-not-under-version-control.md`~~ **CONSUMED 2026-07-12** → `d93d4e5`
 
