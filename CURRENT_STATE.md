@@ -7,7 +7,7 @@ updated: 2026-07-14
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-07-14T02-28-21Z — reflection pass (quiet window). No commits in 12h window. URGENT structural-abandonment handoff still not archived (2nd consecutive observation — route to general or attended session). Three stale proposal tracks approaching 3-cycle URGENT threshold.
+**Last updated**: 2026-07-14T14-24-37Z — reflection pass (quiet window). Carry-forward escalation cycle 3 REACHED for three stale proposal tracks — URGENT handoff obligation now falls on synthesis job (15:23 UTC). URGENT structural-abandonment handoff still not archived (3rd consecutive observation — route to general immediately).
 
 ---
 
@@ -112,7 +112,7 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
   - ~~`context-repository-auth-failure-diagnosis-2026-05-04T02-49Z.md`~~ **CONSUMED 2026-07-12** → auth self-resolved
   - ~~`context-repository-current-state-commit-discipline-2026-05-13T16-47Z.md`~~ **CONSUMED 2026-07-12** → rule added to CLAUDE.md
   - ~~`context-repository-proposal-current-state-commit-discipline-2026-05-13T15-35-09Z.md`~~ **CONSUMED 2026-07-12** → rule added to CLAUDE.md
-  - `URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md` — **STILL ON DISK (2nd consecutive reflection observation)**. Session intended to archive Jul 12; prior reflection flagged it; this reflection sees it again. Route to `general` or attended session. See Jul 14 02:28 reflection §Proposal 1.
+  - `URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md` — **STILL ON DISK (3rd consecutive reflection observation)**. Consumed Jul 12; archive step skipped. Three reflections have noted it. Route to `general` immediately — no principal decision required, any privileged session can move it.
   - ~~`context-repository-canon-gap-frozen-eval-gate-...`~~ **CONSUMED 2026-07-12** → canon v0.2.0
   - ~~`URGENT-context-repository-canon-spec-is-not-under-version-control.md`~~ **CONSUMED 2026-07-12** → `d93d4e5`
 
@@ -166,8 +166,8 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
   auth failure was a one-time transient event; the NEXT tick run succeeded. The claim was wrong from
   the start. Read the tick log (`/var/log/workspace-project-tick-context-repo.log`) before trusting
   front-door claims about tick health.
-- **Next attended session priorities**:
-  1. Archive the structural-abandonment URGENT handoff (it was consumed; file still at `runtime/.handoff/`)
-  2. Formally close or defer polarity v0.1.1; invoke `/review` on harness-check Q2+Q3
+- **Next attended session priorities** (updated 2026-07-14T14-24-37Z):
+  1. **URGENT** Archive the structural-abandonment URGENT handoff — 3 reflections flagged, still on disk
+  2. **URGENT** Render verdict on polarity v0.1.1 and harness-check Q2+Q3 — carry-forward cycle 3 triggered, URGENT now queued for synthesis job
   3. Canon 3-claims-per-assumption Step 2 — awaits principal verdict on two open questions
   4. Give atlas + skillfoundry a schema-drift tripwire (synaplex has one; others don't)
