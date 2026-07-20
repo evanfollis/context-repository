@@ -2,12 +2,12 @@
 name: CURRENT_STATE
 description: Front door for context-repository — what the pattern lab is and what's active
 type: front-door
-updated: 2026-07-19
+updated: 2026-07-20
 ---
 
 # CURRENT_STATE — context-repo
 
-**Last updated**: 2026-07-19T14-26-27Z — reflection pass (quiet midday window, no attended activity). Carry-forward escalation SUPPRESSED by synthesis C143 P0 cap (INBOX at 19, zero consumed). Stale proposals now ~93/~83/~78 days. URGENT structural-abandonment handoff still on disk (**13th consecutive observation** — all original concerns resolved Jul 12; file is now obsolete, not just unarchived. Archive is two shell commands). Canon conformance: 19/19 (not re-run this cycle).
+**Last updated**: 2026-07-20T02-36-55Z — reflection pass (brief attended session in window verified canon-v0.2.0 push state; no new code). Carry-forward escalation SUPPRESSED by synthesis C143 P0 cap (INBOX at ~19, 0 consumed). Stale proposals now ~94/~83/~79 days. URGENT structural-abandonment handoff still on disk (**14th consecutive observation** — obsolete since Jul 12; archive is two shell commands. P2 escalation threshold reached; handoff written to `general` session). Canon conformance: 19/19 (not re-run this cycle).
 
 ---
 
@@ -112,7 +112,7 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
   - ~~`context-repository-auth-failure-diagnosis-2026-05-04T02-49Z.md`~~ **CONSUMED 2026-07-12** → auth self-resolved
   - ~~`context-repository-current-state-commit-discipline-2026-05-13T16-47Z.md`~~ **CONSUMED 2026-07-12** → rule added to CLAUDE.md
   - ~~`context-repository-proposal-current-state-commit-discipline-2026-05-13T15-35-09Z.md`~~ **CONSUMED 2026-07-12** → rule added to CLAUDE.md
-  - `URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md` — **STILL ON DISK (12th consecutive reflection observation)**. Consumed Jul 12; archive step skipped. Eleven reflections, no execution. Original concerns all resolved — file is now obsolete, not just unarchived. The blocker is not knowledge — `mkdir -p .../ARCHIVE/2026-06-10 && mv ...` is two commands. Route to any attended session.
+  - `URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md` — **STILL ON DISK (14th consecutive reflection observation)**. Consumed Jul 12; archive step skipped. Thirteen reflections, no execution. Original concerns all resolved — file is now obsolete, not just unarchived. The blocker is not knowledge — `mkdir -p .../ARCHIVE/2026-06-10 && mv ...` is two commands. **P2 escalation threshold reached; handoff written to `general` session** (`general-context-repo-14th-cycle-no-action.md`).
   - ~~`context-repository-canon-gap-frozen-eval-gate-...`~~ **CONSUMED 2026-07-12** → canon v0.2.0
   - ~~`URGENT-context-repository-canon-spec-is-not-under-version-control.md`~~ **CONSUMED 2026-07-12** → `d93d4e5`
 
@@ -167,7 +167,7 @@ Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Co
   the start. Read the tick log (`/var/log/workspace-project-tick-context-repo.log`) before trusting
   front-door claims about tick health.
 - **Next attended session priorities** (updated 2026-07-19T14-26-27Z):
-  1. **URGENT** Archive the structural-abandonment URGENT handoff — **13 reflections flagged**, file now obsolete (all original concerns resolved Jul 12), still unarchived
+  1. **URGENT** Archive the structural-abandonment URGENT handoff — **14 reflections flagged**, file now obsolete (all original concerns resolved Jul 12), still unarchived. P2 escalation sent to `general` session
   2. **URGENT** Render verdict on polarity v0.1.1 (~92d) and harness-check Q2+Q3 (~82d) — carry-forward cycle 12, INBOX P0 cap suppressing writes (19 items, 0 consumed)
   3. Canon 3-claims-per-assumption Step 2 — awaits principal verdict on two open questions
   4. Give atlas + skillfoundry a schema-drift tripwire (synaplex has one; others don't)
