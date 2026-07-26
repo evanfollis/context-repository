@@ -7,10 +7,9 @@ updated: 2026-07-26
 
 # CURRENT_STATE — context-repository
 
-**Last updated**: 2026-07-26 — attended session. Executed the ADR-0050
-contract-repository migration (repo.toml, Makefile + `make check`, AGENTS.md,
-docs/architecture.md, CI, legacy decoys quarantined). Published contract left in
-place. `make check` green; conformance 19/19.
+**Last updated**: 2026-07-26 — attended dependency closure. The deterministic
+checker is pinned to current jsonschema 4.26.0; the published contract and
+fixtures are unchanged. `make check` remains green with conformance 19/19.
 
 ---
 
@@ -47,6 +46,13 @@ review or admin-enforced checks would break the reflect auto-push; that is a
 deliberate exception, not an oversight (ADR-0050 review finding B3).
 
 ## Active / recent work
+
+- **Dependency closure — LANDED 2026-07-26.** Updated the sole checker
+  dependency from jsonschema 4.10.3 to 4.26.0 after the full 19-fixture
+  conformance suite passed. No schema, canon, fixture, or published path
+  changed. The runner still uses the library's legacy `RefResolver`
+  compatibility surface; removal of that surface requires a separately
+  reviewed implementation migration, not a blind dependency merge.
 
 - **ADR-0050 contract migration — LANDED 2026-07-26 (this session).** Added
   `repo.toml` (shape=contract, lifecycle=active, agentic_risk=none), `Makefile`
