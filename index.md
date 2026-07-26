@@ -17,6 +17,7 @@ after any file add, remove, or retitle.
 | [`AGENTS.md`](AGENTS.md) | AGENTS | Provider-neutral instruction front door for context-repository (canon spec + pattern lab) | directive | 2026-07-26 |
 | [`CLAUDE.md`](CLAUDE.md) | CLAUDE directives | Thin adapter to AGENTS.md + the workspace-wide always-load declaration for context-repository | directive | 2026-07-26 |
 | [`CURRENT_STATE.md`](CURRENT_STATE.md) | CURRENT_STATE | Front door for context-repository — what the canon spec + pattern lab is and what's active | front-door | 2026-07-26 |
+| [`README.md`](README.md) | README | Repo overview and entry pointers for the context-repository canon spec + pattern lab | reference | 2026-07-26 |
 | [`docs/agent-context-repo-pattern.md`](docs/agent-context-repo-pattern.md) | Agent Context Repository Pattern | Canonical spec for how agents maintain file-based persistent context — five invariants, required mechanics, future work | spec | 2026-04-23 |
 | [`docs/architecture.md`](docs/architecture.md) | architecture | Real composition, dependency direction, published-interface constraint, and artifact roles for context-repository | reference | 2026-07-26 |
 | [`docs/canon-0.2.0-adversarial-review.md`](docs/canon-0.2.0-adversarial-review.md) | canon-0.2.0-adversarial-review | Adversarial review of canon v0.2.0 (frozen Policy class) — Codex, read-only, cross-agent | review | 2026-07-12 |
@@ -29,7 +30,6 @@ after any file add, remove, or retitle.
 | [`docs/spec-gap-m1-artifact-files.md`](docs/spec-gap-m1-artifact-files.md) | M1 schema gap — artifact-class files | Observed during pass-2 execution (2026-04-23) — M1's literal reading is over-broad for dated finding/evidence/review archives. Surfaces for separate spec-review pass. | finding | 2026-04-23 |
 | [`docs/supervisor-self-audit-scope.md`](docs/supervisor-self-audit-scope.md) | Supervisor self-audit scope | Scope note for the separate supervisor pass — whether supervisor/system/* satisfies M1+M2 or requires retrofit. Scope only, not execute. | proposal | 2026-04-23 |
 | [`docs/writer-retriever-separation-proposal.md`](docs/writer-retriever-separation-proposal.md) | Writer/Retriever Separation Proposal | Proposed architecture where context-repo writes flow through a single writer pipeline and foreground agents operate retrieval-only; pass-3 groundwork, not yet accepted | proposal | 2026-04-18 |
-| [`README.md`](README.md) | README | Repo overview and entry pointers for the context-repository canon spec + pattern lab | reference | 2026-07-26 |
 | [`spec/discovery-framework/conformance/README.md`](spec/discovery-framework/conformance/README.md) | conformance | Executable conformance fixtures for canon — schema validation plus the validator-level rules | spec | 2026-07-12 |
 | [`spec/discovery-framework/phase-0/cases/atlas/03-null.md`](spec/discovery-framework/phase-0/cases/atlas/03-null.md) | — | — | — | — |
 | [`spec/discovery-framework/phase-0/cases/atlas/04-kill-early.md`](spec/discovery-framework/phase-0/cases/atlas/04-kill-early.md) | — | — | — | — |
@@ -43,13 +43,13 @@ The canon spec bundle is a formally reviewed published artifact with its own
 conventions; the pattern-lab frontmatter mechanic does not apply. Listed here for
 navigation. Its entry point is `spec/discovery-framework/README.md`.
 
+- [`spec/discovery-framework/CHANGELOG.md`](spec/discovery-framework/CHANGELOG.md)
+- [`spec/discovery-framework/README.md`](spec/discovery-framework/README.md)
 - [`spec/discovery-framework/audit-questions.md`](spec/discovery-framework/audit-questions.md)
 - [`spec/discovery-framework/canon.md`](spec/discovery-framework/canon.md)
-- [`spec/discovery-framework/CHANGELOG.md`](spec/discovery-framework/CHANGELOG.md)
 - [`spec/discovery-framework/control-plane.md`](spec/discovery-framework/control-plane.md)
 - [`spec/discovery-framework/exposure.md`](spec/discovery-framework/exposure.md)
-- [`spec/discovery-framework/phase-0/enumeration.md`](spec/discovery-framework/phase-0/enumeration.md)
 - [`spec/discovery-framework/phase-0/README.md`](spec/discovery-framework/phase-0/README.md)
+- [`spec/discovery-framework/phase-0/enumeration.md`](spec/discovery-framework/phase-0/enumeration.md)
 - [`spec/discovery-framework/policy.md`](spec/discovery-framework/policy.md)
-- [`spec/discovery-framework/README.md`](spec/discovery-framework/README.md)
 - [`spec/discovery-framework/roles.md`](spec/discovery-framework/roles.md)

@@ -27,9 +27,13 @@ trap 'rm -f "$TMP"' EXIT
 # with -co --exclude-standard so new-but-not-yet-committed files still show up
 # on their first build — otherwise you add a file, run build-index, and the
 # file is missing from its own index until after the next commit.
+# LC_ALL=C makes the sort order byte-stable across environments (a developer's
+# machine vs CI). index.md is a tracked reproducibility artifact; a locale-
+# dependent sort would make it rebuild in a different row order under a different
+# locale and fail the `make check` drift guard (exactly what happened in CI).
 mapfile -t FILES < <(
   git ls-files -co --exclude-standard '*.md' 2>/dev/null \
-    | sort -u \
+    | LC_ALL=C sort -u \
     | grep -v '^index\.md$' \
     || true
 )
