@@ -35,6 +35,17 @@ version across the bundle · schemas parse · **conformance 19/19** · index fre
 is live via the SessionStart hook, which reads `context-always-load` from
 `CLAUDE.md` (kept there deliberately — see that file).
 
+**CI:** `.github/workflows/check.yml` runs `make check` on every push/PR
+(`contents: read`; actions pinned to commit SHAs). Green on `main`.
+**GitHub security (2026-07-26):** secret scanning + push protection, Dependabot
+alerts + security updates, private vulnerability reporting, and CodeQL default
+setup (python + actions) all enabled. **Branch protection is deploy-path-aware:**
+required status check `check`, **no** required PR review, `enforce_admins=false` —
+so the automated `reflect:` CURRENT_STATE commits (owner identity) still push
+directly to `main`. Force-push and branch deletion are blocked. Requiring PR
+review or admin-enforced checks would break the reflect auto-push; that is a
+deliberate exception, not an oversight (ADR-0050 review finding B3).
+
 ## Active / recent work
 
 - **ADR-0050 contract migration — LANDED 2026-07-26 (this session).** Added
