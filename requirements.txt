@@ -4,4 +4,4 @@
 # the stable RefResolver API and is verified against the 19 conformance fixtures.
 # Dependabot (.github/dependabot.yml) proposes bumps; re-run `make check` before
 # accepting one, since a jsonschema major could drop RefResolver.
-jsonschema==4.10.3
+jsonschema==4.26.0
