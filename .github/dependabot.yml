@@ -1,0 +1,18 @@
+version: 2
+updates:
+  # Keep the pinned GitHub Action commit SHAs current (the standard requires SHA
+  # pinning; Dependabot is how those pins get maintained instead of rotting).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+
+  # The single Python dependency (jsonschema) used by the conformance checker.
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "deps"

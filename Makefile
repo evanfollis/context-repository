@@ -23,8 +23,8 @@ help: ## Show this help
 	@echo "  make deploy-check  nothing is deployed; downstream repos consume the spec by path/digest"
 	@echo "  make eval          no governed prompt/agent surface here (see docs/architecture.md)"
 
-setup: ## Install the one dependency (jsonschema) used by the conformance checker
-	$(PY) -m pip install --quiet jsonschema
+setup: ## Install the pinned dependency (jsonschema) used by the conformance checker
+	$(PY) -m pip install --quiet -r requirements.txt
 
 check: check-repo-toml check-version check-schemas check-conformance check-index ## Full hermetic pre-merge gate (no masked failures)
 	@echo "OK: make check passed"

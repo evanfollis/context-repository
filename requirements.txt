@@ -1,0 +1,7 @@
+# The sole dependency: the JSON-Schema validator used by the canon conformance
+# checker (spec/discovery-framework/conformance/run.py). Pinned exactly for a
+# reproducible `make check` across environments (standard §11). This version uses
+# the stable RefResolver API and is verified against the 19 conformance fixtures.
+# Dependabot (.github/dependabot.yml) proposes bumps; re-run `make check` before
+# accepting one, since a jsonschema major could drop RefResolver.
+jsonschema==4.10.3

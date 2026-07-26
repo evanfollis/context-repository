@@ -35,6 +35,7 @@ authoritative = [
   "CURRENT_STATE.md",
   "README.md",
   "Makefile",
+  "requirements.txt",
 ]
 runtime = []       # this repo holds no mutable runtime state in-tree
 historical = []    # no frozen/retired lineage tracked in-tree
