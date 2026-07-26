@@ -1,173 +1,108 @@
 ---
 name: CURRENT_STATE
-description: Front door for context-repository — what the pattern lab is and what's active
+description: Front door for context-repository — what the canon spec + pattern lab is and what's active
 type: front-door
-updated: 2026-07-20
+updated: 2026-07-26
 ---
 
-# CURRENT_STATE — context-repo
+# CURRENT_STATE — context-repository
 
-**Last updated**: 2026-07-20T02-36-55Z — reflection pass (brief attended session in window verified canon-v0.2.0 push state; no new code). Carry-forward escalation SUPPRESSED by synthesis C143 P0 cap (INBOX at ~19, 0 consumed). Stale proposals now ~94/~83/~79 days. URGENT structural-abandonment handoff still on disk (**14th consecutive observation** — obsolete since Jul 12; archive is two shell commands. P2 escalation threshold reached; handoff written to `general` session). Canon conformance: 19/19 (not re-run this cycle).
+**Last updated**: 2026-07-26 — attended session. Executed the ADR-0050
+contract-repository migration (repo.toml, Makefile + `make check`, AGENTS.md,
+docs/architecture.md, CI, legacy decoys quarantined). Published contract left in
+place. `make check` green; conformance 19/19.
 
 ---
 
 ## What this repo is
 
-This repo has a deliberate **dual role**:
+Two co-located roles (see `AGENTS.md` for the charter):
 
-1. **Pattern lab for agent context repositories** — the place where the
-   concept of local, file-based, resumability-oriented context repos gets
-   designed, pressure-tested, and specified rigorously enough that every
-   agent in the workspace can implement their own.
-2. **Home of canon** — the formal obligations/provenance model under
-   `spec/discovery-framework/`.
+1. **Canon** — the formal obligations/provenance model under
+   `spec/discovery-framework/`. A **published interface**: Atlas, Synaplex, and
+   Skillfoundry consume it as a contract.
+2. **Pattern lab** — `docs/agent-context-repo-pattern.md`: the file-based
+   resumable-context pattern. This repo is an instance of it.
 
-These roles are related but distinct. This repo is **not** the synaplex
-knowledge system and **not** a production memory-runtime service. It is the
-pattern/spec substrate underneath those higher layers.
-
-This repo is itself an instance of the pattern it specifies.
+Not the Synaplex knowledge system, not a runtime service, not the workspace
+operational store. Shape: `contract`. Ships no agent/runner/prompt executor.
 
 ## Deployed / running state
 
-Pure Markdown specification repo — no deployable service.
+No deployable service. Verification is `make check` (repo.toml valid · one spec
+version across the bundle · schemas parse · **conformance 19/19** · index fresh).
+`make help` explains the N/A targets. M4 session-start read enforcement (ADR-0021)
+is live via the SessionStart hook, which reads `context-always-load` from
+`CLAUDE.md` (kept there deliberately — see that file).
 
-**Reference implementation ships the mechanics it mandates**: every tracked
-Markdown file has frontmatter, `index.md` is generated from frontmatter, `CLAUDE.md`
-declares the always-load list. Legacy `apps/` removed via `git rm` (`c4d843f`).
+## Active / recent work
 
-**M4 (session-start read enforcement) is live**: ADR-0021 accepted 2026-04-18.
-Hook at `~/.claude/hooks/session-start-context-load.sh` fires on every Claude Code session.
+- **ADR-0050 contract migration — LANDED 2026-07-26 (this session).** Added
+  `repo.toml` (shape=contract, lifecycle=active, agentic_risk=none), `Makefile`
+  with a non-masking `make check`, `AGENTS.md` (canonical instructions) +
+  thin `CLAUDE.md` adapter, `docs/architecture.md`, and CI. Fixed the stale spec
+  README (was 0.1.0 / "no Python"). Quarantined prior-identity decoys (top-level
+  `schemas/`, 5 gitignored `docs/*.md`) to
+  `runtime/.quarantine/context-repository-prior-identity/`. **The published
+  contract `spec/discovery-framework/{schemas,conformance}` was not moved.**
+  Env-hatch coordination for downstream consumers routed to synaplex/atlas by
+  handoff (prerequisite for any *future* contract move; see B5).
 
-## What's in progress
+- **Canon v0.2.0 — `frozen` Policy class. LANDED + REVIEWED 2026-07-12; IN
+  PRODUCTION USE.** Decision: `docs/canon-0.2.0-frozen-policy-class.md`; review:
+  `docs/canon-0.2.0-adversarial-review.md`; rules 9–17 in `canon.md`; fixtures
+  19/19. Adversarial review caught two blocking defects in the first draft
+  (evidence-laundering, constitutional land-grab) — both fixed and fixture-pinned.
+  **Downstream reality:** Synaplex Phase 2 has run — `lab/.canon/` now holds 12
+  envelopes including **4 frozen policies and 3 kill decisions**; `memory-systems-v1`
+  (`b7ff216f…`) was **killed** via a decision citing its frozen gate. The class
+  works end-to-end. (Supersedes the earlier "window still open, 1 Claim" note.)
+  - **For Evan:** a frozen gate is not amendable by *him* either — deliberate,
+    reversible. See §"What Evan should know he is bound by" in the decision doc.
 
-- **Canon v0.2.0 — `frozen` Policy class. LANDED + REVIEWED 2026-07-12. Ready for synaplex Phase 2.**
-  Resolves the escalated canon gap. Canon can now express a gate that is agent-issued,
-  amendable by **nobody** (including the principal), bound to one `Claim`, and issuable only
-  inside that Claim's pre-registration window.
-  - Decision: `docs/canon-0.2.0-frozen-policy-class.md`. Review: `docs/canon-0.2.0-adversarial-review.md`.
-  - Enforcement: `canon.md` validator rules 9–17. Fixtures: `spec/discovery-framework/conformance/`
-    — **19/19, mutation-tested.** Run `python3 run.py`; if it is not 19/19, canon is broken.
-  - Chose the **new class** (handoff option 1), not the constitutional meta-policy (option 3):
-    option 3 answers obligation 7 vacuously and needs a principal to authorize the issuer.
-    **No principal dependency** — see the caveat below.
-  - **Adversarial review (Codex) found TWO BLOCKING DEFECTS in the first draft**, which was
-    14/14 green with a confident decision record. Both fixed and fixture-pinned:
-    1. **Evidence laundering** — mint a fresh Claim post-hoc (its window is open *because* it
-       has no evidence), freeze a flattering gate on it, conclude it citing the *old* claim's
-       evidence. Rules 9–14 all passed. **The class was decorative.** Now rules 15/16; the
-       window anchors on `observed_at`, not `emitted_at` (which the emitter controls).
-    2. **Constitutional land-grab** — `class: frozen, field_path: capital.max_at_risk,
-       amendment_authority: []` = a ceiling an agent grants itself that *nobody, including
-       Evan,* can ever amend. This broke the exact argument used to justify landing without
-       him. Now rule 17 + a schema bar on framework scope.
-  - **Evan should read §"What Evan should know he is bound by"** — a frozen gate is not
-    amendable by *him* either. Deliberate, and reversible if he disagrees.
-  - **`memory-systems-v1`'s pre-registration window is still open** (verified: its canon store
-    holds 1 Claim, 0 Evidence, 0 phase-transitions). It can get a legal frozen gate today
-    without editing its hash-bound methodology. Emission is synaplex's call.
+- **Open verdicts (awaiting principal):** 3-claims-per-assumption Step 2
+  (`docs/canon-3claims-per-assumption-verdict.md`); polarity v0.1.1 audit
+  (`docs/polarity-schema-v0.1.1-audit.md`, ~99d, close or defer); harness-check
+  Q2+Q3 (`docs/harness-check-spec-amendment-proposal.md`, ~89d); Pass-3
+  writer/retriever split (`docs/writer-retriever-separation-proposal.md`).
 
-- **Canon 3-claims-per-assumption verdict (Step 1 landed, 2026-05-07)**:
-  Step 2 awaits principal verdict on two open questions. See `docs/canon-3claims-per-assumption-verdict.md`.
+## Live canon data validated against these schemas
 
-- **Canon polarity v0.1.1 audit (~82 days stalled, effectively abandoned)**:
-  Codex adversarial review of first proposal failed; holistic audit at `docs/polarity-schema-v0.1.1-audit.md`
-  awaits adversarial review + principal verdict. `/review` never invoked. Principal should
-  explicitly close or formally defer — see Q3 below.
-
-- **Harness-check spec amendment proposal (~72 days, awaiting verdict)**:
-  Q2 + Q3 are low-risk additive changes flagged ready. `docs/harness-check-spec-amendment-proposal.md`.
-  No attended session has authorized them.
-
-- **Pass 3 (proposed, not started)**: writer/retriever split per `docs/writer-retriever-separation-proposal.md`.
+**344 envelopes, 0 invalid** across the workspace: Atlas 315, Skillfoundry-valuation
+17, Synaplex 12. Backward compatibility of v0.2.0 is regression-pinned by
+conformance case 14 (two real live envelopes).
 
 ## Known broken or degraded
 
-- **FIXED 2026-07-12 — the canon spec was never under version control.** `spec/` was line 11 of
-  `.gitignore`, so `spec/discovery-framework/` — the highest truth source in the system — was
-  undiffable, unreviewable, unrevertable for its entire existence. Cause: `spec/` was ignored in
-  April to bury the prior identity's abstract-schema work; canon was later built underneath that
-  path and inherited the ignore silently. Now tracked (`d93d4e5`).
-  **Caveat, stated plainly:** the committed v0.1.0 baseline is a **reconstruction**. The on-disk
-  original was overwritten in-session before the hole was found, and no copy survived anywhere.
-  It is verified by revalidating all 316 live envelopes (0 invalid), *not* by byte-identity.
-  Found by synaplex, not by this repo — a sibling session's `$ref` failed to resolve.
-
-- **RESOLVED 2026-07-12 — Tick auth failure (401, May 2026 was transient)**: The single
-  occurrence on 2026-05-01 was a transient OAuth token issue; the NEXT tick run succeeded
-  immediately. Authentication uses OAuth tokens in `/root/.claude/` accessed via the
-  `workspace-project-tick@.service` `ReadWritePaths`. The current tick session (this one) is
-  proof: running headless without 401. No ANTHROPIC_API_KEY needed or missing — OAuth auth path is
-  correct. The "failing since 2026-05-01" CURRENT_STATE claim was stale by the time it was written.
-  Handoff `context-repository-auth-failure-diagnosis-2026-05-04T02-49Z.md` consumed and deleted.
-
-- **M5 (session-end write enforcement) unimplemented**: Front door not updated at session end.
-
-- ~~**Adversarial review gate blocked**: `codex` not installed.~~ **STALE — codex 0.144.1 IS
-  installed** and produced `supervisor/.reviews/adr-0040-codex-2026-07-12T03-30Z.md` today. The
-  review gate is available; the two spec proposals blocked "72+ days on tooling" were blocked on
-  nobody invoking it.
-
-- **Outstanding handoffs**:
-  - ~~`context-repository-auth-failure-diagnosis-2026-05-04T02-49Z.md`~~ **CONSUMED 2026-07-12** → auth self-resolved
-  - ~~`context-repository-current-state-commit-discipline-2026-05-13T16-47Z.md`~~ **CONSUMED 2026-07-12** → rule added to CLAUDE.md
-  - ~~`context-repository-proposal-current-state-commit-discipline-2026-05-13T15-35-09Z.md`~~ **CONSUMED 2026-07-12** → rule added to CLAUDE.md
-  - `URGENT-context-repository-structural-abandonment-2026-06-10T02-30Z.md` — **STILL ON DISK (14th consecutive reflection observation)**. Consumed Jul 12; archive step skipped. Thirteen reflections, no execution. Original concerns all resolved — file is now obsolete, not just unarchived. The blocker is not knowledge — `mkdir -p .../ARCHIVE/2026-06-10 && mv ...` is two commands. **P2 escalation threshold reached; handoff written to `general` session** (`general-context-repo-14th-cycle-no-action.md`).
-  - ~~`context-repository-canon-gap-frozen-eval-gate-...`~~ **CONSUMED 2026-07-12** → canon v0.2.0
-  - ~~`URGENT-context-repository-canon-spec-is-not-under-version-control.md`~~ **CONSUMED 2026-07-12** → `d93d4e5`
-
-- **reflect.sh auto-commit noise**: 23 consecutive auto-commits Jun 3–18; reflections then
-  short-circuited Jul 1–11 (no CURRENT_STATE change detected). Resolved by attended session
-  + this tick; repo is now pushed to origin.
-
-## Recent decisions
-
-- **2026-07-12**: **Canon v0.2.0 — `frozen` Policy class.** Canon gap resolved. Chose a third
-  mutability class over a constitutional meta-policy; no principal dependency. Added three rules
-  the escalation did not ask for (late issuance, duplicate gates, cherry-picked citation) because
-  refusing amendment without them is security theatre — the real attack is issuing the gate late,
-  not amending it. `docs/canon-0.2.0-frozen-policy-class.md`.
-- **2026-07-12**: **`spec/` removed from `.gitignore`; v0.1.0 committed as a baseline** so the
-  bump lands as a reviewable diff (`d93d4e5`).
-- **2026-05-07 (c2ec5c0)**: Step 1 landing recorded — skillfoundry shipped MAPPING.md patch.
-- **2026-05-07 (1fcf0ad)**: 3-claims-per-assumption verdict issued.
-- **2026-05-01 (e3fe4b6)**: Dual-role identity landed across all files.
-- **2026-05-01 (e561da1)**: Harness-check spec amendment proposal written.
-- **2026-04-23**: Pass-2 complete. Both retrofits landed.
-- **2026-04-20 (064150b)**: Spec honesty block fixed — M4 marked live, M5 marked deferred.
-- **2026-04-18**: ADR-0021 accepted. SessionStart hook live.
+- **M5 (session-end write enforcement) unimplemented** — front door not
+  auto-updated at session end; relies on session discipline.
+- **Downstream env-hatch gap (future risk, not current breakage):** Atlas
+  (`migrate.py`, CLI-only) and Synaplex (`test_conformance.py`,
+  `check_programmes.py`, no override) hardcode the contract path. Nothing breaks
+  while the path is stable; a *future* move needs env hatches added there first.
+  Coordinated by handoff this session.
+- **`AGENTS.md` not yet read by the SessionStart hook** — the hook reads
+  `CLAUDE.md` only, so the `context-always-load` block stays in `CLAUDE.md` (a
+  required compatibility exception until the hook is upgraded — control-plane work).
 
 ## What the next agent must read first
 
 1. This file.
-2. `docs/canon-0.2.0-frozen-policy-class.md` — the canon decision of record. Read before touching
-   `spec/`, and before building anything that emits a `Policy`.
-3. `spec/discovery-framework/conformance/` — run `python3 run.py`. If it is not 19/19, canon is broken.
-4. `index.md` — auto-generated from frontmatter.
-5. `docs/agent-context-repo-pattern.md` — the spec.
+2. `AGENTS.md` — the charter and hard boundaries.
+3. `docs/architecture.md` — composition, the published interface, downstream consumers.
+4. `make check` — if not green from a clean checkout, something is broken.
+5. `docs/canon-0.2.0-frozen-policy-class.md` — read before touching `spec/` or
+   emitting a `Policy`.
 
-## What bit the last sessions (patterns from session transcripts)
+## Patterns worth carrying (from prior sessions)
 
-- **The spec was editable with no diff, and it took a sibling repo to notice.** The 2026-07-12
-  attended session rewrote all eight schemas before discovering `spec/` was gitignored. Synaplex
-  caught it because a `$ref` failed to resolve. **Check `git ls-files` before trusting that `git
-  status` is clean.** A clean tree can mean "no changes" or "git has never heard of this directory."
-- **The escalation asked for four fixtures; the design needed seven.** The handoff named the
-  amendment attack. The *live* attack was late issuance — freeze the gate after seeing the results
-  and no amendment check ever fires. Take an escalation's framing as input, not as scope.
-- **Conformance suites are positive-case dominated.** Adversarial review found two blocking defects
-  that 14/14 fixtures missed because all fixtures tested *legal* structures. The "evidence laundering"
-  and "constitutional land-grab" attacks required fixtures that *attempted violation* to be caught.
-  Every invariant rule needs at least one refusal test alongside its positive cases.
-- **Handoff archive steps are easy to skip.** The attended session marked the structural-abandonment
-  URGENT as "deleted" in CURRENT_STATE.md but the file remained. Reflect confirmed it still on disk.
-  Add a final `ls .handoff/` check to any session that touches handoffs.
-- **A stale claim in CURRENT_STATE.md ("401 failing since 2026-05-01") persisted ~69 days.** The
-  auth failure was a one-time transient event; the NEXT tick run succeeded. The claim was wrong from
-  the start. Read the tick log (`/var/log/workspace-project-tick-context-repo.log`) before trusting
-  front-door claims about tick health.
-- **Next attended session priorities** (updated 2026-07-19T14-26-27Z):
-  1. **URGENT** Archive the structural-abandonment URGENT handoff — **14 reflections flagged**, file now obsolete (all original concerns resolved Jul 12), still unarchived. P2 escalation sent to `general` session
-  2. **URGENT** Render verdict on polarity v0.1.1 (~92d) and harness-check Q2+Q3 (~82d) — carry-forward cycle 12, INBOX P0 cap suppressing writes (19 items, 0 consumed)
-  3. Canon 3-claims-per-assumption Step 2 — awaits principal verdict on two open questions
-  4. Give atlas + skillfoundry a schema-drift tripwire (synaplex has one; others don't)
+- **Check `git ls-files` before trusting a clean `git status`.** `spec/` was
+  gitignored for ~3 months; the highest truth source was untracked and a sibling
+  repo, not this one, caught it.
+- **Every invariant rule needs a refusal test.** 14/14 positive fixtures hid two
+  blocking canon defects; adversarial review found them by *attempting* violations.
+- **Take an escalation's framing as input, not scope.** The canon-gap handoff
+  asked for four fixtures; the design needed nine.
+- **The published contract is frozen in place.** Moving `spec/discovery-framework/`
+  is a coordinated cross-repo migration (env-hatch no-override readers first),
+  never a local edit — see `docs/architecture.md` §Published interface.

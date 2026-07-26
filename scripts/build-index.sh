@@ -67,7 +67,13 @@ has_frontmatter() {
 
 INDEXED=""
 UNINDEXED=""
+EXEMPT=""
 
+# The published-contract bundle under spec/discovery-framework/ is a formally
+# reviewed artifact ("any edit requires cross-agent adversarial review"). The
+# frontmatter mechanic (spec M1) is a pattern-lab convention for this repo's
+# navigable context surface; the contract prose has its own conventions and is
+# exempt. Such files are listed for visibility, not nagged as defects.
 for f in "${FILES[@]}"; do
   [[ -f "$f" ]] || continue
   if has_frontmatter "$f"; then
@@ -76,6 +82,8 @@ for f in "${FILES[@]}"; do
     type=$(extract_field "$f" type)
     updated=$(extract_field "$f" updated)
     INDEXED+="| [\`$f\`]($f) | ${name:-—} | ${desc:-—} | ${type:-—} | ${updated:-—} |"$'\n'
+  elif [[ "$f" == spec/* ]]; then
+    EXEMPT+="- [\`$f\`]($f)"$'\n'
   else
     UNINDEXED+="- \`$f\` (no frontmatter — add one)"$'\n'
   fi
@@ -101,6 +109,19 @@ after any file add, remove, or retitle.
 |---|---|---|---|---|
 EOF
   printf '%s' "$INDEXED"
+
+  if [[ -n "$EXEMPT" ]]; then
+    cat <<EOF
+
+## Published contract (frontmatter-exempt)
+
+The canon spec bundle is a formally reviewed published artifact with its own
+conventions; the pattern-lab frontmatter mechanic does not apply. Listed here for
+navigation. Its entry point is \`spec/discovery-framework/README.md\`.
+
+EOF
+    printf '%s' "$EXEMPT"
+  fi
 
   if [[ -n "$UNINDEXED" ]]; then
     cat <<EOF
