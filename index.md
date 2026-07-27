@@ -2,7 +2,7 @@
 name: index
 description: Auto-generated index of every frontmatter-bearing file in this repo
 type: index
-updated: 2026-07-26
+updated: 2026-07-27
 ---
 
 # Index
@@ -16,7 +16,7 @@ after any file add, remove, or retitle.
 |---|---|---|---|---|
 | [`AGENTS.md`](AGENTS.md) | AGENTS | Provider-neutral instruction front door for context-repository (canon spec + pattern lab) | directive | 2026-07-26 |
 | [`CLAUDE.md`](CLAUDE.md) | CLAUDE directives | Thin adapter to AGENTS.md + the workspace-wide always-load declaration for context-repository | directive | 2026-07-26 |
-| [`CURRENT_STATE.md`](CURRENT_STATE.md) | CURRENT_STATE | Front door for context-repository — what the canon spec + pattern lab is and what's active | front-door | 2026-07-26 |
+| [`CURRENT_STATE.md`](CURRENT_STATE.md) | CURRENT_STATE | Front door for context-repository — what the canon spec + pattern lab is and what's active | front-door | 2026-07-27 |
 | [`README.md`](README.md) | README | Repo overview and entry pointers for the context-repository canon spec + pattern lab | reference | 2026-07-26 |
 | [`docs/agent-context-repo-pattern.md`](docs/agent-context-repo-pattern.md) | Agent Context Repository Pattern | Canonical spec for how agents maintain file-based persistent context — five invariants, required mechanics, future work | spec | 2026-04-23 |
 | [`docs/architecture.md`](docs/architecture.md) | architecture | Real composition, dependency direction, published-interface constraint, and artifact roles for context-repository | reference | 2026-07-26 |

@@ -2,14 +2,15 @@
 name: CURRENT_STATE
 description: Front door for context-repository — what the canon spec + pattern lab is and what's active
 type: front-door
-updated: 2026-07-26
+updated: 2026-07-27
 ---
 
 # CURRENT_STATE — context-repository
 
-**Last updated**: 2026-07-26 — attended dependency closure. The deterministic
-checker is pinned to current jsonschema 4.26.0; the published contract and
-fixtures are unchanged. `make check` remains green with conformance 19/19.
+**Last updated**: 2026-07-27 — read-only architecture inventory tick. No code
+or spec changes. `make check` verified green 19/19. Architecture inventory
+delivered to general at
+`runtime/.handoff/general-cross-repo-architecture-context-repository-inventory-complete.md`.
 
 ---
 
