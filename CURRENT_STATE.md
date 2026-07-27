@@ -7,10 +7,12 @@ updated: 2026-07-27
 
 # CURRENT_STATE — context-repository
 
-**Last updated**: 2026-07-27 — read-only architecture inventory tick. No code
-or spec changes. `make check` verified green 19/19. Architecture inventory
-delivered to general at
-`runtime/.handoff/general-cross-repo-architecture-context-repository-inventory-complete.md`.
+**Last updated**: 2026-07-27 — scheduled tick confirmed July 2026 contract-repository
+migration handoff is fully closed. No new code or spec changes this tick.
+`make check` verified green 19/19. Migration work (ADR-0050, repo.toml, Makefile,
+AGENTS.md, docs/architecture.md, CI, GitHub hardening, jsonschema 4.26.0) all
+landed in prior sessions 2026-07-26. Completion report at
+`runtime/.handoff/general-context-repo-tick-complete-2026-07-27T08-43-03Z.md`.
 
 ---
 
